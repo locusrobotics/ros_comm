@@ -62,17 +62,26 @@
 #include <boost/iterator/iterator_facade.hpp>
 
 #include "console_bridge/console.h"
-#if defined logDebug
-# undef logDebug
+
+#ifdef logDebug
+# ifndef CONSOLE_BRIDGE_logDebug
+#  define CONSOLE_BRIDGE_logDebug logDebug
+# endif
 #endif
-#if defined logInform
-# undef logInform
+#ifdef logInform
+# ifndef CONSOLE_BRIDGE_logInform
+#  define CONSOLE_BRIDGE_logInform logInform
+# endif
 #endif
-#if defined logWarn
-# undef logWarn
+#ifdef logWarn
+# ifndef CONSOLE_BRIDGE_logWarn
+#  define CONSOLE_BRIDGE_logWarn logWarn
+# endif
 #endif
-#if defined logError
-# undef logError
+#ifdef logError
+# ifndef CONSOLE_BRIDGE_logError
+#  define CONSOLE_BRIDGE_logError logError
+# endif
 #endif
 
 namespace rosbag {
@@ -221,7 +230,7 @@ private:
     void startReadingVersion200();
 
     // Writing
-    
+
     void writeVersion();
     void writeFileHeaderRecord();
     void writeConnectionRecord(ConnectionInfo const* connection_info);
@@ -311,7 +320,7 @@ private:
     uint64_t index_data_pos_;
     uint32_t connection_count_;
     uint32_t chunk_count_;
-    
+
     // Current chunk
     bool      chunk_open_;
     ChunkInfo curr_chunk_info_;
@@ -524,7 +533,7 @@ void Bag::doWrite(std::string const& topic, ros::Time const& time, T const& msg,
     else {
         // Store the connection info by the address of the connection header
 
-        // Add the topic name to the connection header, so that when we later search by 
+        // Add the topic name to the connection header, so that when we later search by
         // connection header, we can disambiguate connections that differ only by topic name (i.e.,
         // same callerid, same message type), #3755.  This modified connection header is only used
         // for our bookkeeping, and will not appear in the resulting .bag.
@@ -616,7 +625,7 @@ void Bag::writeMessageDataRecord(uint32_t conn_id, ros::Time const& time, T cons
     uint32_t msg_ser_len = ros::serialization::serializationLength(msg);
 
     record_buffer_.setSize(msg_ser_len);
-    
+
     ros::serialization::OStream s(record_buffer_.getData(), msg_ser_len);
 
     // todo: serialize into the outgoing_chunk_buffer & remove record_buffer_
@@ -634,7 +643,7 @@ void Bag::writeMessageDataRecord(uint32_t conn_id, ros::Time const& time, T cons
     writeHeader(header);
     writeDataLength(msg_ser_len);
     write((char*) record_buffer_.getData(), msg_ser_len);
-    
+
     // todo: use better abstraction than appendHeaderToBuffer
     appendHeaderToBuffer(outgoing_chunk_buffer_, header);
     appendDataLengthToBuffer(outgoing_chunk_buffer_, msg_ser_len);
@@ -642,7 +651,7 @@ void Bag::writeMessageDataRecord(uint32_t conn_id, ros::Time const& time, T cons
     uint32_t offset = outgoing_chunk_buffer_.getSize();
     outgoing_chunk_buffer_.setSize(outgoing_chunk_buffer_.getSize() + msg_ser_len);
     memcpy(outgoing_chunk_buffer_.getData() + offset, record_buffer_.getData(), msg_ser_len);
-    
+
     // Update the current chunk time range
     if (time > curr_chunk_info_.end_time)
     	curr_chunk_info_.end_time = time;
