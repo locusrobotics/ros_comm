@@ -38,7 +38,7 @@ import logging
 import sys
 import traceback
 
-import rospy.names 
+import rospy.names
 
 from rospy.core import get_caller_id
 from rospy.exceptions import ROSException
@@ -88,11 +88,7 @@ def _rosout(level, msg, fname, line, func):
 
                     # check parameter server/cache for omit_topics flag
                     # the same parameter is checked in rosout_appender.cpp for the same purpose
-                    # parameter accesses are cached automatically in python
-                    if rospy.has_param("/rosout_disable_topics_generation"):
-                        disable_topics_ = rospy.get_param("/rosout_disable_topics_generation")
-                    else:
-                        disable_topics_ = False
+                    disable_topics_ = rospy.get_param_cached("/rosout_disable_topics_generation", False)
 
                     if not disable_topics_:
                         topics = get_topic_manager().get_topics()
@@ -107,7 +103,7 @@ def _rosout(level, msg, fname, line, func):
     except Exception as e:
         #traceback.print_exc()
         # don't use logerr in this case as that is recursive here
-        logger = logging.getLogger("rospy.rosout")        
+        logger = logging.getLogger("rospy.rosout")
         logger.error("Unable to report rosout: %s\n%s", e, traceback.format_exc())
         return False
 
