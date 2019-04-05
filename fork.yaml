@@ -1,0 +1,19 @@
+upstream:
+  repo: https://github.com/ros/ros_comm.git
+  # Unreleased as of April 4th
+  ref: ac2f29d75bd0b8fd983939ea634b03c4549d2363
+
+fork:
+  repo: https://github.com/locusrobotics/ros_comm.git
+  branch: locus-devel
+  apply:
+  - patch: https://github.com/ros/ros_comm/pull/1414.diff
+    name: "ROSBAG: add snapshot subcommand "
+  - patch: https://github.com/ros/ros_comm/pull/1597.diff
+    name: "move check parameter for /rosout_disable_topics_generation only for initialization time"
+  - patch: https://github.com/ros/ros_comm/pull/1515.diff
+    name: "rospy: added get_param_cached"
+  - patch: https://github.com/locusrobotics/ros_comm/commit/5b39fbfd0bbecfbf4a44ba6d2ec00fa0af85a7da.diff
+    name: "Use cached parameter for rosout_disable_topics_generation"
+  - patch: https://github.com/ros/ros_comm/pull/1471.diff
+    name: "Reuse xmlrpc connections everywhere"
