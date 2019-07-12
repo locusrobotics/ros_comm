@@ -2,6 +2,11 @@
 Changelog for package roslaunch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Missing args (`#12 <https://github.com/locusrobotics/ros_comm/issues/12>`_)
+* Contributors: David V. Lu!!
+
 1.14.3 (2018-08-06)
 -------------------
 
