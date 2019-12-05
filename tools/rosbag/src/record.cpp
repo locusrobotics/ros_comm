@@ -69,15 +69,16 @@ rosbag::RecorderOptions parseOptions(int argc, char** argv) {
       ("duration", po::value<std::string>(), "Record a bag of maximum duration in seconds, unless 'm', or 'h' is appended.")
       ("node", po::value<std::string>(), "Record all topics subscribed to by a specific node.")
       ("tcpnodelay", "Use the TCP_NODELAY transport hint when subscribing to topics.")
-      ("udp", "Use the UDP transport hint when subscribing to topics.");
+      ("udp", "Use the UDP transport hint when subscribing to topics.")
+      ("repeat-latched", "Repeat latched msgs at the start of each new bag file.");
 
-  
+
     po::positional_options_description p;
     p.add("topic", -1);
-    
+
     po::variables_map vm;
-    
-    try 
+
+    try
     {
       po::store(po::command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
     } catch (boost::program_options::invalid_command_line_syntax& e)
@@ -106,6 +107,8 @@ rosbag::RecorderOptions parseOptions(int argc, char** argv) {
       opts.quiet = true;
     if (vm.count("publish"))
       opts.publish = true;
+    if (vm.count("repeat-latched"))
+      opts.repeat_latched = true;
     if (vm.count("output-prefix"))
     {
       opts.prefix = vm["output-prefix"].as<std::string>();
@@ -227,7 +230,7 @@ rosbag::RecorderOptions parseOptions(int argc, char** argv) {
       else
         throw ros::Exception("Duration unit must be s, m, or h");
 
-      
+
       opts.max_duration = ros::Duration(duration * multiplier);
       if (opts.max_duration <= ros::Duration(0))
         throw ros::Exception("Duration must be positive.");
@@ -296,6 +299,6 @@ int main(int argc, char** argv) {
     // Run the recorder
     rosbag::Recorder recorder(opts);
     int result = recorder.run();
-    
+
     return result;
 }
