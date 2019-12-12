@@ -75,10 +75,10 @@ rosbag::RecorderOptions parseOptions(int argc, char** argv) {
 
     po::positional_options_description p;
     p.add("topic", -1);
-
+    
     po::variables_map vm;
-
-    try
+    
+    try 
     {
       po::store(po::command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
     } catch (boost::program_options::invalid_command_line_syntax& e)
@@ -230,7 +230,7 @@ rosbag::RecorderOptions parseOptions(int argc, char** argv) {
       else
         throw ros::Exception("Duration unit must be s, m, or h");
 
-
+      
       opts.max_duration = ros::Duration(duration * multiplier);
       if (opts.max_duration <= ros::Duration(0))
         throw ros::Exception("Duration must be positive.");
@@ -299,6 +299,6 @@ int main(int argc, char** argv) {
     // Run the recorder
     rosbag::Recorder recorder(opts);
     int result = recorder.run();
-
+    
     return result;
 }

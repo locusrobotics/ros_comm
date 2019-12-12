@@ -189,7 +189,7 @@ def info_cmd(argv):
             b.close()
             if i < len(args) - 1:
                 print('---')
-
+        
         except (ROSBagEncryptNotSupportedException, ROSBagEncryptException) as ex:
             print('ERROR: %s' % str(ex), file=sys.stderr)
         except ROSBagUnindexedException as ex:
@@ -355,7 +355,7 @@ The following variables are available:
     filter_fn = expr_eval(expr)
 
     outbag = Bag(outbag_filename, 'w')
-
+    
     try:
         inbag = Bag(inbag_filename)
     except (ROSBagEncryptNotSupportedException, ROSBagEncryptException) as ex:
@@ -368,10 +368,10 @@ The following variables are available:
     try:
         meter = ProgressMeter(outbag_filename, inbag._uncompressed_size)
         total_bytes = 0
-
+    
         if options.verbose_pattern:
             verbose_pattern = expr_eval(options.verbose_pattern)
-
+    
             for topic, raw_msg, t, conn_header in inbag.read_messages(raw=True, return_connection_header=True):
                 msg_type, serialized_bytes, md5sum, pos, pytype = raw_msg
                 msg = pytype()
@@ -381,7 +381,7 @@ The following variables are available:
                     print('MATCH', verbose_pattern(topic, msg, t))
                     outbag.write(topic, msg, t, connection_header=conn_header)
                 else:
-                    print('NO MATCH', verbose_pattern(topic, msg, t))
+                    print('NO MATCH', verbose_pattern(topic, msg, t))          
 
                 total_bytes += len(serialized_bytes)
                 meter.step(total_bytes)
@@ -396,7 +396,7 @@ The following variables are available:
 
                 total_bytes += len(serialized_bytes)
                 meter.step(total_bytes)
-
+        
         meter.finish()
 
     finally:
@@ -417,7 +417,7 @@ def fix_cmd(argv):
 
     inbag_filename  = args[0]
     outbag_filename = args[1]
-    rules           = args[2:]
+    rules           = args[2:]   
 
     ext = os.path.splitext(outbag_filename)[1]
     if ext == '.bmr':
@@ -455,7 +455,7 @@ def fix_cmd(argv):
         options.noplugins = False
 
     migrator = MessageMigrator(rules, plugins=not options.noplugins)
-
+    
     try:
         migrations = fixbag2(migrator, inbag_filename, outname, options.force)
     except (ROSBagEncryptNotSupportedException, ROSBagEncryptException) as ex:
@@ -473,12 +473,12 @@ def fix_cmd(argv):
         print('Bag could not be migrated.  The following migrations could not be performed:')
         for m in migrations:
             print_trans(m[0][0].old_class, m[0][-1].new_class, 0)
-
+            
             if len(m[1]) > 0:
                 print('    %d rules missing:' % len(m[1]))
                 for r in m[1]:
                     print_trans(r.old_class, r.new_class,1)
-
+                    
         print('Try running \'rosbag check\' to create the necessary rule files or run \'rosbag fix\' with the \'--force\' option.')
         os.remove(outname)
         sys.exit(1)
@@ -500,13 +500,13 @@ def check_cmd(argv):
             parser.error('The file %s already exists.  Include -a if you intend to append.' % options.rulefile)
         if not rulefile_exists and options.append:
             parser.error('The file %s does not exist, and so -a is invalid.' % options.rulefile)
-
+    
     if options.append:
         append_rule = [options.rulefile]
     else:
         append_rule = []
 
-    # First check that the bag is not unindexed
+    # First check that the bag is not unindexed 
     try:
         Bag(args[0])
     except (ROSBagEncryptNotSupportedException, ROSBagEncryptException) as ex:
@@ -517,13 +517,13 @@ def check_cmd(argv):
         sys.exit(1)
 
     mm = MessageMigrator(args[1:] + append_rule, not options.noplugins)
-
+       
     migrations = checkbag(mm, args[0])
 
     if len(migrations) == 0:
         print('Bag file does not need any migrations.')
         exit(0)
-
+        
     print('The following migrations need to occur:')
     all_rules = []
     for m in migrations:
@@ -606,9 +606,9 @@ def decompress_cmd(argv):
 
     if len(args) < 1:
         parser.error('You must specify at least one bag file.')
-
+    
     op = lambda inbag, outbag, quiet: change_compression_op(inbag, outbag, Compression.NONE, options.quiet)
-
+    
     bag_op(args, False, True, lambda b: False, op, options.output_dir, options.force, options.quiet)
 
 def reindex_cmd(argv):
@@ -622,7 +622,7 @@ def reindex_cmd(argv):
 
     if len(args) < 1:
         parser.error('You must specify at least one bag file.')
-
+    
     op = lambda inbag, outbag, quiet: reindex_op(inbag, outbag, options.quiet)
 
     bag_op(args, True, True, lambda b: b.version > 102, op, options.output_dir, options.force, options.quiet)
@@ -693,12 +693,12 @@ def bag_op(inbag_filenames, allow_unindexed, open_inbag, copy_fn, op, output_dir
         if outbag_filename == inbag_filename:
             # Rename the input bag to ###.orig.###, and open for reading
             backup_filename = '%s.orig%s' % os.path.splitext(inbag_filename)
-
+            
             if not force and os.path.exists(backup_filename):
                 if not quiet:
                     print('Skipping %s. Backup path %s already exists.' % (inbag_filename, backup_filename), file=sys.stderr)
                 continue
-
+            
             try:
                 if copy:
                     shutil.copy(inbag_filename, backup_filename)
@@ -707,7 +707,7 @@ def bag_op(inbag_filenames, allow_unindexed, open_inbag, copy_fn, op, output_dir
             except OSError as ex:
                 print('ERROR %s %s to %s: %s' % ('copying' if copy else 'moving', inbag_filename, backup_filename, str(ex)), file=sys.stderr)
                 continue
-
+            
             source_filename = backup_filename
         else:
             if copy:
@@ -773,7 +773,7 @@ def bag_op(inbag_filenames, allow_unindexed, open_inbag, copy_fn, op, output_dir
                 except OSError as ex:
                     print('ERROR %s %s to %s: %s', ('removing' if copy else 'moving', backup_filename, inbag_filename, str(ex)), file=sys.stderr)
                     break
-
+    
         except (ROSBagException, IOError) as ex:
             print('ERROR operating on %s: %s' % (inbag_filename, str(ex)), file=sys.stderr)
 
@@ -789,12 +789,12 @@ def change_compression_op(inbag, outbag, compression, quiet):
         total_bytes = 0
         for topic, msg, t, conn_header in inbag.read_messages(raw=True, return_connection_header=True):
             msg_type, serialized_bytes, md5sum, pos, pytype = msg
-
+    
             outbag.write(topic, msg, t, raw=True, connection_header=conn_header)
-
-            total_bytes += len(serialized_bytes)
+            
+            total_bytes += len(serialized_bytes) 
             meter.step(total_bytes)
-
+        
         meter.finish()
 
 def reindex_op(inbag, outbag, quiet):
@@ -881,7 +881,7 @@ class RosbagCmds(UserDict):
     def add_cmd(self, name, function, description):
         self[name] = function
         self._description[name] = description
-
+        
     def get_valid_cmds(self):
         str = "Available subcommands:\n"
         for k in sorted(self.keys()):
@@ -916,7 +916,7 @@ class ProgressMeter(object):
         self.path           = path
         self.bytes_total    = bytes_total
         self.refresh_rate   = refresh_rate
-
+        
         self.elapsed        = 0.0
         self.update_elapsed = 0.0
         self.bytes_read     = 0.0
@@ -928,7 +928,7 @@ class ProgressMeter(object):
     def step(self, bytes_read, force_update=False):
         self.bytes_read = bytes_read
         self.elapsed    = time.time() - self.start_time
-
+        
         if force_update or self.elapsed - self.update_elapsed > self.refresh_rate:
             self._update_progress()
             self.update_elapsed = self.elapsed
@@ -941,7 +941,7 @@ class ProgressMeter(object):
 
         bytes_read_str  = self._human_readable_size(float(self.bytes_read))
         bytes_total_str = self._human_readable_size(float(self.bytes_total))
-
+        
         if self.bytes_read < self.bytes_total:
             complete_fraction = float(self.bytes_read) / self.bytes_total
             pct_complete      = int(100.0 * complete_fraction)
@@ -962,14 +962,14 @@ class ProgressMeter(object):
 
         print('\r', progress, end='')
         sys.stdout.flush()
-
+        
     def _human_readable_size(self, size):
         multiple = 1024.0
         for suffix in ['KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']:
             size /= multiple
             if size < multiple:
                 return '%.1f %s' % (size, suffix)
-
+    
         raise ValueError('number too large')
 
     def finish(self):
@@ -994,7 +994,7 @@ class ProgressMeter(object):
                 pass
         if width <= 0:
             width = 80
-
+    
         return width
 
 def rosbagmain(argv=None):
