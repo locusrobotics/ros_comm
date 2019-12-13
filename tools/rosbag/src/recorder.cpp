@@ -460,6 +460,15 @@ void Recorder::startWriting() {
         }
     }
 
+    if (options_.repeat_latched)
+    {
+        // Start each new bag file with copies of all latched messages.
+        for (auto const& out : latched_msgs_)
+        {
+            bag_.write(out.second.topic, out.second.time, *out.second.msg);
+        }
+    }
+
     if (options_.publish)
     {
         std_msgs::String msg;
