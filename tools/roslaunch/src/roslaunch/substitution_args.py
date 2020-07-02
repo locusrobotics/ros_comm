@@ -346,6 +346,10 @@ def _eval(s, context):
         raise SubstitutionException("$(eval ...) may not contain double underscore expressions")
     return str(eval(s, {}, _DictWrapper(context['arg'], functions)))
 
+def _resolve_eval(resolved, a, unused, context):
+    eval_resolved = _eval(a[5:], context)
+    return resolved.replace("$(%s)" % a, eval_resolved)
+
 def resolve_args(arg_str, context=None, resolve_anon=True, filename=None):
     """
     Resolves substitution args (see wiki spec U{http://ros.org/wiki/roslaunch}).
@@ -373,9 +377,6 @@ def resolve_args(arg_str, context=None, resolve_anon=True, filename=None):
         context = {}
     if not arg_str:
         return arg_str
-    # special handling of $(eval ...)
-    if arg_str.startswith('$(eval ') and arg_str.endswith(')'):
-        return _eval(arg_str[7:-1], context)
     # first resolve variables like 'env' and 'arg'
     commands = {
         'env': _env,
@@ -383,6 +384,7 @@ def resolve_args(arg_str, context=None, resolve_anon=True, filename=None):
         'dirname': _dirname,
         'anon': _anon,
         'arg': _arg,
+        'eval': _resolve_eval
     }
     resolved = _resolve_args(arg_str, context, resolve_anon, commands)
     # then resolve 'find' as it requires the subsequent path to be expanded already
@@ -393,7 +395,7 @@ def resolve_args(arg_str, context=None, resolve_anon=True, filename=None):
     return resolved
 
 def _resolve_args(arg_str, context, resolve_anon, commands):
-    valid = ['find', 'env', 'optenv', 'dirname', 'anon', 'arg']
+    valid = ['find', 'env', 'optenv', 'dirname', 'anon', 'arg', 'eval']
     resolved = arg_str
     for a in _collect_args(arg_str):
         splits = [s for s in a.split(' ') if s]
@@ -423,6 +425,7 @@ def _collect_args(arg_str):
     buff = StringIO()
     args = []
     state = _OUT
+    eval_in_count = 0
     for c in arg_str:
         # No escapes supported
         if c == '$':
@@ -435,15 +438,22 @@ def _collect_args(arg_str):
         elif c == '(':
             if state == _DOLLAR:
                 state = _LP
+            elif eval_in_count > 0:
+                eval_in_count += 1
             elif state != _OUT:
                 raise SubstitutionException("Invalid left parenthesis '(' in substitution args [%s]"%arg_str)
         elif c == ')':
             if state == _IN:
-                #save contents of collected buffer
-                args.append(buff.getvalue())
-                buff.truncate(0)
-                buff.seek(0)
-                state = _OUT
+                if eval_in_count > 0:
+                    eval_in_count -= 1
+
+                if eval_in_count == 0:
+                    #save contents of collected buffer
+                    args.append(buff.getvalue())
+                    buff.truncate(0)
+                    buff.seek(0)
+                    in_eval = False
+                    state = _OUT
             else:
                 state = _OUT
         elif state == _DOLLAR:
@@ -454,6 +464,12 @@ def _collect_args(arg_str):
 
         if state == _IN:
             buff.write(c)
+
+            # The eval statement can have nested parentheses, so we need to track how many we've seen, and only write
+            # the buffer to the argument when we have a matching right parenthesis for every left parenthesis.
+            if eval_in_count == 0 and buff.getvalue().startswith('eval '):
+                eval_in_count = 1
+
     return args
 
 
