@@ -32,8 +32,11 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import unittest
+import rosbag
+import roslaunch
 import rospy
 import rostest
+import os
 import sys
 from std_msgs.msg import *
 
@@ -51,6 +54,50 @@ class LatchedPub(unittest.TestCase):
 
     rospy.sleep(rospy.Duration.from_sec(5.0))
     
+  def test_latched_split(self):
+    pub = rospy.Publisher("chatter2", String, latch=True)
+
+    pub.publish(String("hello"))
+
+    # Wait for some time before starting the bag recording
+    rospy.sleep(rospy.Duration.from_sec(5.0))
+
+    # Kick off a rosbag record that splits every 2 seconds
+    rosbag_args = "--split --repeat-latched --duration=2s chatter2 -O /tmp/test_latched_pub_delayed_sub"
+
+    node = roslaunch.core.Node(package="rosbag", node_type="record", name="repeat_recorder", args=rosbag_args)
+    launch = roslaunch.scriptapi.ROSLaunch()
+    launch.start()
+    process = launch.launch(node)
+
+    # Give the record time to split
+    rospy.sleep(rospy.Duration.from_sec(6.0))
+
+    # Shut down the roslaunch instance to stop bagging
+    launch.stop()
+
+    # Now check that the topic is in each of the bag files
+    bag_count = 0
+    previous_time = rospy.Time()
+
+    for file in os.listdir("/tmp/"):
+        if file.startswith("test_latched_pub_delayed_sub") and file.endswith(".bag"):
+            bag_count += 1
+
+            bag_file_name = os.path.join("/tmp", file)
+            bag_file = rosbag.Bag(bag_file_name, 'r')
+
+            messages_in_bag = 0
+
+            for _, msg, t in bag_file.read_messages(topics=['chatter2']):
+                self.assertNotEqual(previous_time, t)
+                self.assertEqual("hello", msg.data)
+                messages_in_bag += 1
+                previous_time = t
+
+            self.assertEqual(1, messages_in_bag)
+
+    self.assertGreater(bag_count, 1)
 
 if __name__ == '__main__':
   rostest.rosrun('test_rosbag', 'latched_pub', LatchedPub, sys.argv)
