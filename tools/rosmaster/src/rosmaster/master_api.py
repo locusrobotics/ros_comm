@@ -701,6 +701,7 @@ class ROSMasterHandler(object):
 
             mloginfo("+SUB [%s] %s %s",topic, caller_id, caller_api)
             pub_uris = self.publishers.get_apis(topic)
+            self._notify_topic_subscribers(topic, pub_uris, [caller_api])
         finally:
             self.ps_lock.release()
         return 1, "Subscribed to [%s]"%topic, pub_uris
