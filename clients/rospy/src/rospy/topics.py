@@ -915,7 +915,7 @@ class _PublisherImpl(_TopicImpl):
         self.latch = None
         
         # maximum queue size for publishing messages
-        self.queue_size = None
+        self.queue_size = 200  # temporary default for testing
 
         #STATS
         self.message_data_sent = 0
@@ -995,6 +995,9 @@ class _PublisherImpl(_TopicImpl):
         """
         if self.queue_size is not None:
             c = QueuedConnection(c, self.queue_size)
+        else:
+            import warnings
+            warnings.warn("Adding non-queued connection for topic %s to [%s:%s]" % (self.resolved_name, c.remote_endpoint[0], c.remote_endpoint[1]))
         super(_PublisherImpl, self).add_connection(c)
         def publish_single(data):
             self.publish(data, connection_override=c)
