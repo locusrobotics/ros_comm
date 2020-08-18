@@ -116,7 +116,7 @@ if not hasattr(select, 'EPOLLRDHUP'):
 class Topic(object):
     """Base class of L{Publisher} and L{Subscriber}"""
     
-    def __init__(self, name, data_class, reg_type):
+    def __init__(self, name, data_class, reg_type, options):
         """
         @param name: graph resource name of topic, e.g. 'laser'. 
         @type  name: str
@@ -161,7 +161,7 @@ class Topic(object):
         self.type = data_class._type
         self.md5sum = data_class._md5sum
         self.reg_type = reg_type
-        self.impl = get_topic_manager().acquire_impl(reg_type, self.resolved_name, data_class)
+        self.impl = get_topic_manager().acquire_impl(reg_type, self.resolved_name, data_class, options)
 
     def get_num_connections(self):
         """
@@ -260,6 +260,20 @@ class Poller(object):
         e = [x for x in self.kevents if x.ident == fd]
         for x in e:
             self.kevents.remove(x)
+
+
+class _TopicOptions(object):
+    def __init__(self):
+        # publisher options
+        self.latch = False
+
+        # subscriber options
+        self.buff_size = DEFAULT_BUFF_SIZE
+
+        # common topic options
+        self.queue_size = None
+        self.tcp_nodelay = False
+
             
 class _TopicImpl(object):
     """
@@ -560,15 +574,14 @@ class Subscriber(Topic):
         @type  tcp_nodelay: bool
         @raise ROSException: if parameters are invalid
         """
-        super(Subscriber, self).__init__(name, data_class, Registration.SUB)
-        #add in args that factory cannot pass in
-
-        # last person to set these to non-defaults wins, not much way
+        # first person to set these to non-defaults wins, not much way
         # around this
-        if queue_size is not None:
-            self.impl.set_queue_size(queue_size)
-        if buff_size != DEFAULT_BUFF_SIZE:
-            self.impl.set_buff_size(buff_size)
+        options = _TopicOptions()
+        options.queue_size = queue_size
+        options.buff_size = buff_size
+        options.tcp_nodelay = tcp_nodelay
+
+        super(Subscriber, self).__init__(name, data_class, Registration.SUB, options)
 
         if callback is not None:
             # #1852
@@ -581,8 +594,6 @@ class Subscriber(Topic):
         else:
             # initialize fields
             self.callback = self.callback_args = None            
-        if tcp_nodelay:
-            self.impl.set_tcp_nodelay(tcp_nodelay)        
 
     def unregister(self):
         """
@@ -601,7 +612,7 @@ class _SubscriberImpl(_TopicImpl):
     """
     Underyling L{_TopicImpl} implementation for subscriptions.
     """
-    def __init__(self, name, data_class):
+    def __init__(self, name, data_class, options):
         """
         ctor.
         @param name: graph resource name of topic, e.g. 'laser'.
@@ -614,9 +625,9 @@ class _SubscriberImpl(_TopicImpl):
         # under lock. This is a list of 2-tuples (fn, args), where
         # args are additional arguments for the callback, or None
         self.callbacks = [] 
-        self.queue_size = None
-        self.buff_size = DEFAULT_BUFF_SIZE
-        self.tcp_nodelay = False
+        self.queue_size = options.queue_size
+        self.buff_size = options.buff_size
+        self.tcp_nodelay = options.tcp_nodelay
         self.statistics_logger = SubscriberStatisticsLogger(self) \
             if SubscriberStatisticsLogger.is_enabled() \
             else None
@@ -839,22 +850,25 @@ class Publisher(Topic):
         @type  queue_size: int
         @raise ROSException: if parameters are invalid     
         """
-        super(Publisher, self).__init__(name, data_class, Registration.PUB)
-
-        if subscriber_listener:
-            self.impl.add_subscriber_listener(subscriber_listener)
-        if tcp_nodelay:
-            get_tcpros_handler().set_tcp_nodelay(self.resolved_name, tcp_nodelay)
-        if latch:
-            self.impl.enable_latch()
-        if headers:
-            self.impl.add_headers(headers)
+        options = _TopicOptions()
+        options.latch = latch
+        options.tcp_nodelay = tcp_nodelay
+        #if tcp_nodelay:
+        #    get_tcpros_handler().set_tcp_nodelay(self.resolved_name, tcp_nodelay)
         if queue_size is not None:
-            self.impl.set_queue_size(queue_size)
+            options.queue_size = queue_size
         else:
             import warnings
             warnings.warn("The publisher should be created with an explicit keyword argument 'queue_size'. "
                 "Please see http://wiki.ros.org/rospy/Overview/Publishers%20and%20Subscribers for more information.", SyntaxWarning, stacklevel=2)
+
+        super(Publisher, self).__init__(name, data_class, Registration.PUB, options)
+
+        if subscriber_listener:
+            self.impl.add_subscriber_listener(subscriber_listener)
+        if headers:
+            self.impl.add_headers(headers)
+
 
     def publish(self, *args, **kwds):
         """
@@ -892,7 +906,7 @@ class _PublisherImpl(_TopicImpl):
     Underyling L{_TopicImpl} implementation for publishers.
     """
     
-    def __init__(self, name, data_class):
+    def __init__(self, name, data_class, options):
         """
         @param name: name of topic, e.g. 'laser'. 
         @type  name: str
@@ -911,11 +925,14 @@ class _PublisherImpl(_TopicImpl):
         self.headers = {}
         
         # publish latch, starts disabled
-        self.is_latch = False
+        self.is_latch = options.latch
         self.latch = None
         
         # maximum queue size for publishing messages
-        self.queue_size = None
+        self.queue_size = options.queue_size
+
+        if options.tcp_nodelay:
+            get_tcpros_handler().set_tcp_nodelay(name, options.tcp_nodelay)
 
         #STATS
         self.message_data_sent = 0
@@ -1239,7 +1256,7 @@ class _TopicManager(object):
             raise TypeError("invalid reg_type: %s"%s)
         return rmap.get(resolved_name, None)
         
-    def acquire_impl(self, reg_type, resolved_name, data_class):
+    def acquire_impl(self, reg_type, resolved_name, data_class, options):
         """
         Acquire a L{_TopicImpl} for the specified topic (create one if it
         doesn't exist).  Every L{Topic} instance has a _TopicImpl that
@@ -1268,7 +1285,7 @@ class _TopicManager(object):
         with self.lock:
             impl = rmap.get(resolved_name, None)            
             if not impl:
-                impl = impl_class(resolved_name, data_class)
+                impl = impl_class(resolved_name, data_class, options)
                 self._add(impl, rmap, reg_type)
             impl.ref_count += 1
             return impl
