@@ -853,8 +853,6 @@ class Publisher(Topic):
         options = _TopicOptions()
         options.latch = latch
         options.tcp_nodelay = tcp_nodelay
-        #if tcp_nodelay:
-        #    get_tcpros_handler().set_tcp_nodelay(self.resolved_name, tcp_nodelay)
         if queue_size is not None:
             options.queue_size = queue_size
         else:
