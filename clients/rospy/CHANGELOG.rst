@@ -2,6 +2,13 @@
 Changelog for package rospy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Initialize publisher/subscriber options in impl constructors (`#19 <https://github.com/locusrobotics/ros_comm/issues/19>`_)
+  Prevents misconfigured connections from being added to a topic before
+  topic configuration is complete.
+* Contributors: abencz
+
 1.15.0 (2019-07-12)
 -------------------
 

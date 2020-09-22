@@ -2,6 +2,9 @@
 Changelog for package roslaunch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.15.0 (2019-07-12)
 -------------------
 * Missing args (`#12 <https://github.com/locusrobotics/ros_comm/issues/12>`_)
