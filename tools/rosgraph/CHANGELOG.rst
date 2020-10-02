@@ -2,6 +2,45 @@
 Changelog for package rosgraph
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/locusrobotics/ros_comm/issues/1792>`_)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* added is_legal_remap() to rosgraph to make remap-detection more precise (`#1683 <https://github.com/locusrobotics/ros_comm/issues/1683>`_)
+  * added is_legal_remap() to rosgraph
+  * test_rospy/test_rospy_client.py: fixed failing test
+  * removed unrelated change
+* more Python 3 compatibility (`#1783 <https://github.com/locusrobotics/ros_comm/issues/1783>`_)
+* more Python 3 compatibility (`#1782 <https://github.com/locusrobotics/ros_comm/issues/1782>`_)
+* Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (`#1688 <https://github.com/locusrobotics/ros_comm/issues/1688>`_)
+  * Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning
+  * Change all usages of yaml.load to yaml.safe_load
+  * Extend PyYAML's SafeLoader and use it with `yaml.load`
+  Also added convenience functions for using this loader for reuse in
+  `roslaunch`
+  * fix typo in rosparam.yaml_load_all
+  * Modify Loader and SafeLoader in yaml module directly
+  * Revert whitespace change
+  * Revert unrelated change to import through global variable construction
+* rosgraph/network: use urlparse for parsing the port, whick makes ipv6 possible (`#1698 <https://github.com/locusrobotics/ros_comm/issues/1698>`_)
+  * rosgraph/network: use urlparse for parsing the port, this makes ipv6 possible
+  * remove unnecessary assert and comment
+* fix paths (and regex for paths) comparison issues (`#1592 <https://github.com/locusrobotics/ros_comm/issues/1592>`_)
+  * add os.path.normcase for return value of Logger.FindCaller, escape windows path delimiter for regex comparison
+  * escape os path separator for regular expression comparison
+  * use os.path.sep to indicate path separator
+  * use re.escape to escape metacharacters
+  * apply escaping only when the string is used for comparison
+* fix various test problems (`#1601 <https://github.com/locusrobotics/ros_comm/issues/1601>`_)
+  * move test files to separate package
+  * move publishtest into separate package since it requires rostopic which rostest can't depend on
+  * [rosbag_storage] add missing dependency on std_msgs
+  * duplicate talker.py test node since rospy doesn't install the file
+  * modify test to pass when rospy.get_name isn't available without a dependency declared on it
+* Fixed typos: awhile -> a while (`#1534 <https://github.com/locusrobotics/ros_comm/issues/1534>`_)
+* Contributors: Christopher Wecht, Daniel Ingram, Dirk Thomas, James Xu, Martijn Buijs
+
 1.14.3 (2018-08-06)
 -------------------
 

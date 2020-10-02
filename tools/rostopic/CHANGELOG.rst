@@ -2,6 +2,32 @@
 Changelog for package rostopic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* rostopic: added --use-rostime for pub (`#1717 <https://github.com/locusrobotics/ros_comm/issues/1717>`_)
+  * rostopic: added --use-rostime for pub
+  * rostopic: added missing docstring
+  * fixed typo
+* rostopic: _rostopic_list_group_by_host: publisher/subscriber lists have correct type now (`#1780 <https://github.com/locusrobotics/ros_comm/issues/1780>`_)
+* more Python 3 compatibility (`#1783 <https://github.com/locusrobotics/ros_comm/issues/1783>`_)
+* Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (`#1688 <https://github.com/locusrobotics/ros_comm/issues/1688>`_)
+  * Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning
+  * Change all usages of yaml.load to yaml.safe_load
+  * Extend PyYAML's SafeLoader and use it with `yaml.load`
+  Also added convenience functions for using this loader for reuse in
+  `roslaunch`
+  * fix typo in rosparam.yaml_load_all
+  * Modify Loader and SafeLoader in yaml module directly
+  * Revert whitespace change
+  * Revert unrelated change to import through global variable construction
+* fix(tools/rostopic): fix typo, confict -> conflict (`#1690 <https://github.com/locusrobotics/ros_comm/issues/1690>`_)
+* rostopic: repeatedly republish message from file (`#1635 <https://github.com/locusrobotics/ros_comm/issues/1635>`_)
+  * rostopic: repeatedly republish message from file
+  * rostopic pub: limit 'exactly one message'-fix to real files, not streams
+* duplicate test nodes which aren't available to other packages, add missing dependencies (`#1611 <https://github.com/locusrobotics/ros_comm/issues/1611>`_)
+* Update wiki.ros.org URLs (`#1536 <https://github.com/locusrobotics/ros_comm/issues/1536>`_)
+* Contributors: Christopher Wecht, Dirk Thomas, Martijn Buijs, Victor Lamoine, Yoshiya Hinosawa
+
 1.14.3 (2018-08-06)
 -------------------
 

@@ -2,6 +2,48 @@
 Changelog for package rosbag_storage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Check for fclose returning 0 in rosbag_storage (`#1750 <https://github.com/locusrobotics/ros_comm/issues/1750>`_)
+  fix `#1743 <https://github.com/locusrobotics/ros_comm/issues/1743>`_
+* fix windows build for rosbag_storage (`#1687 <https://github.com/locusrobotics/ros_comm/issues/1687>`_)
+  * fix broken changes. (`#55 <https://github.com/locusrobotics/ros_comm/issues/55>`_)
+  Fix broken changes.
+  * add comment, include rosbag_storage first
+  * remove unhelpful comment
+* fix `#1474 <https://github.com/locusrobotics/ros_comm/issues/1474>`_ move bag encryption plugins into separate library (`#1499 <https://github.com/locusrobotics/ros_comm/issues/1499>`_)
+  * fix `#1474 <https://github.com/locusrobotics/ros_comm/issues/1474>`_ move bag encryption plugins into separate library
+  This setup is required by the class_loader, which is part of the pluginlib, see  http://wiki.ros.org/class_loader#Caution_of_Linking_Directly_Against_Plugin_Libraries
+  * fix unit tests of aes_encryptor
+* rosbag_storage modernization: replaced BOOST_FOREACH with range-based for loops, used algorithm, where appropriated (`#1640 <https://github.com/locusrobotics/ros_comm/issues/1640>`_)
+* rosbag_storage: fixed dangeling if-else (`#1637 <https://github.com/locusrobotics/ros_comm/issues/1637>`_)
+* fix infinite loop in rosbag buffer resize (`#1623 <https://github.com/locusrobotics/ros_comm/issues/1623>`_)
+  * fix infinite loop in rosbag buffer resize
+  * grow to max size
+* update CMakeLists.txt in rosbag_storage (`#1618 <https://github.com/locusrobotics/ros_comm/issues/1618>`_)
+  * binplace rosbag_storage.dll to CATKIN_GLOBAL_IN
+  * Move rosbag_storage.dll to package lib destination
+  * Export NoEncryptor from Dll and install encryptor_plugins.xml for Windows (`#19 <https://github.com/locusrobotics/ros_comm/issues/19>`_)
+  * update library install destination (`#47 <https://github.com/locusrobotics/ros_comm/issues/47>`_)
+  * Remove unnecessary ROSBAG_STORAGE_DECL (`#28 <https://github.com/locusrobotics/ros_comm/issues/28>`_)
+* fix various test problems (`#1601 <https://github.com/locusrobotics/ros_comm/issues/1601>`_)
+  * move test files to separate package
+  * move publishtest into separate package since it requires rostopic which rostest can't depend on
+  * [rosbag_storage] add missing dependency on std_msgs
+  * duplicate talker.py test node since rospy doesn't install the file
+  * modify test to pass when rospy.get_name isn't available without a dependency declared on it
+* visibility macros update (`#1591 <https://github.com/locusrobotics/ros_comm/issues/1591>`_)
+* Fix issues when built or run on Windows (`#1466 <https://github.com/locusrobotics/ros_comm/issues/1466>`_)
+  * Fix roslz4 build issue on Windows
+  * Fix xmlrpcpp build issue on Windows, fix polling fails when run on Windows
+  * Fix roscpp build issue on Windows
+  * Fix rosbag_storage build issue on Windows
+  * fix issues in python scripts to run roscore on Windows
+  * revert unrelated whitespace changes
+  * Revert changes in roslogging.py
+  * declare const for source_cnt
+* Contributors: Christopher Wecht, Dirk Thomas, James Xu, Jeremie Deray, Johnson Shih, ipa-fez, jalkino
+
 1.14.3 (2018-08-06)
 -------------------
 

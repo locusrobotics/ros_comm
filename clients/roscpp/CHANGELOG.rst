@@ -2,6 +2,94 @@
 Changelog for package roscpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* `#1577 <https://github.com/locusrobotics/ros_comm/issues/1577>`_ revisited: Fix dynamic windowing for Topic Statistics (`#1695 <https://github.com/locusrobotics/ros_comm/issues/1695>`_)
+  * Add failing tests for topic statistics frequency for rospy and roscpp
+  * Fix TopicStatistics dynamic windowing to adjust evaluation frequency in the right direction
+  * test_roscpp: fixed topic_statistic_frequency
+  * test_roscpp/topic_statistic_frequency: cleanup
+* roscpp/service_publication: removed int-bool-comparison (`#1710 <https://github.com/locusrobotics/ros_comm/issues/1710>`_)
+* add Timer::isValid() const (`#1779 <https://github.com/locusrobotics/ros_comm/issues/1779>`_)
+  fix `#1650 <https://github.com/locusrobotics/ros_comm/issues/1650>`_
+  Signed-off-by: artivis <jeremie.deray@canonical.com>
+* Added possibility to pass rospy.Duration as timeout to wait_for_service and wait_for_message. (`#1703 <https://github.com/locusrobotics/ros_comm/issues/1703>`_)
+  * Added possibility to pass rospy.Duration as timeout to wait_for_service and wait_for_message.
+  Fixes https://github.com/ros/ros_comm/issues/1658.
+  * spelling
+* Fix segfault in TransportPublisherLink (`#1714 <https://github.com/locusrobotics/ros_comm/issues/1714>`_)
+* roscpp/transport_tcp: enable poll event POLLRDHUP to detect dead (`#1704 <https://github.com/locusrobotics/ros_comm/issues/1704>`_)
+  connections properly
+* roscpp/transport_udp: zero-initialize sockaddr_in object (`#1740 <https://github.com/locusrobotics/ros_comm/issues/1740>`_)
+  * roscpp/transport_udp: zero-initialize sockaddr_in object
+  * rostcp/transport_udp: zero-initialize sockaddr_in members
+* unregisterService returns result of execute("unregisterService") (`#1751 <https://github.com/locusrobotics/ros_comm/issues/1751>`_)
+  fix `#1744 <https://github.com/locusrobotics/ros_comm/issues/1744>`_
+* fixing string check (`#1771 <https://github.com/locusrobotics/ros_comm/issues/1771>`_)
+  Signed-off-by: Daniel Wang <daniel.wang@canonical.com>
+* Resolve memory leak. (`#1503 <https://github.com/locusrobotics/ros_comm/issues/1503>`_)
+  * Resolve memory leak.
+  Delete g_rosout_appender explicitly instead of assigning it to NULL.
+  Follow deletion with NULL assignment.
+  * Deregister g_rosout_appender
+  * revert unrelated whitespace change
+  * Update init.cpp
+  * Increment version number.
+  * space in comments
+  * Merge
+  * Revert "Increment version number."
+  This reverts commit 795c8fda33821b635ad30a4828d9071bcc69bed4.
+  * Add newer rosconsole dependencies
+  * Update rosconsole dependencies in package.xml
+  * Sync with upstream completely
+  * Add changes
+  * Remove deregister function, since it is already done in shutdown().
+  * Remove unnecessary .catkin_workspace file.
+* /libros/node_handle: alternative way to fix `#838 <https://github.com/locusrobotics/ros_comm/issues/838>`_ (`#1656 <https://github.com/locusrobotics/ros_comm/issues/1656>`_)
+* roscpp/TopicManager: avoid deadlock (`#1645 <https://github.com/locusrobotics/ros_comm/issues/1645>`_)
+* roscpp/service: use WallTime/WallDuration for waiting (`#1638 <https://github.com/locusrobotics/ros_comm/issues/1638>`_)
+* roscpp: added missin include path (for bazel workspaces) (`#1636 <https://github.com/locusrobotics/ros_comm/issues/1636>`_)
+* fixed bug in statistics decision making if one should publish (`#1625 <https://github.com/locusrobotics/ros_comm/issues/1625>`_)
+* Add hasStarted() const to WallTimer and SteadyTimer API (`#1565 <https://github.com/locusrobotics/ros_comm/issues/1565>`_)
+  * roscpp: copy hasStarted() member function from ros::Timer to ros::WallTimer and ros::SteadyTimer
+  ros::Timer::hasStarted() has been added in `ros/ros_comm#1464 <https://github.com/ros/ros_comm/issues/1464>`_. The same member function should exist in the other
+  two timer implementations, too, for completeness.
+  * Check for nullptr in WallTimer::hasStarted() and SteadyTimer::hasStarted()
+  Analogous to fe9479cdbf0be0caa542c74c7c1fb8229ea8164d (`ros/ros_comm#1541 <https://github.com/ros/ros_comm/issues/1541>`_).
+* Remove signals from find_package(Boost COMPONENTS ...) (`#1580 <https://github.com/locusrobotics/ros_comm/issues/1580>`_)
+  The packages use signals2, not signals. Only boost libraries with
+  compiled code should be passed to find_package(Boost COMPONENTS ...),
+  and the signals2 library has always been header only.
+  Boost 1.69 has removed the deprecated signals library, so the otherwise
+  useless but harmless `signals` component now breaks the build.
+* Fix string error on windows (`#1582 <https://github.com/locusrobotics/ros_comm/issues/1582>`_)
+  Check if name is empty before read it, or it will cause 'cannot decrement string iterator before begin' error on Windows in debug mode.
+* visibility macros update (`#1591 <https://github.com/locusrobotics/ros_comm/issues/1591>`_)
+* Fix race due unprotected access to callbacks\_ in roscpp client (`#1595 <https://github.com/locusrobotics/ros_comm/issues/1595>`_)
+* Removed nullptr access from Timer().hasStarted() (`#1541 <https://github.com/locusrobotics/ros_comm/issues/1541>`_)
+* roscpp: Add const specifier to `NodeHandle::param(param_name, default_val)`. (`#1539 <https://github.com/locusrobotics/ros_comm/issues/1539>`_)
+* Update wiki.ros.org URLs (`#1536 <https://github.com/locusrobotics/ros_comm/issues/1536>`_)
+* Fix stamp_age_mean overflow when stamp age very big (`#1526 <https://github.com/locusrobotics/ros_comm/issues/1526>`_)
+* [C++14] remove explicit -std=c++11, default to 14 (`#1525 <https://github.com/locusrobotics/ros_comm/issues/1525>`_)
+  From REP-0003
+  > Melodic
+  > As of ROS Melodic, we are using the C++14 (ISO/IEC 14882:2014) standard.
+  Related to discussion on `ros-planning/moveit#1146 <https://github.com/ros-planning/moveit/issues/1146>`_
+* Fix memory error due to missing rosout_disable_topics_generation para… (`#1507 <https://github.com/locusrobotics/ros_comm/issues/1507>`_)
+  * Fix memory error due to missing rosout_disable_topics_generation parameter
+  * Initialise disable_topics\_ in constructor of ROSOutAppender
+  * Removed security check for rosout_disable_topics_generation parameter in favour of a class initialiser
+* Fix issues when built or run on Windows (`#1466 <https://github.com/locusrobotics/ros_comm/issues/1466>`_)
+  * Fix roslz4 build issue on Windows
+  * Fix xmlrpcpp build issue on Windows, fix polling fails when run on Windows
+  * Fix roscpp build issue on Windows
+  * Fix rosbag_storage build issue on Windows
+  * fix issues in python scripts to run roscore on Windows
+  * revert unrelated whitespace changes
+  * Revert changes in roslogging.py
+  * declare const for source_cnt
+* Contributors: Alex Moriarty, Arkady Shapkin, Christopher Wecht, Daniel Wang, Dino Hüllmann, Hans-Joachim Krauch, Igor Semenov, James Xu, Jeremie Deray, Johannes Meyer, Johnson Shih, Kunal Tyagi, Maarten de Vries, Martin Pecka, Tahsincan Köse, Victor Lamoine, randoms, wentz89
+
 1.14.3 (2018-08-06)
 -------------------
 * add hasStarted() to Timer API (`#1464 <https://github.com/ros/ros_comm/issues/1464>`_)

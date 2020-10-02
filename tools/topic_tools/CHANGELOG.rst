@@ -2,6 +2,50 @@
 Changelog for package topic_tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* more Python 3 compatibility (`#1795 <https://github.com/locusrobotics/ros_comm/issues/1795>`_)
+  * avoid using nose.tools without dependency being declared
+  * seek(0)
+  * subprocess decode
+  * import urlparse
+  * fix hash arg encode
+  * print function
+  * replace tabs used for indenting Python code with spaces
+* topic_tools/relay: fixed boost::lock exception (`#1696 <https://github.com/locusrobotics/ros_comm/issues/1696>`_)
+  * topic_tools/relay: fixed boost::lock exception
+  * topic_tools/relay: better name for timer
+* /topic_tools/relay_field: added --tcpnodely (`#1682 <https://github.com/locusrobotics/ros_comm/issues/1682>`_)
+* Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (`#1688 <https://github.com/locusrobotics/ros_comm/issues/1688>`_)
+  * Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning
+  * Change all usages of yaml.load to yaml.safe_load
+  * Extend PyYAML's SafeLoader and use it with `yaml.load`
+  Also added convenience functions for using this loader for reuse in
+  `roslaunch`
+  * fix typo in rosparam.yaml_load_all
+  * Modify Loader and SafeLoader in yaml module directly
+  * Revert whitespace change
+  * Revert unrelated change to import through global variable construction
+* rostest: fix flaky hztests (`#1661 <https://github.com/locusrobotics/ros_comm/issues/1661>`_)
+  * rostest: fix flaky hztests
+  * add retry to all hztests
+  * fix concerns
+  * fix more wrong retry-attributes
+* topic_tools/transfom: create publisher before subscriber, because callback may use the publisher (`#1669 <https://github.com/locusrobotics/ros_comm/issues/1669>`_)
+* duplicate test nodes which aren't available to other packages, add missing dependencies (`#1611 <https://github.com/locusrobotics/ros_comm/issues/1611>`_)
+* /topic_tools/mux: do not dereference the end-iterator (`#1579 <https://github.com/locusrobotics/ros_comm/issues/1579>`_)
+* fix topic_tools environment hook (`#1486 <https://github.com/locusrobotics/ros_comm/issues/1486>`_)
+  Without this commit, `source /opt/ros/$ROS_DISTRO/setup.bash` fails under the following conditions:
+  1. topic_tools is installed
+  2. rosbash is not installed
+  3. the bash shell has the following options set (which is the default in GitLab CI):
+  set -o errexit
+  set -o pipefail
+  What happens is that since rosbash is not installed, `$(complete | grep -w rosrun)` finds no match, and grep exits with status 1. Since `pipefail` is enabled, this error code is propagated to the return value of the pipe. Since `errexit` is enabled, the script exits immediately.
+  This commit catches grep exit status 1 (= "no match") and passes everything else through.
+* topic_tools/mux: add ~latch option (`#1489 <https://github.com/locusrobotics/ros_comm/issues/1489>`_)
+* Contributors: Christopher Wecht, Dirk Thomas, Martijn Buijs, Martin Günther, Yuki Furuta, beetleskin
+
 1.14.3 (2018-08-06)
 -------------------
 

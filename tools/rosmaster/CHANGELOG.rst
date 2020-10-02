@@ -2,6 +2,25 @@
 Changelog for package rosmaster
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/locusrobotics/ros_comm/issues/1792>`_)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* Fixed issue occuring during alternating calls of getParamCached and setParam (`#1439 <https://github.com/locusrobotics/ros_comm/issues/1439>`_)
+  * test_roscpp/params/added getParamCachedSetParamLoop
+  * rosmaster: set_param: the not update the caller!
+  * rosmaster: set_param: do not update the caller more fine grained
+  * /rosmaster/paramserver/compute_params_update, apply filter only if caller_id_to_ignore is not None
+  * /test_rospy/talker: set publishers queue_size to supress warning
+  * /test_rospy/sub_to_multple_pubs: moved listener up to avoid warnings
+  * refactor for readability
+  * pep8
+* Fixed docstring in unregisterSubscriber (`#1553 <https://github.com/locusrobotics/ros_comm/issues/1553>`_)
+  Fixes `#1508 <https://github.com/locusrobotics/ros_comm/issues/1508>`_.
+* Setting correctly typed @apivalidate default return values (`#1472 <https://github.com/locusrobotics/ros_comm/issues/1472>`_)
+* Contributors: BoukeKromTNO, Christopher Wecht, Dirk Thomas, Kostya
+
 1.14.3 (2018-08-06)
 -------------------
 

@@ -2,6 +2,24 @@
 Changelog for package rosparam
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/locusrobotics/ros_comm/issues/1792>`_)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (`#1688 <https://github.com/locusrobotics/ros_comm/issues/1688>`_)
+  * Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning
+  * Change all usages of yaml.load to yaml.safe_load
+  * Extend PyYAML's SafeLoader and use it with `yaml.load`
+  Also added convenience functions for using this loader for reuse in
+  `roslaunch`
+  * fix typo in rosparam.yaml_load_all
+  * Modify Loader and SafeLoader in yaml module directly
+  * Revert whitespace change
+  * Revert unrelated change to import through global variable construction
+* Update wiki.ros.org URLs (`#1536 <https://github.com/locusrobotics/ros_comm/issues/1536>`_)
+* Contributors: Dirk Thomas, Martijn Buijs, Victor Lamoine
+
 1.14.3 (2018-08-06)
 -------------------
 

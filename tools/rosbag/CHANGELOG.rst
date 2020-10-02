@@ -2,6 +2,89 @@
 Changelog for package rosbag
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Initializing the repeat_latched option (`#17 <https://github.com/locusrobotics/ros_comm/issues/17>`_)
+  * Initializing the repeat_latched option and adding test
+* Fix latched timestamps (`#15 <https://github.com/locusrobotics/ros_comm/issues/15>`_)
+  * Overwrite message receipt time to prevent gaps.
+  * Revert unrelated whitespace changes
+* Added --repeat-latched option to rosbag record
+  (cherry picked from commit f777d6e39ec776cafde481f3462e80ff230156a9)
+* Revert "Add pycryptodome as default on melodic (`#1609 <https://github.com/locusrobotics/ros_comm/issues/1609>`_)"
+  This reverts commit ba7b5b13d9e1b82133bc18475c93c62bb0f3e85e.
+* use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/locusrobotics/ros_comm/issues/1792>`_)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* Add pycryptodome as default on melodic (`#1609 <https://github.com/locusrobotics/ros_comm/issues/1609>`_)
+* Encrypted rosbag fixes for Python 3. (`#1777 <https://github.com/locusrobotics/ros_comm/issues/1777>`_)
+* fixed `#1776 <https://github.com/locusrobotics/ros_comm/issues/1776>`_ deadcode (`#1786 <https://github.com/locusrobotics/ros_comm/issues/1786>`_)
+  Signed-off-by: Daniel Wang <daniel.wang@canonical.com>
+* rosbag fix: keep latched topics latched (`#1708 <https://github.com/locusrobotics/ros_comm/issues/1708>`_)
+* Wrap the rosbag filter eval in a lambda (`#1712 <https://github.com/locusrobotics/ros_comm/issues/1712>`_)
+* rosbag/record: fix signed int overflow (`#1741 <https://github.com/locusrobotics/ros_comm/issues/1741>`_)
+* Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (`#1688 <https://github.com/locusrobotics/ros_comm/issues/1688>`_)
+  * Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning
+  * Change all usages of yaml.load to yaml.safe_load
+  * Extend PyYAML's SafeLoader and use it with `yaml.load`
+  Also added convenience functions for using this loader for reuse in
+  `roslaunch`
+  * fix typo in rosparam.yaml_load_all
+  * Modify Loader and SafeLoader in yaml module directly
+  * Revert whitespace change
+  * Revert unrelated change to import through global variable construction
+* Pickleable rosbag exceptions (`#1210 <https://github.com/locusrobotics/ros_comm/issues/1210>`_ revisited). (`#1652 <https://github.com/locusrobotics/ros_comm/issues/1652>`_)
+  * test_rosbag/test_bag.py: test, if rosbag exception can be pickled
+  * rosbag/bag.py: rosbag exceptions can now be unpickled
+  * pep8
+* fix topic message count for rosbag indexed v1.2. (`#1648 <https://github.com/locusrobotics/ros_comm/issues/1648>`_)
+* Fix wrong error handling in migration. (`#1639 <https://github.com/locusrobotics/ros_comm/issues/1639>`_)
+  * Fix wrong error handling in migration.
+  self.(old|new)_types is supposed to be a dictionary, not a list
+  * Address PR 1639 comments.
+  * remove duplicate warning message
+* rosbag modernization: replaced BOOST_FOREACH with range-based for-loo… (`#1641 <https://github.com/locusrobotics/ros_comm/issues/1641>`_)
+  * rosbag modernization: replaced BOOST_FOREACH with range-based for-loops, used algorithm where appropriated
+  * /rosbag: changed formatting
+  * single level indentation
+  * single level indentation
+* fix IOError during Python file operation (`#1617 <https://github.com/locusrobotics/ros_comm/issues/1617>`_)
+  * fix IOError from python file operation in r+ mode (`#41 <https://github.com/locusrobotics/ros_comm/issues/41>`_)
+  * move file.seek into _stop_writing, add comment (`#42 <https://github.com/locusrobotics/ros_comm/issues/42>`_)
+* add Windows.h usage explicitly (`#44 <https://github.com/locusrobotics/ros_comm/issues/44>`_) (`#1616 <https://github.com/locusrobotics/ros_comm/issues/1616>`_)
+  * attempt to remove unused header.
+  * Add windows.h usage explicitly
+  * Update statistics.h
+* [rosbag] Fix waitForSubscribers hanging with simtime (`#1543 <https://github.com/locusrobotics/ros_comm/issues/1543>`_)
+  * [rosbag] Fix waitForSubscribers hanging with simtime
+  Use Walltime for sleep as clock is not running yet
+  * Simplify wallsleep in waitForSubscribers
+  Co-Authored-By: AlexReimann <alexander.reimann@enway.ai>
+* Publish last message from latch topics when start time > 0 (`#1537 <https://github.com/locusrobotics/ros_comm/issues/1537>`_)
+  * Publish last message from latch topics when start time > 0
+  * cuddle brace
+  I know the ROS 1 style guide says otherwise but for my sanity of reading it I saved the vertical space
+* Add a new option to publish when a bag write begin (`#1527 <https://github.com/locusrobotics/ros_comm/issues/1527>`_)
+  * Add a new option to publish when a bag write begin
+  * Add the option in rosbag_main to use rosbag record
+* ROSBAG SNAPSHOT: address PR comments
+* ROSBAG SNAPSHOT: documentation
+* ROSBAG SNAPSHOT: clear topic buffer on backwards time
+* ROSBAG SNAPSHOT: resolve filename path relative to client not server
+* ROSBAG SNAPSHOT: move message definitions to new package rosbag_msgs
+* ROSBAG SNAPSHOT: address TODOs
+* ROSBAG SNAPSHOT: style formating
+* ROSBAG SNAPSHOT: add prefix filename mode
+* ROSBAG SNAPSHOT: improve testing
+* ROSBAG SNAPSHOT: optional time range for trigger_snapshot service
+* ROSBAG SNAPSHOT: cli arguments and client mode
+* ROSBAG SNAPSHOT: bootstrap for client mode
+* ROSBAG SNAPSHOT: pull topic config from ROS params
+* ROSBAG SNAPSHOT: working status publishing
+* ROSBAG SNAPSHOT: clear on resume, write all topics, status bootstrap
+* ROSBAG: add snapshot subcommand
+* Contributors: Alex Bencz, Alexander Reimann, AnthonyBirot, Christopher Wecht, Daniel Wang, Dirk Thomas, Enrique Fernández Perdomo, Eric Tappan, James Xu, Kevin Allen, Martijn Buijs, Maxime St-Pierre, Mike Purvis, Olivier Mangin, Tom Moore, kmiku7
+
 1.14.3 (2018-08-06)
 -------------------
 * restore API compatibility (`#1473 <https://github.com/ros/ros_comm/issues/1473>`_) (regression from 1.14.0)

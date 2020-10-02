@@ -2,6 +2,146 @@
 Changelog for package roslaunch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Handling eval tag inside yaml files (`#16 <https://github.com/locusrobotics/ros_comm/issues/16>`_)
+* more Python 3 compatibility (`#1795 <https://github.com/locusrobotics/ros_comm/issues/1795>`_)
+  * avoid using nose.tools without dependency being declared
+  * seek(0)
+  * subprocess decode
+  * import urlparse
+  * fix hash arg encode
+  * print function
+  * replace tabs used for indenting Python code with spaces
+* use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/locusrobotics/ros_comm/issues/1792>`_)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* [Windows][melodic-devel] Skip `cat` related test cases on Windows build (`#1724 <https://github.com/locusrobotics/ros_comm/issues/1724>`_)
+  * Skip `cat` related test cases on Windows build
+  * revert unrelated changes.
+  * style PEP 8
+  * style PEP 8
+  * fix wrong argument names.
+* Taskkill process tree. (`#1725 <https://github.com/locusrobotics/ros_comm/issues/1725>`_)
+* Missing args (`#1733 <https://github.com/locusrobotics/ros_comm/issues/1733>`_)
+* Small fixes for roslaunch-check on Python 3.
+* roslaunch added --required option (`#1681 <https://github.com/locusrobotics/ros_comm/issues/1681>`_)
+* more Python 3 compatibility (`#1783 <https://github.com/locusrobotics/ros_comm/issues/1783>`_)
+* more Python 3 compatibility (`#1782 <https://github.com/locusrobotics/ros_comm/issues/1782>`_)
+* Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (`#1688 <https://github.com/locusrobotics/ros_comm/issues/1688>`_)
+  * Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning
+  * Change all usages of yaml.load to yaml.safe_load
+  * Extend PyYAML's SafeLoader and use it with `yaml.load`
+  Also added convenience functions for using this loader for reuse in
+  `roslaunch`
+  * fix typo in rosparam.yaml_load_all
+  * Modify Loader and SafeLoader in yaml module directly
+  * Revert whitespace change
+  * Revert unrelated change to import through global variable construction
+* Fix $(dirname) for roslaunch-check. (`#1624 <https://github.com/locusrobotics/ros_comm/issues/1624>`_)
+* change how commands are executed (`#1628 <https://github.com/locusrobotics/ros_comm/issues/1628>`_)
+  * Use non-posix way to split command string.
+  * Use shell feature for roslaunch command.
+  * Resolved the merge again.
+  * rework shell=True for Windows change (`#51 <https://github.com/locusrobotics/ros_comm/issues/51>`_)
+  * rework shell=True for Windows change
+  * remove .exe handling, prepend python for python scripts instead
+  * update Windows search logic
+  * move comments around and remove unnecessary comments
+  * minor refactor
+  * file is a keyword in python2, rename as f
+  * remove unnecessary \ at the end of line
+  * use sys.executable to launch Python interpreter
+  * follow inline comment style in PEP8
+  * invert logic
+* `#1468 <https://github.com/locusrobotics/ros_comm/issues/1468>`_ revisited: add option to hide summary from roslaunch output. (`#1655 <https://github.com/locusrobotics/ros_comm/issues/1655>`_)
+  * add option to hide summary from roslaunch output.
+  * roslaunch no_summary: default is False, avoid double negative
+  * roslaunch/parent.py: moved new argument at the end, fixed documentation
+  * move new keyword argument to the end
+  * spelling
+* `#1455 <https://github.com/locusrobotics/ros_comm/issues/1455>`_ reviseted: make roslaunch-check respect arg remappings with command line argument (`#1653 <https://github.com/locusrobotics/ros_comm/issues/1653>`_)
+  * make roslaunch-check respect arg remappings with command line argument (:=)
+  * added exmpale for commandline arg remappings,
+  scripts/roslaunch-check resources/example.launch commandline_true_arg:=false should be fail
+  * roslaunch: removed rospy run dependency
+* add POSIX flag for shlex.split() (`#1619 <https://github.com/locusrobotics/ros_comm/issues/1619>`_)
+  * Fix more shlex.split usage for Windows.
+  * remove space between args
+* respawn if process died while checking should_respawn() (`#1590 <https://github.com/locusrobotics/ros_comm/issues/1590>`_)
+  * If process died when checking should_respawn, treat it as over-due and respawn (`#32 <https://github.com/locusrobotics/ros_comm/issues/32>`_)
+  * fix how the return value of should_respawn() is checked
+* add python prefix for python scripts when there is no .py extension (`#1589 <https://github.com/locusrobotics/ros_comm/issues/1589>`_)
+  * add python prefix for python script when there is no .py extension
+  * consolidate and minimize change to existing code
+  * update comment
+  * revert unnecessary change from sys.platform to os.name
+* roslaunch/xmlloader: use continue instead of pass for args_only (`#1540 <https://github.com/locusrobotics/ros_comm/issues/1540>`_)
+* fix various test problems (`#1601 <https://github.com/locusrobotics/ros_comm/issues/1601>`_)
+  * move test files to separate package
+  * move publishtest into separate package since it requires rostopic which rostest can't depend on
+  * [rosbag_storage] add missing dependency on std_msgs
+  * duplicate talker.py test node since rospy doesn't install the file
+  * modify test to pass when rospy.get_name isn't available without a dependency declared on it
+* normalize strings to utf-8 before setting as environment variable (`#1593 <https://github.com/locusrobotics/ros_comm/issues/1593>`_)
+  * normalize the string to utf-8 before passing to environment block.
+  * convert from unicode to string when setting env variable (`#21 <https://github.com/locusrobotics/ros_comm/issues/21>`_)
+* Fixed typos: awhile -> a while (`#1534 <https://github.com/locusrobotics/ros_comm/issues/1534>`_)
+* Added more useful helper text here to indicate that this might be a permission error. (`#1568 <https://github.com/locusrobotics/ros_comm/issues/1568>`_)
+* Fix `#889 <https://github.com/locusrobotics/ros_comm/issues/889>`_ : Exclude unused args check if pass_all_args is set (`#1520 <https://github.com/locusrobotics/ros_comm/issues/1520>`_)
+  * Exclude unused args check if pass_all_args is set
+  * Add test for pass_all_args fix
+* roslaunch: add an option in XmlLoader to only load arg tags (`#1521 <https://github.com/locusrobotics/ros_comm/issues/1521>`_)
+  This fixes `#1300 <https://github.com/locusrobotics/ros_comm/issues/1300>`_. It's off/false by default, but it's used by `arg_dump`
+  to stop roslaunch-autocomplete from failing if any arg has no default value.
+* Update wiki.ros.org URLs (`#1536 <https://github.com/locusrobotics/ros_comm/issues/1536>`_)
+* [roslaunch] Better exception handling when resource is not found. (`#1476 <https://github.com/locusrobotics/ros_comm/issues/1476>`_)
+  * [roslaunch] Better exception handling when resource is not found.
+  When `$(find pkg)` fail to return a resource in `arg` tag, `roslaunch` fails without printing useful output. With this PR it provides better explanation.
+  Without this PR:
+  ```
+  $ roslaunch /tmp/invalid_arg.launch
+  :
+  Invalid <arg> tag: foo
+  ROS path [0]=/opt/ros/kinetic/share/ros
+  ROS path [1]=/home/n130s/ROS/indigo_trusty/cws_rosdt/src/ros/ros_comm/tools/roslaunch
+  ROS path [2]=/opt/ros/kinetic/share
+  Arg xml is <arg default="$(find foo)/.config" name="foo"/>
+  The traceback for the exception was written to the log file
+  ```
+  With this PR:
+  ```
+  $ roslaunch /tmp/invalid_arg.launch
+  :
+  Invalid <arg> tag: Make sure the following is found in ROS_PACKAGE_PATH: foo
+  ROS path [0]=/opt/ros/kinetic/share/ros
+  ROS path [1]=/home/n130s/ROS/indigo_trusty/cws_rosdt/src/ros/ros_comm/tools/roslaunch
+  ROS path [2]=/opt/ros/kinetic/share
+  Arg xml is <arg default="$(find foo)/.config" name="foo"/>
+  The traceback for the exception was written to the log file
+  ```
+  ```
+  $ more /tmp/invalid_arg.launch
+  <?xml version="1.0"?>
+  <launch>
+  <arg name="foo" default="$(find foo)/.config" />
+  <arg name="baa" default="$(arg foo)/hoge.yaml" />
+  </launch>
+  ```
+  * [roslaunch] Raise appropriate exception when a resource was not found.
+  Applyin feedback https://github.com/ros/ros_comm/pull/1476#discussion_r209081340
+  * shortened the exception message a bit
+* Fix issues when built or run on Windows (`#1466 <https://github.com/locusrobotics/ros_comm/issues/1466>`_)
+  * Fix roslz4 build issue on Windows
+  * Fix xmlrpcpp build issue on Windows, fix polling fails when run on Windows
+  * Fix roscpp build issue on Windows
+  * Fix rosbag_storage build issue on Windows
+  * fix issues in python scripts to run roscore on Windows
+  * revert unrelated whitespace changes
+  * Revert changes in roslogging.py
+  * declare const for source_cnt
+* Contributors: Alessandro Tondo, Christophe, Christopher Wecht, Daniel Ingram, David V. Lu!!, Dirk Thomas, Isaac I.Y. Saito, James Xu, Johnson Shih, Martijn Buijs, Mike Purvis, Sean Yen, Tom Moore, Victor Lamoine, betab0t
+
 1.14.3 (2018-08-06)
 -------------------
 

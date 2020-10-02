@@ -2,6 +2,24 @@
 Changelog for package rosout
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix use-after-free issue in rosout (`#1764 <https://github.com/locusrobotics/ros_comm/issues/1764>`_)
+* include cctype for std::tolower (`#1587 <https://github.com/locusrobotics/ros_comm/issues/1587>`_)
+* Disable rosout.log by using environment variable (`#1425 <https://github.com/locusrobotics/ros_comm/issues/1425>`_)
+  * Disable rosout.log by using environment variable
+  The parameter server may not be available at the time rosout is
+  starting.
+  * Add dependency for boost
+  * add boost include dirs in cmake
+  * add 'REQUIRED1
+  * as long as the env is defined, treat it as true for unknown values
+  * remove boost dependency
+  * revert unrelated changes
+  * revert unrelated changes
+  * trailing operators
+* Contributors: Daniel Wang, James Xu, Yong Li
+
 1.14.3 (2018-08-06)
 -------------------
 

@@ -2,6 +2,11 @@
 Changelog for package ros_comm
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update wiki.ros.org URLs (`#1536 <https://github.com/locusrobotics/ros_comm/issues/1536>`_)
+* Contributors: Victor Lamoine
+
 1.14.3 (2018-08-06)
 -------------------
 

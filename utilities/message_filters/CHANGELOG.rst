@@ -2,6 +2,27 @@
 Changelog for package message_filters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* update approximate time filter to work with python2 and python3 (`#1660 <https://github.com/locusrobotics/ros_comm/issues/1660>`_)
+* message_filters/__init_\_.py - Added reduce import for python3 compatability (`#1633 <https://github.com/locusrobotics/ros_comm/issues/1633>`_)
+* remove messages that are newer than the newly added message (`#1438 <https://github.com/locusrobotics/ros_comm/issues/1438>`_)
+  * remove messages that are newer than the newly added message
+  * use /clock as reference for detecting backward jumps
+  * set time to initialised after constructing ApproximateTimeSynchronizer
+  * notify user about clearing buffer
+  * use continuous time for testing header-less message synchronisation
+  * test buffer clearing when jumping back in time
+  * avoid unrelated changes, remove double space
+* Remove signals from find_package(Boost COMPONENTS ...) (`#1580 <https://github.com/locusrobotics/ros_comm/issues/1580>`_)
+  The packages use signals2, not signals. Only boost libraries with
+  compiled code should be passed to find_package(Boost COMPONENTS ...),
+  and the signals2 library has always been header only.
+  Boost 1.69 has removed the deprecated signals library, so the otherwise
+  useless but harmless `signals` component now breaks the build.
+* Fix message_filters build issue on the template syntax (`#1483 <https://github.com/locusrobotics/ros_comm/issues/1483>`_)
+* Contributors: Christian Rauch, Johnson Shih, Maarten de Vries, Ross Lannen, tykurtz
+
 1.14.3 (2018-08-06)
 -------------------
 * call Subscriber::unsubscribe() in destructor (`#1434 <https://github.com/ros/ros_comm/issues/1434>`_)

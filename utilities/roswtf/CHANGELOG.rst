@@ -2,6 +2,48 @@
 Changelog for package roswtf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* more Python 3 compatibility (`#1796 <https://github.com/locusrobotics/ros_comm/issues/1796>`_)
+  * keep subscribers around
+  * more subprocess decode
+  * add another seek(0), remove an unncessary one
+* use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/locusrobotics/ros_comm/issues/1792>`_)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* [roswtf] Print exception content to show better idea why loading plugin failed. (`#1721 <https://github.com/locusrobotics/ros_comm/issues/1721>`_)
+  Add the content exception to print when `roswtf` failed to load a plugin.
+  When loading a wtf plugin failed the message looks something like the following without any info about the reason it was not loaded:
+  ```
+  Loaded plugin tf.tfwtf
+  Unable to load plugin [B_utility.roswtf.B_wtf_plugin.py] from package [B_utility].
+  ```
+  For the same context, error message prints the exception, which helps debugging.
+  ```
+  Loaded plugin tf.tfwtf
+  Unable to load plugin [B_utility.roswtf.B_wtf_plugin.py] from package [B_utility]. Exception: [cannot import name RemovedMsgTypeA]
+  ```
+  (In my case RemovedMsgTypeA is the message type that is the package depends on but is recently removed so not found).
+* duplicate test nodes which aren't available to other packages, add missing dependencies (`#1611 <https://github.com/locusrobotics/ros_comm/issues/1611>`_)
+* query ipv6 only if specified (`#1596 <https://github.com/locusrobotics/ros_comm/issues/1596>`_)
+  * Query resolved_ips according to ipv6()
+  * Add missing import name (`#20 <https://github.com/locusrobotics/ros_comm/issues/20>`_)
+* Fixed typos: awhile -> a while (`#1534 <https://github.com/locusrobotics/ros_comm/issues/1534>`_)
+* [roswtf] Better msg replacement for 'No package or stack in context'. (`#1505 <https://github.com/locusrobotics/ros_comm/issues/1505>`_)
+  When there's no ROS pkg is found on the current directory when `roswtf` is run, a message `No package or stack in context` appears. This message is not useful IMO because "context" is unclear.
+  This PR suggests clearer message.
+  **How to reproduce the behavior**
+  ```
+  $ cd ~
+  $ roswtf
+  :
+  No package or stack in context
+  :
+  $ rosversion roswtf
+  1.12.14
+  ```
+* Contributors: Daniel Ingram, Dirk Thomas, Isaac I.Y. Saito, James Xu
+
 1.14.3 (2018-08-06)
 -------------------
 

@@ -2,6 +2,37 @@
 Changelog for package xmlrpcpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fixed test build errors. (`#1723 <https://github.com/locusrobotics/ros_comm/issues/1723>`_)
+* fix base64 encode error (`#1769 <https://github.com/locusrobotics/ros_comm/issues/1769>`_)
+* XmlRpcValue added bool assignment operator (`#1709 <https://github.com/locusrobotics/ros_comm/issues/1709>`_)
+* Added const indexer for xmlrpc (`#1759 <https://github.com/locusrobotics/ros_comm/issues/1759>`_)
+* xmlrpcpp: fixed invalid zero index as suggested in `#1547 <https://github.com/locusrobotics/ros_comm/issues/1547>`_ (`#1631 <https://github.com/locusrobotics/ros_comm/issues/1631>`_)
+* Avoid calling memcpy on NULL pointer with size 0. (`#1546 <https://github.com/locusrobotics/ros_comm/issues/1546>`_)
+* Revert "Revert "move the winsock2.h into cpp."" (`#1588 <https://github.com/locusrobotics/ros_comm/issues/1588>`_)
+  This reverts commit e3e2bfbd75615b52231956285eeddc7fd2cf22c1.
+* visibility macros update (`#1591 <https://github.com/locusrobotics/ros_comm/issues/1591>`_)
+* [C++14] remove explicit -std=c++11, default to 14 (`#1525 <https://github.com/locusrobotics/ros_comm/issues/1525>`_)
+  From REP-0003
+  > Melodic
+  > As of ROS Melodic, we are using the C++14 (ISO/IEC 14882:2014) standard.
+  Related to discussion on `ros-planning/moveit#1146 <https://github.com/ros-planning/moveit/issues/1146>`_
+* Fix test code build issues on Windows (`#1479 <https://github.com/locusrobotics/ros_comm/issues/1479>`_)
+  * Fix test code build issues on Windows
+  * Change not to touch XmlRpcClient header, expose the enum from test code
+  * Add missing header file back
+* Fix issues when built or run on Windows (`#1466 <https://github.com/locusrobotics/ros_comm/issues/1466>`_)
+  * Fix roslz4 build issue on Windows
+  * Fix xmlrpcpp build issue on Windows, fix polling fails when run on Windows
+  * Fix roscpp build issue on Windows
+  * Fix rosbag_storage build issue on Windows
+  * fix issues in python scripts to run roscore on Windows
+  * revert unrelated whitespace changes
+  * Revert changes in roslogging.py
+  * declare const for source_cnt
+* Contributors: Alex Moriarty, Christopher Wecht, Hanno Böck, James Xu, Jason Wang, Johnson Shih, Sean Yen, randoms
+
 1.14.3 (2018-08-06)
 -------------------
 

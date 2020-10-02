@@ -2,6 +2,25 @@
 Changelog for package roslz4
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* check for XXH_malloc NULL return (`#1778 <https://github.com/locusrobotics/ros_comm/issues/1778>`_)
+  fix `#1753 <https://github.com/locusrobotics/ros_comm/issues/1753>`_
+  Signed-off-by: artivis <jeremie.deray@canonical.com>
+* update install destination for roslz4 (`#1620 <https://github.com/locusrobotics/ros_comm/issues/1620>`_)
+  * Fixing installation target for Windows.
+  * add comment (`#50 <https://github.com/locusrobotics/ros_comm/issues/50>`_)
+* Fix issues when built or run on Windows (`#1466 <https://github.com/locusrobotics/ros_comm/issues/1466>`_)
+  * Fix roslz4 build issue on Windows
+  * Fix xmlrpcpp build issue on Windows, fix polling fails when run on Windows
+  * Fix roscpp build issue on Windows
+  * Fix rosbag_storage build issue on Windows
+  * fix issues in python scripts to run roscore on Windows
+  * revert unrelated whitespace changes
+  * Revert changes in roslogging.py
+  * declare const for source_cnt
+* Contributors: James Xu, Jeremie Deray, Johnson Shih
+
 1.14.3 (2018-08-06)
 -------------------
 

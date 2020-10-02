@@ -2,6 +2,21 @@
 Changelog for package rosmsg
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/locusrobotics/ros_comm/issues/1792>`_)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* more Python 3 compatibility (`#1783 <https://github.com/locusrobotics/ros_comm/issues/1783>`_)
+* normalize paths before comparison in rosmsg (`#1586 <https://github.com/locusrobotics/ros_comm/issues/1586>`_)
+  * normalize paths before comparison in rosmsg
+  * remove use of normcase and remove path_in_workspaces temp variable
+  * remove duplicated control
+  * revert unrelated whitespace changes
+  * keep order of operands
+* Update wiki.ros.org URLs (`#1536 <https://github.com/locusrobotics/ros_comm/issues/1536>`_)
+* Contributors: Dirk Thomas, James Xu, Victor Lamoine
+
 1.14.3 (2018-08-06)
 -------------------
 

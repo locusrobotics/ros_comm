@@ -2,6 +2,277 @@
 Changelog for package rospy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Initialize publisher/subscriber options in impl constructors (`#19 <https://github.com/locusrobotics/ros_comm/issues/19>`_)
+  Initialize publisher/subscriber options in impl constructors
+  Prevents misconfigured connections from being added to a topic before
+  topic configuration is complete.
+* Use cached parameter for rosout_disable_topics_generation
+* more Python 3 compatibility (`#1795 <https://github.com/locusrobotics/ros_comm/issues/1795>`_)
+  * avoid using nose.tools without dependency being declared
+  * seek(0)
+  * subprocess decode
+  * import urlparse
+  * fix hash arg encode
+  * print function
+  * replace tabs used for indenting Python code with spaces
+* fix line endings to be LF (`#1794 <https://github.com/locusrobotics/ros_comm/issues/1794>`_)
+* use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/locusrobotics/ros_comm/issues/1792>`_)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* `#1577 <https://github.com/locusrobotics/ros_comm/issues/1577>`_ revisited: Fix dynamic windowing for Topic Statistics (`#1695 <https://github.com/locusrobotics/ros_comm/issues/1695>`_)
+  * Add failing tests for topic statistics frequency for rospy and roscpp
+  * Fix TopicStatistics dynamic windowing to adjust evaluation frequency in the right direction
+  * test_roscpp: fixed topic_statistic_frequency
+  * test_roscpp/topic_statistic_frequency: cleanup
+* Do not raise socket exception during shutdown (`#1720 <https://github.com/locusrobotics/ros_comm/issues/1720>`_)
+* Added possibility to pass rospy.Duration as timeout to wait_for_service and wait_for_message. (`#1703 <https://github.com/locusrobotics/ros_comm/issues/1703>`_)
+  * Added possibility to pass rospy.Duration as timeout to wait_for_service and wait_for_message.
+  Fixes https://github.com/ros/ros_comm/issues/1658.
+  * spelling
+* added is_legal_remap() to rosgraph to make remap-detection more precise (`#1683 <https://github.com/locusrobotics/ros_comm/issues/1683>`_)
+  * added is_legal_remap() to rosgraph
+  * test_rospy/test_rospy_client.py: fixed failing test
+  * removed unrelated change
+* Add missing comma in the list of strings (`#1760 <https://github.com/locusrobotics/ros_comm/issues/1760>`_)
+  The missing comma will implicitly concatenate the string "FATAL" and "is_shutdown" together
+* Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (`#1688 <https://github.com/locusrobotics/ros_comm/issues/1688>`_)
+  * Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning
+  * Change all usages of yaml.load to yaml.safe_load
+  * Extend PyYAML's SafeLoader and use it with `yaml.load`
+  Also added convenience functions for using this loader for reuse in
+  `roslaunch`
+  * fix typo in rosparam.yaml_load_all
+  * Modify Loader and SafeLoader in yaml module directly
+  * Revert whitespace change
+  * Revert unrelated change to import through global variable construction
+* Fix error handling for Topic constructor (`#1701 <https://github.com/locusrobotics/ros_comm/issues/1701>`_)
+  There is no s variable in scope - and we clearly wanna display
+  reg_type
+* Make sigterm handling python3 compatible. (`#1559 <https://github.com/locusrobotics/ros_comm/issues/1559>`_)
+* Update wiki.ros.org URLs (`#1536 <https://github.com/locusrobotics/ros_comm/issues/1536>`_)
+* Added missing lock
+* Use cache when possible
+* Fixed behavior for unset keys
+* Fixes for failing test
+* Fixes for broken tests
+* Avoid unnecessary whitespace change
+* added get_param_cached
+* show connection info on rosnode info (`#1497 <https://github.com/locusrobotics/ros_comm/issues/1497>`_)
+* import socket, threading in udpros.py (`#1494 <https://github.com/locusrobotics/ros_comm/issues/1494>`_)
+  * import socket in udpros.py
+  Avoids a host of undefined names:
+  [flake8](http://flake8.pycqa.org) testing of https://github.com/ros/ros_comm on Python 3.6.3
+  $ __flake8 . --count --select=E901,E999,F821,F822,F823 --show-source --statistics\_\_
+  ```
+  ./clients/rospy/src/rospy/names.py:62:30: F821 undefined name 'basestring'
+  return isinstance(s, basestring) #Python 2.x
+  ^
+  ./clients/rospy/src/rospy/impl/tcpros_service.py:72:30: F821 undefined name 'basestring'
+  return isinstance(s, basestring) #Python 2.x
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:72:17: F821 undefined name 'socket'
+  s = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:72:31: F821 undefined name 'socket'
+  s = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:72:48: F821 undefined name 'socket'
+  s = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:74:17: F821 undefined name 'socket'
+  s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:74:31: F821 undefined name 'socket'
+  s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:74:47: F821 undefined name 'socket'
+  s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:79:9: F821 undefined name 'threading'
+  threading.start_new_thread(self.run, ())
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:112:34: F821 undefined name 'UDPROS'
+  if protocol_params[0] != UDPROS:
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:128:21: F821 undefined name 'UDPTransport'
+  transport = UDPTransport(protocol, topic_name, sub.receive_callback)
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:128:34: F821 undefined name 'protocol'
+  transport = UDPTransport(protocol, topic_name, sub.receive_callback)
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:144:28: F821 undefined name 'UDPROS'
+  return protocol == UDPROS
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:150:18: F821 undefined name 'UDPROS'
+  return [[UDPROS]]
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:166:34: F821 undefined name 'UDPROS'
+  if protocol_params[0] != UDPROS:
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:167:76: F821 undefined name 'protocol'
+  return 0, "Internal error: protocol does not match UDPROS: %s"%protocol, []
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:171:29: F821 undefined name 'UDPROS'
+  return 1, "ready", [UDPROS]
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:222:17: F821 undefined name '_configure_pub_socket'
+  _configure_pub_socket(sock, tcp_nodelay)
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:223:28: F821 undefined name 'TCPROSPub'
+  protocol = TCPROSPub(resolved_topic_name, topic.data_class, is_latch=topic.is_latch, headers=topic.headers)
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:224:29: F821 undefined name 'TCPROSTransport'
+  transport = TCPROSTransport(protocol, resolved_topic_name)
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:249:19: F821 undefined name 'TransportInitError'
+  raise TransportInitError("Unable to initialize transport: name is not set")
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:267:9: F821 undefined name 'serialize_message'
+  serialize_message(self.write_buff, seq, msg)
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:299:9: F821 undefined name 'self'
+  self(UDPROSTransport, self).close()
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:299:31: F821 undefined name 'self'
+  self(UDPROSTransport, self).close()
+  ^
+  ./clients/rospy/src/rospy/impl/udpros.py:301:9: F821 undefined name 'self'
+  self.done = True
+  ^
+  ./test/test_rosmaster/test/testMaster.py:86:15: E999 SyntaxError: invalid syntax
+  print graph[1]
+  ^
+  ./test/test_rosmaster/test/testSlave.py:277:27: E999 SyntaxError: invalid syntax
+  print "Testing", test
+  ^
+  ./test/test_rosmaster/test/client_verification/test_slave_api.py:127:30: E999 SyntaxError: invalid syntax
+  print "[%s] API  = %s"%(self.test_node, self.node_api)
+  ^
+  ./test/test_rospy/test/rostest/test_node.py:58:41: F821 undefined name 'Time'
+  new_data.header.stamp = Time(1234, 5678)
+  ^
+  ./test/test_rospy/test/unit/test_genmsg_py.py:266:20: F821 undefined name 'long'
+  maxp = long(math.pow(2, w-1)) - 1
+  ^
+  ./test/test_rospy/test/unit/test_genmsg_py.py:267:21: F821 undefined name 'long'
+  maxn = -long(math.pow(2, w-1)) + 1
+  ^
+  ./test/test_rospy/test/unit/test_genmsg_py.py:303:79: F821 undefined name 'w'
+  self.fail("check_types should have noted sign error[%s]: %s"%(w, cls.__name_\_))
+  ^
+  ./test/test_rospy/test/unit/test_genmsg_py.py:309:20: F821 undefined name 'long'
+  maxp = long(math.pow(2, w)) - 1
+  ^
+  ./test/test_rospy/test/unit/test_rospy_rostime.py:239:33: F821 undefined name 'Time'
+  v = Duration(1,0) + Time(1, 0)
+  ^
+  ./test/test_rospy/test/unit/test_rospy_rostime.py:275:34: F821 undefined name 'Time'
+  v = Duration(1, 0) - Time(1,0)
+  ^
+  ./test/test_rosservice/test/test_rosservice_command_line_offline.py:94:40: F821 undefined name 'NAME'
+  rostest.unitrun('test_rosservice', NAME, TestRosserviceOffline, sys.argv, coverage_packages=[])
+  ^
+  ./tools/rosbag/scripts/bag2png.py:51:42: F821 undefined name 'ma'
+  ma, image_data = msg.uint8_data, ma.data
+  ^
+  ./tools/rosbag/scripts/fix_msg_defs.py:64:31: F821 undefined name 'roslib'
+  systype = roslib.message.get_message_class(msg[0])
+  ^
+  ./tools/rosbag/scripts/makerule.py:136:32: F821 undefined name 'raw_input'
+  new_type = raw_input('>')
+  ^
+  ./tools/rosbag/scripts/makerule.py:140:36: F821 undefined name 'raw_input'
+  new_type = raw_input('>')
+  ^
+  ./tools/rosbag/src/rosbag/migration.py:1115:100: F821 undefined name 'msg_from'
+  raise BagMigrationException("Migrate called, but no migration path from [%s] to [%s]"%(msg_from._type, msg_to._type))
+  ^
+  ./tools/rosbag/src/rosbag/migration.py:1115:116: F821 undefined name 'msg_to'
+  raise BagMigrationException("Migrate called, but no migration path from [%s] to [%s]"%(msg_from._type, msg_to._type))
+  ^
+  ./tools/rosbag/src/rosbag/rosbag_main.py:540:28: F821 undefined name 'raw_input'
+  new_type = raw_input('>')
+  ^
+  ./tools/rosbag/src/rosbag/rosbag_main.py:544:32: F821 undefined name 'raw_input'
+  new_type = raw_input('>')
+  ^
+  ./tools/rosbag/src/rosbag/rosbag_main.py:834:9: F821 undefined name 'parser'
+  parser.error("Cannot find rosbag/encrypt executable")
+  ^
+  ./tools/rosgraph/src/rosgraph/names.py:63:30: F821 undefined name 'basestring'
+  return isinstance(s, basestring) #Python 2.x
+  ^
+  ./tools/rosgraph/src/rosgraph/network.py:397:35: F821 undefined name 'unicode'
+  str_cls = str if python3 else unicode
+  ^
+  ./tools/roslaunch/src/roslaunch/__init_\_.py:216:67: F821 undefined name 'f'
+  parser.error("The following input files do not exist: %s"%f)
+  ^
+  ./tools/roslaunch/src/roslaunch/core.py:315:79: F821 undefined name 'msg'
+  raise RLException("ERROR: master failed status check: %s"%msg)
+  ^
+  ./tools/roslaunch/src/roslaunch/server.py:262:103: F821 undefined name 'm'
+  raise RLException("ERROR: roslaunch server URI is not a valid XML-RPC URI. Value is [%s]"%m.uri)
+  ^
+  ./tools/roslaunch/test/unit/test_roslaunch_pmon.py:82:31: F821 undefined name 'p'
+  return self.procs.get(p, None)
+  ^
+  ./tools/rosmaster/src/rosmaster/main.py:139:5: F821 undefined name 'main'
+  main()
+  ^
+  ./tools/rosmaster/src/rosmaster/master_api.py:547:100: F821 undefined name 's'
+  _logger.warn('subscriber data stale (key [%s], listener [%s]): node API unknown'%(key, s))
+  ^
+  ./tools/rosmaster/src/rosmaster/validators.py:183:16: F821 undefined name 'is_global'
+  if not is_global(param_value):
+  ^
+  ./tools/rosmaster/test/test_rosmaster_paramserver.py:308:101: F821 undefined name 'traceback'
+  raise Exception("Exception raised while calling param_server.get_param(%s): %s"%(k, traceback.format_exc()))
+  ^
+  ./tools/rosmsg/src/rosmsg/__init_\_.py:181:64: F821 undefined name 'Time'
+  if time_offset is not None and isinstance(val, Time):
+  ^
+  ./tools/rosparam/src/rosparam/__init_\_.py:354:134: F821 undefined name 'maxint'
+  raise RosParamException("Overflow: Parameter Server integers must be 32-bit signed integers:\n\t-%s <= value <= %s"%(maxint - 1, maxint))
+  ^
+  ./tools/rosparam/src/rosparam/__init_\_.py:354:146: F821 undefined name 'maxint'
+  raise RosParamException("Overflow: Parameter Server integers must be 32-bit signed integers:\n\t-%s <= value <= %s"%(maxint - 1, maxint))
+  ^
+  ./tools/rostest/src/rostest/__init_\_.py:211:17: F821 undefined name 'reload'
+  reload(sys.modules[package])
+  ^
+  ./tools/rostopic/src/rostopic/__init_\_.py:285:70: F821 undefined name 'xrange'
+  body = '\n'.join('   '.join(cols[h][i] for h in header) for i in xrange(n_rows))
+  ^
+  ./tools/topic_tools/test/test_mux_delete_add.py:71:17: E999 TabError: inconsistent use of tabs and spaces in indentation
+  rospy.sleep(0.2)
+  ^
+  ./tools/topic_tools/test/test_mux_services.py:75:5: E999 TabError: inconsistent use of tabs and spaces in indentation
+  try:
+  ^
+  ./utilities/message_filters/src/message_filters/__init_\_.py:220:18: F821 undefined name 'reduce'
+  common = reduce(set.intersection, [set(q) for q in self.queues])
+  ^
+  ./utilities/roswtf/src/roswtf/graph.py:179:9: F821 undefined name 'rospy'
+  rospy.Subscriber(t, msg_class)
+  ^
+  ./utilities/roswtf/src/roswtf/graph.py:179:29: F821 undefined name 'msg_class'
+  rospy.Subscriber(t, msg_class)
+  ^
+  5     E999 SyntaxError: invalid syntax
+  60    F821 undefined name 'basestring'
+  65
+  ```
+  * import threading
+  ```
+  ./clients/rospy/src/rospy/impl/udpros.py:79:9: F821 undefined name 'threading'
+  threading.start_new_thread(self.run, ())
+  ^
+  ```
+* Contributors: Christopher Wecht, Dirk Thomas, Hans Gaiser, Markus Grimm, Martijn Buijs, Martin Pecka, Maxime St-Pierre, Paul Bovbel, Paweł Lorek, Victor Lamoine, Yong Li, Yuchen Ying, abencz, cclauss
+
 1.14.3 (2018-08-06)
 -------------------
 * maintain exception info in RosOutHandler (`#1442 <https://github.com/ros/ros_comm/issues/1442>`_)

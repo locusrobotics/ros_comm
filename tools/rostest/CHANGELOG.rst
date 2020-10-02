@@ -2,6 +2,34 @@
 Changelog for package rostest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* more Python 3 compatibility (`#1795 <https://github.com/locusrobotics/ros_comm/issues/1795>`_)
+  * avoid using nose.tools without dependency being declared
+  * seek(0)
+  * subprocess decode
+  * import urlparse
+  * fix hash arg encode
+  * print function
+  * replace tabs used for indenting Python code with spaces
+* rostest: add advertisetest (`#1761 <https://github.com/locusrobotics/ros_comm/issues/1761>`_)
+* rostest: fix flaky hztests (`#1661 <https://github.com/locusrobotics/ros_comm/issues/1661>`_)
+  * rostest: fix flaky hztests
+  * add retry to all hztests
+  * fix concerns
+  * fix more wrong retry-attributes
+* rostest: use AnyMsg in publishtest (`#1659 <https://github.com/locusrobotics/ros_comm/issues/1659>`_)
+  * publishtest: use AnyMsg in publishtest
+  * fix concerns
+* fix various test problems (`#1601 <https://github.com/locusrobotics/ros_comm/issues/1601>`_)
+  * move test files to separate package
+  * move publishtest into separate package since it requires rostopic which rostest can't depend on
+  * [rosbag_storage] add missing dependency on std_msgs
+  * duplicate talker.py test node since rospy doesn't install the file
+  * modify test to pass when rospy.get_name isn't available without a dependency declared on it
+* Directly run python script if run test through cmake (`#24 <https://github.com/locusrobotics/ros_comm/issues/24>`_) (`#1583 <https://github.com/locusrobotics/ros_comm/issues/1583>`_)
+* Contributors: Dirk Thomas, James Xu, Yuki Furuta, beetleskin
+
 1.14.3 (2018-08-06)
 -------------------
 
