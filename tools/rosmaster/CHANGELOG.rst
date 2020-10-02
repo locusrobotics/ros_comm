@@ -2,8 +2,8 @@
 Changelog for package rosmaster
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.15.0 (2020-10-02)
+-------------------
 * use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/locusrobotics/ros_comm/issues/1792>`_)
   * use condition attributes to specify Python 2 and 3 dependencies
   * use python3-pil

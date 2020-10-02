@@ -2,8 +2,8 @@
 Changelog for package rosout
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.15.0 (2020-10-02)
+-------------------
 * Fix use-after-free issue in rosout (`#1764 <https://github.com/locusrobotics/ros_comm/issues/1764>`_)
 * include cctype for std::tolower (`#1587 <https://github.com/locusrobotics/ros_comm/issues/1587>`_)
 * Disable rosout.log by using environment variable (`#1425 <https://github.com/locusrobotics/ros_comm/issues/1425>`_)

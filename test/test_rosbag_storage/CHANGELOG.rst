@@ -2,5 +2,5 @@
 Changelog for package test_rosbag_storage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.15.0 (2020-10-02)
+-------------------

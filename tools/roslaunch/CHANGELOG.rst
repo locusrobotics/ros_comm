@@ -2,8 +2,8 @@
 Changelog for package roslaunch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.15.0 (2020-10-02)
+-------------------
 * Handling eval tag inside yaml files (`#16 <https://github.com/locusrobotics/ros_comm/issues/16>`_)
 * more Python 3 compatibility (`#1795 <https://github.com/locusrobotics/ros_comm/issues/1795>`_)
   * avoid using nose.tools without dependency being declared

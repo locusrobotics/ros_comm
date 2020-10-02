@@ -2,8 +2,8 @@
 Changelog for package roswtf
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.15.0 (2020-10-02)
+-------------------
 * more Python 3 compatibility (`#1796 <https://github.com/locusrobotics/ros_comm/issues/1796>`_)
   * keep subscribers around
   * more subprocess decode

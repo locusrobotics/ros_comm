@@ -2,8 +2,8 @@
 Changelog for package roslz4
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.15.0 (2020-10-02)
+-------------------
 * check for XXH_malloc NULL return (`#1778 <https://github.com/locusrobotics/ros_comm/issues/1778>`_)
   fix `#1753 <https://github.com/locusrobotics/ros_comm/issues/1753>`_
   Signed-off-by: artivis <jeremie.deray@canonical.com>

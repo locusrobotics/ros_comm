@@ -2,8 +2,8 @@
 Changelog for package rostopic
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.15.0 (2020-10-02)
+-------------------
 * rostopic: added --use-rostime for pub (`#1717 <https://github.com/locusrobotics/ros_comm/issues/1717>`_)
   * rostopic: added --use-rostime for pub
   * rostopic: added missing docstring

@@ -2,8 +2,8 @@
 Changelog for package message_filters
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.15.0 (2020-10-02)
+-------------------
 * update approximate time filter to work with python2 and python3 (`#1660 <https://github.com/locusrobotics/ros_comm/issues/1660>`_)
 * message_filters/__init_\_.py - Added reduce import for python3 compatability (`#1633 <https://github.com/locusrobotics/ros_comm/issues/1633>`_)
 * remove messages that are newer than the newly added message (`#1438 <https://github.com/locusrobotics/ros_comm/issues/1438>`_)

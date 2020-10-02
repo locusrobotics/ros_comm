@@ -2,8 +2,8 @@
 Changelog for package xmlrpcpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.15.0 (2020-10-02)
+-------------------
 * Fixed test build errors. (`#1723 <https://github.com/locusrobotics/ros_comm/issues/1723>`_)
 * fix base64 encode error (`#1769 <https://github.com/locusrobotics/ros_comm/issues/1769>`_)
 * XmlRpcValue added bool assignment operator (`#1709 <https://github.com/locusrobotics/ros_comm/issues/1709>`_)
