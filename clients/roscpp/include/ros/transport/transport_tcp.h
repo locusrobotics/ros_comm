@@ -99,6 +99,7 @@ public:
   int getServerPort() { return server_port_; }
   int getLocalPort() { return local_port_; }
 
+  void setTos(int tos);
   void setNoDelay(bool nodelay);
   void setKeepAlive(bool use, uint32_t idle, uint32_t interval, uint32_t count);
 

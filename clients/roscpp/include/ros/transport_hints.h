@@ -32,6 +32,7 @@
 #include "ros/forwards.h"
 
 #include <boost/lexical_cast.hpp>
+#include <netinet/ip.h>
 
 namespace ros
 {
@@ -103,6 +104,32 @@ public:
     }
 
     return false;
+  }
+
+  /**
+   * \brief Set TOS level for traffic on this connection.
+   *
+   * \param ip_tos Level of TOS to set - see <netinet/ip.h>
+   */
+  TransportHints& ipTos(int ip_tos)
+  {
+    options_["ip_tos"] = boost::lexical_cast<std::string>(ip_tos);
+    return *this;
+  }
+
+  /**
+   * \brief Returns the IP_TOS level specified on this TransportHints, or CLASS_DEFAULT if
+   * no level was specified.
+   */
+  int getIpTos()
+  {
+    M_string::iterator it = options_.find("ip_tos");
+    if (it == options_.end())
+    {
+      return IPTOS_CLASS_DEFAULT;
+    }
+
+    return boost::lexical_cast<int>(it->second);
   }
 
   /**
