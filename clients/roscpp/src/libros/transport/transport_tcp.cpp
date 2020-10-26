@@ -40,6 +40,7 @@
 #include <ros/assert.h>
 #include <sstream>
 #include <boost/bind.hpp>
+#include <boost/lexical_cast.hpp>
 #include <fcntl.h>
 #include <errno.h>
 
@@ -169,10 +170,10 @@ void TransportTCP::parseHeader(const Header& header)
 void TransportTCP::setTos(int tos)
 {
 
-  int result = setsockopt(sock_, IPPROTO_TCP, IP_TOS, &flag, sizeof(flag));
+  int result = setsockopt(sock_, IPPROTO_TCP, IP_TOS, &tos, sizeof(tos));
   if (result < 0)
   {
-    ROS_ERROR("setsockopt failed to set TOS [%s] on socket [%d] [%s]", tos, sock_, cached_remote_host_.c_str());
+    ROS_ERROR("setsockopt failed to set TOS [%d] on socket [%d] [%s]", tos, sock_, cached_remote_host_.c_str());
   }
 }
 

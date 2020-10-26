@@ -112,7 +112,7 @@ public:
    */
   TransportHints& ipTos(int ip_tos)
   {
-    options_["ip_tos"] = boost::lexical_cast<string>(ip_tos);
+    options_["ip_tos"] = boost::lexical_cast<std::string>(ip_tos);
     return *this;
   }
 
