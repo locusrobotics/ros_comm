@@ -42,6 +42,7 @@
 #include <boost/bind.hpp>
 #include <fcntl.h>
 #include <errno.h>
+
 namespace ros
 {
 
@@ -155,6 +156,23 @@ void TransportTCP::parseHeader(const Header& header)
   {
     ROSCPP_LOG_DEBUG("Setting nodelay on socket [%d]", sock_);
     setNoDelay(true);
+  }
+
+  std::string tos;
+  if (header.getValue("ip_tos", tos))
+  {
+    ROSCPP_LOG_DEBUG("Setting TOS on socket [%d]", sock_);
+    setTos(boost::lexical_cast<int>(tos));
+  }
+}
+
+void TransportTCP::setTos(int tos)
+{
+
+  int result = setsockopt(sock_, IPPROTO_TCP, IP_TOS, &flag, sizeof(flag));
+  if (result < 0)
+  {
+    ROS_ERROR("setsockopt failed to set TOS [%s] on socket [%d] [%s]", tos, sock_, cached_remote_host_.c_str());
   }
 }
 

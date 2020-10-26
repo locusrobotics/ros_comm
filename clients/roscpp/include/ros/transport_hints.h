@@ -106,6 +106,31 @@ public:
   }
 
   /**
+   * \brief Set TOS level for traffic on this connection.
+   *
+   * \param ip_tos Level of TOS to set - see <netinet/ip.h>
+   */
+  TransportHints& ipTos(int ip_tos)
+  {
+    options_["ip_tos"] = boost::lexical_cast<string>(ip_tos);
+    return *this;
+  }
+
+  /**
+   * \brief Returns whether or not this TransportHints has specified IP_TOS level.
+   */
+  bool getIpTos()
+  {
+    M_string::iterator it = options_.find("ip_tos");
+    if (it == options_.end())
+    {
+      return 0;
+    }
+
+    return boost::lexical_cast<int>(it->second);
+  }
+
+  /**
    * \brief If a UDP transport is used, specifies the maximum datagram size.
    *
    * \param size The size, in bytes
