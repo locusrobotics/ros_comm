@@ -43,7 +43,6 @@
 #include <boost/lexical_cast.hpp>
 #include <fcntl.h>
 #include <errno.h>
-
 namespace ros
 {
 

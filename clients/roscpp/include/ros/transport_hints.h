@@ -117,9 +117,10 @@ public:
   }
 
   /**
-   * \brief Returns whether or not this TransportHints has specified IP_TOS level.
+   * \brief Returns the IP_TOS level specified on this TransportHints, or 0 if
+   * no level was specified.
    */
-  bool getIpTos()
+  int getIpTos()
   {
     M_string::iterator it = options_.find("ip_tos");
     if (it == options_.end())
