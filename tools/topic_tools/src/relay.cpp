@@ -32,6 +32,7 @@
 
 
 #include <cstdio>
+#include <netinet/ip.h>
 #include "topic_tools/shape_shifter.h"
 #include "topic_tools/parse.h"
 
@@ -170,6 +171,11 @@ int main(int argc, char **argv)
   pnh.getParam("lazy", g_lazy);
   if (unreliable)
     g_th.unreliable().reliable(); // Prefers unreliable, but will accept reliable.
+
+  bool priority = false;
+  pnh.getParam("priority", priority);
+  if (priority)
+    g_th.ipTos(IPTOS_DSCP_EF);
 
   pnh.param<bool>("stealth", g_stealth, false);
   if (g_stealth)
