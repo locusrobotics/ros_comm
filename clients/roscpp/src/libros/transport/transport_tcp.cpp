@@ -172,19 +172,10 @@ void TransportTCP::parseHeader(const Header& header)
 
 void TransportTCP::setTos(int tos)
 {
-  ROS_ERROR("Setting ip_tos to %d", tos);
   int result = setsockopt(sock_, IPPROTO_IP, IP_TOS, &tos, sizeof(tos));
   if (result < 0)
   {
     ROS_ERROR("setsockopt failed to set ip_tos [%d] on socket [%d] [%s]", tos, sock_, cached_remote_host_.c_str());
-  }
-  int tos_val = 0;
-  socklen_t tos_len = sizeof(tos_val);
-
-  if (getsockopt(sock_, IPPROTO_IP, IP_TOS,  &tos_val, &tos_len) < 0) {
-    ROS_ERROR("getsockopt failed to get ip_tos");
-  } else {
-    ROS_ERROR("ip_tos set to %d on socket [%d] [%s]", tos_val, sock_, cached_remote_host_.c_str());
   }
 }
 
