@@ -163,20 +163,19 @@ void TransportTCP::parseHeader(const Header& header)
   }
 
   std::string tos;
-  if (header.getValue("ip_tos", tos))
+  if (header.getValue("ip_tos", tos) && tos != "0")
   {
-    ROSCPP_LOG_DEBUG("Setting TOS on socket [%d]", sock_);
+    ROSCPP_LOG_DEBUG("Setting TOS [%s] on socket [%d]", tos, sock_);
     setTos(boost::lexical_cast<int>(tos));
   }
 }
 
 void TransportTCP::setTos(int tos)
 {
-
-  int result = setsockopt(sock_, IPPROTO_TCP, IP_TOS, &tos, sizeof(tos));
+  int result = setsockopt(sock_, IPPROTO_IP, IP_TOS, &tos, sizeof(tos));
   if (result < 0)
   {
-    ROS_ERROR("setsockopt failed to set TOS [%d] on socket [%d] [%s]", tos, sock_, cached_remote_host_.c_str());
+    ROS_ERROR("setsockopt failed to set ip_tos [%d] on socket [%d] [%s]", tos, sock_, cached_remote_host_.c_str());
   }
 }
 
