@@ -2,8 +2,8 @@
 Changelog for package roscpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.16.0 (2020-11-10)
+-------------------
 * Transport hint fix debug (`#21 <https://github.com/locusrobotics/ros_comm/issues/21>`_)
 * Transporthint tos (`#20 <https://github.com/locusrobotics/ros_comm/issues/20>`_)
   * Added TOS level to TransportHints
