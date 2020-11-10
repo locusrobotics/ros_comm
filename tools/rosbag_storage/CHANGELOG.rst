@@ -2,6 +2,9 @@
 Changelog for package rosbag_storage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.15.0 (2020-10-02)
 -------------------
 * Check for fclose returning 0 in rosbag_storage (`#1750 <https://github.com/locusrobotics/ros_comm/issues/1750>`_)

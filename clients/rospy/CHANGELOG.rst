@@ -2,6 +2,9 @@
 Changelog for package rospy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.15.0 (2020-10-02)
 -------------------
 * Initialize publisher/subscriber options in impl constructors (`#19 <https://github.com/locusrobotics/ros_comm/issues/19>`_)

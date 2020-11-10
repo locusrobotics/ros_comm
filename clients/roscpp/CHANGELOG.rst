@@ -2,6 +2,13 @@
 Changelog for package roscpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Transport hint fix debug (`#21 <https://github.com/locusrobotics/ros_comm/issues/21>`_)
+* Transporthint tos (`#20 <https://github.com/locusrobotics/ros_comm/issues/20>`_)
+  * Added TOS level to TransportHints
+* Contributors: Michael Johnson
+
 1.15.0 (2020-10-02)
 -------------------
 * `#1577 <https://github.com/locusrobotics/ros_comm/issues/1577>`_ revisited: Fix dynamic windowing for Topic Statistics (`#1695 <https://github.com/locusrobotics/ros_comm/issues/1695>`_)

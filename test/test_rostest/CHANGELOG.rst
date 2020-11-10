@@ -2,6 +2,9 @@
 Changelog for package test_rostest
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.15.0 (2020-10-02)
 -------------------
 * fix various test problems (`#1601 <https://github.com/locusrobotics/ros_comm/issues/1601>`_)

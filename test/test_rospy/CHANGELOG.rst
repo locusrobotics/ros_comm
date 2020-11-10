@@ -2,6 +2,9 @@
 Changelog for package test_rospy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.15.0 (2020-10-02)
 -------------------
 * more Python 3 compatibility (`#1796 <https://github.com/locusrobotics/ros_comm/issues/1796>`_)

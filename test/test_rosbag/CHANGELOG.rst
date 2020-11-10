@@ -2,6 +2,9 @@
 Changelog for package test_rosbag
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.15.0 (2020-10-02)
 -------------------
 * Initializing the repeat_latched option (`#17 <https://github.com/locusrobotics/ros_comm/issues/17>`_)
