@@ -41,12 +41,12 @@ class ParamServerCache(object):
     Cache of values on the parameter server. Implementation
     is just a thread-safe dictionary.
     """
-    
+
     def __init__(self):
         self.lock = threading.Lock()
         self.d = None
         self.notifier = None
-        
+
     ## Delete parameter from cache
     def delete(self, key):
         with self.lock:
@@ -82,7 +82,7 @@ class ParamServerCache(object):
         lock and thus must not implement any lengthy computation.
         """
         self.notifier = notifier
-        
+
     def update(self, key, value):
         """
         Update the value of the parameter in the cache
@@ -114,7 +114,7 @@ class ParamServerCache(object):
             d[value_key] = value
             if self.notifier is not None:
                 self.notifier(key, value)
-                
+
     def set(self, key, value):
         """
         Set the value of the parameter in the cache. This is a
@@ -184,5 +184,5 @@ def get_param_server_cache():
     """
     global _param_server_cache
     if _param_server_cache is None:
-        _param_server_cache = ParamServerCache()        
+        _param_server_cache = ParamServerCache()
     return _param_server_cache
