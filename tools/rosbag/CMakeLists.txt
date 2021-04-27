@@ -5,7 +5,7 @@ if(NOT WIN32)
   set_directory_properties(PROPERTIES COMPILE_OPTIONS "-Wall;-Wextra")
 endif()
 
-find_package(catkin REQUIRED COMPONENTS rosbag_storage rosconsole roscpp std_srvs topic_tools xmlrpcpp rosbag_msgs)
+find_package(catkin REQUIRED COMPONENTS rosbag_storage rosconsole roscpp std_srvs topic_tools xmlrpcpp)
 find_package(Boost REQUIRED COMPONENTS date_time regex program_options filesystem)
 find_package(BZip2 REQUIRED)
 
@@ -21,15 +21,12 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}
 catkin_package(
   LIBRARIES rosbag
   INCLUDE_DIRS include
-  CATKIN_DEPENDS rosbag_storage rosconsole roscpp std_srvs topic_tools xmlrpcpp rosbag_msgs)
+  CATKIN_DEPENDS rosbag_storage rosconsole roscpp std_srvs topic_tools xmlrpcpp)
 
 add_library(rosbag
   src/player.cpp
   src/recorder.cpp
-  src/snapshotter.cpp
   src/time_translator.cpp)
-
-add_dependencies(rosbag ${catkin_EXPORTED_TARGETS})
 
 target_link_libraries(rosbag ${catkin_LIBRARIES} ${Boost_LIBRARIES}
   ${BZIP2_LIBRARIES}
@@ -37,9 +34,6 @@ target_link_libraries(rosbag ${catkin_LIBRARIES} ${Boost_LIBRARIES}
 
 add_executable(record src/record.cpp)
 target_link_libraries(record rosbag)
-
-add_executable(snapshot src/snapshot.cpp)
-target_link_libraries(snapshot rosbag)
 
 add_executable(play src/play.cpp)
 target_link_libraries(play rosbag)
@@ -56,7 +50,7 @@ install(TARGETS rosbag
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
-install(TARGETS record play snapshot
+install(TARGETS record play
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
