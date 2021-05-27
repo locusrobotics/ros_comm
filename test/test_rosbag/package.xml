@@ -43,7 +43,7 @@
   <test_depend>genpy</test_depend>
   <test_depend>libboost-dev</test_depend>
   <test_depend>message_runtime</test_depend>
-  <test_depend condition="$ROS_PYTHON_VERSION == 2">python-rospkg</test_depend>
+  <test_depend condition="$ROS_PYTHON_VERSION == 2">python3-rospkg</test_depend>
   <test_depend condition="$ROS_PYTHON_VERSION == 3">python3-rospkg</test_depend>
   <test_depend>roslib</test_depend>
   <test_depend>rospy</test_depend>
