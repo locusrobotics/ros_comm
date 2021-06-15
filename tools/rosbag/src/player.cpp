@@ -44,6 +44,7 @@
 
 #include "rosgraph_msgs/Clock.h"
 
+#include <ctime>
 #include <set>
 
 using std::map;
@@ -94,7 +95,9 @@ PlayerOptions::PlayerOptions() :
     wait_for_subscribers(false),
     rate_control_topic(""),
     rate_control_max_delay(1.0f),
-    skip_empty(ros::DURATION_MAX)
+    skip_empty(ros::DURATION_MAX),
+    utc_time(false),
+    local_time(false)
 {
 }
 
@@ -115,6 +118,7 @@ Player::Player(PlayerOptions const& options) :
     pause_for_topics_(options_.pause_topics.size() > 0),
     pause_change_requested_(false),
     requested_pause_state_(false),
+    clock_time_format_("%F %T"),
     terminal_modified_(false)
 {
   ros::NodeHandle private_node_handle("~");
@@ -381,20 +385,50 @@ void Player::printTime()
 
         ros::Time current_time = time_publisher_.getTime();
         ros::Duration d = current_time - start_time_;
+        char status_buffer[200];
 
+        if (options_.utc_time || options_.local_time)
+        {
+            time_t time = current_time.sec;
+            struct tm* time_info = (options_.utc_time ? std::gmtime(&time) : std::localtime(&time));
+            auto usec = static_cast<int>(std::round(static_cast<double>(current_time.nsec) / 1e3));
+
+            char time_buffer[100];
+            strftime(time_buffer, 100, clock_time_format_.c_str(), time_info);
+
+            snprintf(
+                status_buffer,
+                200,
+                "Bag Time: %s.%-6d %s  Duration: %.6f / %.6f",
+                time_buffer,
+                usec,
+                time_info->tm_zone,
+                d.toSec(),
+                bag_length_.toSec());
+        }
+        else
+        {
+            snprintf(
+                status_buffer,
+                200,
+                "Bag Time: %13.6f   Duration: %.6f / %.6f",
+                current_time.toSec(),
+                d.toSec(),
+                bag_length_.toSec());
+        }
 
         if (paused_)
         {
-            printf("\r [PAUSED ]  Bag Time: %13.6f   Duration: %.6f / %.6f               \r", time_publisher_.getTime().toSec(), d.toSec(), bag_length_.toSec());
+            printf("\r [PAUSED ]  %s                      \r", status_buffer);
         }
         else if (delayed_)
         {
             ros::Duration time_since_rate = std::max(ros::Time::now() - last_rate_control_, ros::Duration(0));
-            printf("\r [DELAYED]  Bag Time: %13.6f   Duration: %.6f / %.6f   Delay: %.2f \r", time_publisher_.getTime().toSec(), d.toSec(), bag_length_.toSec(), time_since_rate.toSec());
+            printf("\r [DELAYED]  %s   Delay: %.2f        \r", status_buffer, time_since_rate.toSec());
         }
         else
         {
-            printf("\r [RUNNING]  Bag Time: %13.6f   Duration: %.6f / %.6f               \r", time_publisher_.getTime().toSec(), d.toSec(), bag_length_.toSec());
+            printf("\r [RUNNING]  %s                      \r", status_buffer);
         }
         fflush(stdout);
     }
