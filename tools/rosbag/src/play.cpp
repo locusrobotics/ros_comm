@@ -50,6 +50,8 @@ rosbag::PlayerOptions parseOptions(int argc, char** argv) {
       ("pause", "start in paused mode")
       ("queue", po::value<int>()->default_value(100), "use an outgoing queue of size SIZE")
       ("clock", "publish the clock time")
+      ("utc-time", "displays the time in UTC")
+      ("local-time,", "displays the time in the user's local timezone")
       ("hz", po::value<float>()->default_value(100.0f), "use a frequency of HZ when publishing clock time")
       ("delay,d", po::value<float>()->default_value(0.2f), "sleep SEC seconds after every advertise call (to allow subscribers to connect)")
       ("rate,r", po::value<float>()->default_value(1.0f), "multiply the publish rate by FACTOR")
@@ -148,6 +150,15 @@ rosbag::PlayerOptions parseOptions(int argc, char** argv) {
 
     if (vm.count("rate-control-max-delay"))
       opts.rate_control_max_delay = vm["rate-control-max-delay"].as<float>();
+
+    if (vm.count("utc-time") && vm.count("local-time"))
+      throw ros::Exception("utc-time and local-time are mutually exclusive. Please use only one.");
+
+    if (vm.count("utc-time"))
+      opts.utc_time = true;
+
+    if (vm.count("local-time"))
+      opts.local_time = true;
 
     if (vm.count("bags"))
     {
