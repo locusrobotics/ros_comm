@@ -97,6 +97,8 @@ struct ROSBAG_DECL PlayerOptions
     std::string rate_control_topic;
     float    rate_control_max_delay;
     ros::Duration skip_empty;
+    bool     utc_time;
+    bool     local_time;
 
     std::vector<std::string> bags;
     std::vector<std::string> topics;
@@ -212,6 +214,8 @@ private:
     bool pause_change_requested_;
 
     bool requested_pause_state_;
+
+    const std::string clock_time_format_;
 
     ros::Subscriber rate_control_sub_;
     ros::Time last_rate_control_;
