@@ -2,6 +2,9 @@
 Changelog for package test_rosservice
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.16.0 (2020-11-10)
 -------------------
 

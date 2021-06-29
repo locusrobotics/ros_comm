@@ -2,6 +2,13 @@
 Changelog for package rosbag
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Passing time args through to the actual rosbag play executable (`#27 <https://github.com/locusrobotics/ros_comm/issues/27>`_)
+* Writing out connection header for latched topics (`#26 <https://github.com/locusrobotics/ros_comm/issues/26>`_)
+* Adding real clock time display option (`#25 <https://github.com/locusrobotics/ros_comm/issues/25>`_)
+* Contributors: Tom Moore
+
 1.16.0 (2020-11-10)
 -------------------
 
