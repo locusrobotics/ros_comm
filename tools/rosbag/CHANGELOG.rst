@@ -2,6 +2,11 @@
 Changelog for package rosbag
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fixing latched record updating (`#28 <https://github.com/locusrobotics/ros_comm/issues/28>`_)
+* Contributors: Tom Moore
+
 1.16.1 (2021-06-29)
 -------------------
 * Passing time args through to the actual rosbag play executable (`#27 <https://github.com/locusrobotics/ros_comm/issues/27>`_)

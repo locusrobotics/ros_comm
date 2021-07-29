@@ -2,6 +2,9 @@
 Changelog for package test_rosservice
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.16.1 (2021-06-29)
 -------------------
 
