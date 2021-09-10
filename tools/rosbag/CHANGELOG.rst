@@ -2,6 +2,9 @@
 Changelog for package rosbag
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.16.2 (2021-07-29)
 -------------------
 * Fixing latched record updating (`#28 <https://github.com/locusrobotics/ros_comm/issues/28>`_)
