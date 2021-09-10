@@ -2,8 +2,8 @@
 Changelog for package rospy
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.16.3 (2021-09-10)
+-------------------
 * Fixing sleep timing issue in _reconnect (`#29 <https://github.com/locusrobotics/ros_comm/issues/29>`_)
 * Contributors: Tom Moore
 
