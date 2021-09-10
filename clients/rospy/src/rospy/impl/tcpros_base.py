@@ -783,11 +783,12 @@ class TCPROSTransport(Transport):
             except TransportInitError:
                 self.socket = None
                 
-            if self.socket is None and interval < 30.:
-                # exponential backoff (maximum 32 seconds)
-                interval = interval * 2
-                
-            time.sleep(interval)
+            if self.socket is None:
+                if interval < 30.:
+                    # exponential backoff (maximum 32 seconds)
+                    interval = interval * 2
+
+                time.sleep(interval)
 
     def receive_loop(self, msgs_callback):
         """
