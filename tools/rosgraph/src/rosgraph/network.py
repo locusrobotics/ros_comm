@@ -354,9 +354,19 @@ def read_ros_handshake_header(sock, b, buff_size):
     """
     header_str = None
     while not header_str:
-        d = sock.recv(buff_size)
+        # Remember timeout so we can reset it later
+        prev_timeout = sock.gettimeout()
+        try:
+            sock.settimeout(1.0)
+            d = sock.recv(buff_size)
+        except socket.timeout:
+            raise ROSHandshakeException("connection from sender timed out before handshake header received. Please check sender %s:%d for additional details." % sock.getpeername())
+        finally:
+            sock.settimeout(prev_timeout)
+
         if not d:
             raise ROSHandshakeException("connection from sender terminated before handshake header received. %s bytes were received. Please check sender for additional details."%b.tell())
+
         b.write(d)
         btell = b.tell()
         if btell > 4:
