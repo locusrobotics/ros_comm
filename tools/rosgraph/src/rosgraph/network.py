@@ -366,7 +366,6 @@ def read_ros_handshake_header(sock, b, buff_size):
 
         if not d:
             raise ROSHandshakeException("connection from sender terminated before handshake header received. %s bytes were received. Please check sender for additional details."%b.tell())
-
         b.write(d)
         btell = b.tell()
         if btell > 4:
