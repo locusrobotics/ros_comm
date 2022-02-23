@@ -93,8 +93,8 @@ Changelog for package roslaunch
 * improve exception handling when resource is not found (`#1476 <https://github.com/ros/ros_comm/issues/1476>`_)
 * fix issues when built or run on Windows (`#1466 <https://github.com/ros/ros_comm/issues/1466>`_)
 
-Forthcoming
------------
+1.16.0 (2022-02-23)
+-------------------
 * REMOVEME: Force to use python3 for now
 * Handling eval tag inside yaml files (#16)
 * 1.15.11

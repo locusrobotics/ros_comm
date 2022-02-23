@@ -77,8 +77,8 @@ Changelog for package rospy
 * show connection info on rosnode info (`#1497 <https://github.com/ros/ros_comm/issues/1497>`_)
 * import socket, threading in udpros.py (`#1494 <https://github.com/ros/ros_comm/issues/1494>`_)
 
-Forthcoming
------------
+1.16.0 (2022-02-23)
+-------------------
 * Fixing sleep timing issue in _reconnect (#29)
 * REMOVEME: Force to use python3 for now
 * Make python2 compatible (#24)

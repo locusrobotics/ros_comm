@@ -54,8 +54,8 @@ Changelog for package rosmsg
 * normalize paths before comparison in rosmsg (`#1586 <https://github.com/ros/ros_comm/issues/1586>`_)
 * update wiki.ros.org URLs (`#1536 <https://github.com/ros/ros_comm/issues/1536>`_)
 
-Forthcoming
------------
+1.16.0 (2022-02-23)
+-------------------
 * REMOVEME: Force to use python3 for now
 * 1.15.11
 * 1.15.10
