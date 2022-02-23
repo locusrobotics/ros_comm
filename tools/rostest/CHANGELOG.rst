@@ -59,6 +59,97 @@ Changelog for package rostest
 * fix various test problems (`#1601 <https://github.com/ros/ros_comm/issues/1601>`_)
 * invoke rostest from CMake with the PYTHON_EXECUTABLE (`#1583 <https://github.com/ros/ros_comm/issues/1583>`_)
 
+Forthcoming
+-----------
+* 1.15.11
+* 1.15.10
+* 1.15.9 package.xmls
+* 1.15.9
+* Fix paramtest for empty values of a parameter (#2054)
+  * Fix paramtest for empty values of a parameter (ros#2053)
+  * Fix paramtest for empty values of a parameter (ros#2053)
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* fix misspell. (#2066)
+* install advertisetest (#2046)
+  Co-authored-by: Stefan Kaiser <stefan.kaiser@tomtom.com>
+* 1.15.8
+* update changelogs
+* Remove dependency on rostopic from rostest package (#2002)
+  * Remove unused 'rostopic' import in rostest/publishtest node
+  * Remove dependency on rostopic in advertisetest.test
+* fixed missing reload() function on python 3 (#1968)
+  Co-authored-by: Kai-Uwe Hermann <khermann@fzi.de>
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* 1.15.4
+* update changelogs
+* [noetic] Restrict boost dependencies to components used (#1871)
+  * [roscpp] declare specific boost dependencies
+  * [rosbag] declare specific boost dependencies
+  * [rosbag_storage] declare specific boost dependencies
+  * [rostest] declare specific boost dependencies
+  * [xmlrpcpp] declare specific boost dependencies
+  * [message_filters] declare specific boost dependencies
+  * [test_rosbag] declare specific boost dependencies
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* increase time limit of advertisetest/publishtest.test to reduce flakyness (#1897)
+  * increase time limit of publishtest.test to reduce flakyness
+  * increase time limit of advertisetest.test to reduce flakyness
+* Use setuptools instead of distutils (#1870)
+  * Use setuptools instead of distutils
+  * Remove explicit setuptools dependency
+  * revert unrelated package format changes
+  * restore xml version
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.15.0
+* update changelogs
+* [noetic] wrap rostest call to add `python` pointing to sys.executable in PATH (#1879)
+  * Wrap rostest call to set python in PATH
+  * Consolidate skip logic
+  * sys.executable is always an absolute path
+  * Fix skip
+  * style only
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.14.4
+* update changelog
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* more Python 3 compatibility (#1795)
+  * avoid using nose.tools without dependency being declared
+  * seek(0)
+  * subprocess decode
+  * import urlparse
+  * fix hash arg encode
+  * print function
+  * replace tabs used for indenting Python code with spaces
+* rostest: add advertisetest (#1761)
+* rostest: fix flaky hztests (#1661)
+  * rostest: fix flaky hztests
+  * add retry to all hztests
+  * fix concerns
+  * fix more wrong retry-attributes
+* rostest: use AnyMsg in publishtest (#1659)
+  * publishtest: use AnyMsg in publishtest
+  * fix concerns
+* fix various test problems (#1601)
+  * move test files to separate package
+  * move publishtest into separate package since it requires rostopic which rostest can't depend on
+  * [rosbag_storage] add missing dependency on std_msgs
+  * duplicate talker.py test node since rospy doesn't install the file
+  * modify test to pass when rospy.get_name isn't available without a dependency declared on it
+* Directly run python script if run test through cmake (#24) (#1583)
+* Contributors: Dirk Thomas, Jacob Perron, James Xu, Kai Hermann, Levko Ivanchuk, Mateus Amarante, Mikael Arguedas, Shane Loretz, Yuki Furuta, beetleskin, tomoya
+
 1.14.3 (2018-08-06)
 -------------------
 

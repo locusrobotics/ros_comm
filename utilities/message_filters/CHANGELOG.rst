@@ -54,6 +54,71 @@ Changelog for package message_filters
 * remove signals from find_package(Boost COMPONENTS ...) (`#1580 <https://github.com/ros/ros_comm/issues/1580>`_)
 * fix message_filters build issue on the template syntax (`#1483 <https://github.com/ros/ros_comm/issues/1483>`_)
 
+Forthcoming
+-----------
+* 1.15.11
+* 1.15.10
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* [roscpp] Update boost::placeholders usage for boost 1.73 (and later) (#2023)
+  * more port fix.
+  * boost::placeholders migration.
+  * fix more.
+  * revert boost/bind/bind.hpp for back-compatible.
+* 1.15.8
+* update changelogs
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* clear message queue on simtime jumping back (#1518)
+* 1.15.4
+* update changelogs
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* fix missing boost dependencies (#1895)
+* Use setuptools instead of distutils (#1870)
+  * Use setuptools instead of distutils
+  * Remove explicit setuptools dependency
+  * revert unrelated package format changes
+  * restore xml version
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* Add overload of ApproximateTime::setInterMessageLowerBound() to set all topics to the same value (#1860)
+  * Remove incorrect comments
+  * Add overload of setInterMessageLowerBound() to set all topics to the same value
+* update approximate time filter to work with python2 and python3 (#1660)
+* message_filters/__init_\_.py - Added reduce import for python3 compatability (#1633)
+* remove messages that are newer than the newly added message (#1438)
+  * remove messages that are newer than the newly added message
+  * use /clock as reference for detecting backward jumps
+  * set time to initialised after constructing ApproximateTimeSynchronizer
+  * notify user about clearing buffer
+  * use continuous time for testing header-less message synchronisation
+  * test buffer clearing when jumping back in time
+  * avoid unrelated changes, remove double space
+* Remove signals from find_package(Boost COMPONENTS ...) (#1580)
+  The packages use signals2, not signals. Only boost libraries with
+  compiled code should be passed to find_package(Boost COMPONENTS ...),
+  and the signals2 library has always been header only.
+  Boost 1.69 has removed the deprecated signals library, so the otherwise
+  useless but harmless `signals` component now breaks the build.
+* Fix message_filters build issue on the template syntax (#1483)
+* Contributors: Christian Rauch, Dirk Thomas, Jacob Perron, Johnson Shih, Kevin Hallenbeck, Maarten de Vries, Ross Lannen, Sean Yen, Shane Loretz, Yuki Furuta, tykurtz
+
 1.14.3 (2018-08-06)
 -------------------
 * call Subscriber::unsubscribe() in destructor (`#1434 <https://github.com/ros/ros_comm/issues/1434>`_)

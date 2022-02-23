@@ -104,6 +104,298 @@ Changelog for package roscpp
 * fix memory error due to missing rosout_disable_topics_generation parameter (`#1507 <https://github.com/ros/ros_comm/issues/1507>`_)
 * fix issues when built or run on Windows (`#1466 <https://github.com/ros/ros_comm/issues/1466>`_)
 
+Forthcoming
+-----------
+* Transport hint fix debug (#21)
+* Transporthint tos (#20)
+  * Added TOS level to TransportHints
+* 1.15.11
+* 1.15.10
+* Fix for deadlock issue 1980 (#2121)
+  * Add unit test for removing a callback that's being executed.
+  This unit test fails until we can remove callbacks that are being executed.
+  * Use the marked_for_removal flag if the callback is being executed.
+  This fixes a potential deadlock when a timer is being removed that's also being executed.
+* fix getNumPublishers() to only count fully connected (#2107)
+  There is code which uses getNumPublishers() being positive as a
+  guarantee that a call to the remote publisher's publish() is
+  guaranteed to send a message to the subscriber. However, because
+  connections which have not yet received their header are counted,
+  this is not true. One such user of getNumPublishers() is actionlib.
+  It relies on getNumPublishers() only returning postive when a publish
+  on the result topic would succeed.
+  Fix this by only counting connections with received headers. If we
+  have received the header, we know the remote publisher is tracking a
+  connection back to us and has accepted the connection and that a
+  call to publish() on its end will send the message.
+  Note that this issue is only relevant for the TCP transport, as the
+  UDP transport and intraprocess link have already setup their header
+  by the time they are added to the publication links. Since all
+  publisher link types update the header, including the caller ID,
+  counting those with caller IDs set to non-empty is sufficient to
+  solve the issue.
+* Replace message assertion with logging in order to have release modes to fail in compilation when msg type mismatches occur (#2096)
+* 1.15.9 package.xmls
+* 1.15.9
+* set call_finished\_ with true for each call inside callFinished (#2074)
+  * set call_finished\_ with true for each call inside callFinished
+  and also set current_call flags when failure happens
+  * Update based on review
+  Co-authored-by: Tomoya.Fujita <Tomoya.Fujita@sony.com>
+  * set the flag with true again even if it is true already
+  Co-authored-by: Tomoya.Fujita <Tomoya.Fujita@sony.com>
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* cached parameter should be unsubscribed (#2068)
+  * add unsubscribeCachedParam.
+  * unsubscribe all the cached parameters.
+  * add const S_string::iterator.
+  * delete unnecessary if statement.
+  * unsubscribeCachedParam should be called when parameter is deleted.
+  * fix parenthesis location.
+* fix misspell. (#2066)
+* Fix Lost Wake Bug in ROSOutAppender (#2033)
+  This fixes a bug in ROSOutAppender that consists of waiting on the condition_variable `queue_condition\_` without checking if the `log_queue\_` is empty.
+  In this situation if the `log_queue\_` had some messages that were inserted while `ROSOutAppender::logThread` was publishing other messages, the new messages in the queue won't be published, until another message eventually is added.
+  Note that the `notify_all` sent in the destructor would not cause the unpublished messages to get published, as when the `queue_condition\_`  is awaken by this notification, `shutting_down\_` would be true and would cause `ROSOutAppender::logThread`  to return immediately.
+  Co-authored-by: Adel Fakih <adel.fakih@avidbots.com>
+* [roscpp] Update boost::placeholders usage for boost 1.73 (and later) (#2023)
+  * more port fix.
+  * boost::placeholders migration.
+  * fix more.
+  * revert boost/bind/bind.hpp for back-compatible.
+* 1.15.8
+* update changelogs
+* Changed is_async_connected to use epoll when available (#1983)
+  Scalability improvement to remove the 1024 socket limit
+* Allow mixing latched and unlatched publishers. (#1991)
+  * Allow mixing latched and unlatched publishers.
+  * Fix isLatched behaviour, add tests.
+  * Don't pass unused argument to PublicationPtr.
+  * Protect latch accessors with lock.
+* 1.15.7
+* update changelogs
+* fixed Windows build break. (#1961)
+* 1.15.6
+* update changelogs
+* Fix a bug that using a destroyed connection object. (#1950)
+  there is a case that accessing a connection object which was destroyed by
+  ConnectionManager and TransportSubscriberLink/TransportPublicationLink
+  while getting a close event in pollset to call Connection::drop.
+* 1.15.5
+* update changelogs
+* check if async socket connect is success or failure before TransportTCP::read() and TransportTCP::write() (#1954)
+  Co-authored-by: hustac <imtoumao@gmail.com>
+* Fix bug that connection drop signal related funtion throw a bad_weak … (#1940)
+  * Fix bug that connection drop signal related funtion throw a bad_weak exception
+  TransportSubscriberLink::onConnectionDropped throws a bad_weak exception
+  while call shared_from_this() if TransportSubscriberLink already destroyed
+  * Fix dead lock about call_queue_mutex\_ and drop_mutex\_ in two threads
+  * Remove check that is not necessary
+* roscpp: Multiple latched publishers per process on the same topic (fix #146) (#1544)
+  * roscpp: Fix latching of multiple publishers on the same topic.
+  * test_roscpp: Add test for multiple latched publishers on same topic.
+  * remove obsolete CXX_STANDARD property
+  Co-authored-by: Hans-Joachim Krauch <achim.krauch@intermodalics.eu>
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* Fix negative numbers in ros statistics (#1531)
+  Fix ros/ros_comm#1509
+* Remove extra \n in ROS_DEBUG. (#1925)
+* 1.15.4
+* update changelogs
+* [noetic] Restrict boost dependencies to components used (#1871)
+  * [roscpp] declare specific boost dependencies
+  * [rosbag] declare specific boost dependencies
+  * [rosbag_storage] declare specific boost dependencies
+  * [rostest] declare specific boost dependencies
+  * [xmlrpcpp] declare specific boost dependencies
+  * [message_filters] declare specific boost dependencies
+  * [test_rosbag] declare specific boost dependencies
+* 1.15.3
+* update changelogs
+* remove Boost version check since Noetic only targets platforms with 1.67+ (#1903)
+* 1.15.2
+* update changelogs
+* export missing Boost dependency (#1898)
+* 1.15.1
+* update changelogs
+* fix missing boost dependencies (#1895)
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* #961 revisited: Add default ROS_MASTER_URI (#1666)
+  * Add default ROS_MASTER_URI
+  * roscpp: added getDefaultMasterUri()
+  * moved DEFAULT_MASTER_PORT and DEFAULT_MASTER_URI from rospy to rosgraph to make them usable in get_master_uri
+  * removed not needed try-catch-block in get_master_uri
+  * style of touched lines
+  * style of touched lines
+  * style of touched lines
+  Co-authored-by: Jochen Sprickerhof <github@jochen.sprickerhof.de>
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* add default assignment operator for various classes (#1888)
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* Do not display error message if poll yields EINTR (#1868)
+  * Do not display error message if poll yields EINTR
+  Closes #1370
+  closes TonyRobotics/RoboWare#63
+  closes ericsantii/alexa-turtlesim-ros#2
+  * Keep abstraction compatibility
+* [windows][melodic] portable duration cast (#1882)
+* Drop custom implementation of boost::condition_variable to fix busy-wait spinning (#1878)
+  * roscpp: fix potential busy-wait loop caused by backported Boost condition_variable (fix ros/ros_comm#1343)
+  https://github.com/ros/ros_comm/pull/1014 and https://github.com/ros/ros_comm/pull/1250 introduced a backported
+  version of boost::condition_variable, where support for steady (monotonic) clocks has been added in version 1.61.
+  But the namespace of the backported version was not changed and the symbol names might clash with the original
+  version.
+  Because the underlying clock used for the condition_variable is set in the constructor and must be
+  consistent with the the expectations within member variables. The compiler might choose to inline one or the
+  other or both, and is more likely to do so for optimized Release builds. But if it does not, the symbol ends
+  up in the symbol table of roscpp and depending on which other libraries will be linked into the process it
+  is unpredictable which of the two versions will be actually called at the end. In case the constructor defined
+  in `/usr/include/boost/thread/pthread/condition_variable.hpp` was called and did not configure the internal
+  pthread condition variable for monotonic clock, each call to the backported do_wait_until() method with a
+  monotonic timestamp will return immediately and hence causes `CallbackQueue::callOne(timeout)` or
+  `CallbackQueue::callAvailable(timeout)` to return immediately.
+  This patch changes the namespace of the backported condition_variable implementation to boost_161. This
+  removes the ambiguity with the original definition if both are used in the same process.
+  * roscpp: use boost::condition_variable::wait_for() instead of deprecated timed_wait()
+  This fixes ROS timers in combination with 2c18b9f29269ee713c182409666be66af05e06a7. The timer
+  callbacks were not called because the TimerManager's thread function blocked indefinitely on
+  boost::condition_variable::timed_wait().
+  Relative timed_wait() uses the system clock (boost::get_system_time()) unconditionally to
+  calculate the absolute timestamp for do_wait_until(). If the condition variable has been
+  initialized with BOOST_THREAD_HAS_CONDATTR_SET_CLOCK_MONOTONIC, it compares this timestamp
+  with the monotonic clock and therefore blocks.
+  This issue has been reported in https://svn.boost.org/trac10/ticket/12728 and will not be
+  fixed. The timed_wait interface is apparently deprecated.
+  * roscpp: do not use boost_161_condition_variable.h on Windows (untested)
+  * roscpp: remove specialized implementation of TimerManager<T,D,E>::threadFunc() in steady_timer.cpp
+  The updated generic definition in timer_manager.h should do the same with a minor update.
+  In all cases we can call boost::condition_variable::wait_until() with an absolute time_point of the respective clock.
+  The conversion from system_clock to steady_clock for Time and WallTime is done internally in
+  boost::condition_variable::wait_until(lock_type& lock, const chrono::time_point<Clock, Duration>& t).
+  * fix namespaces
+  * add more explicit namespaces
+  * add missing ns
+  * roscpp: fixed Boost version check in CMakeLists.txt
+  find_package(Boost) has to come before checking the Boost version.
+  Otherwise BOOST_THREAD_HAS_CONDATTR_SET_CLOCK_MONOTONIC was not defined which
+  triggered the assertion in timer_manager.h:240.
+  Since Boost 1.67 BOOST_THREAD_HAS_CONDATTR_SET_CLOCK_MONOTONIC became the default
+  if the platform supports it and the macro is not defined anymore. Instead, check
+  for BOOST_THREAD_INTERNAL_CLOCK_IS_MONO.
+  * roscpp: replace ROSCPP_BOOST_CONDITION_VARIABLE and ROSCPP_BOOST_CONDITION_VARIABLE_HEADER macros by a typedef in internal_condition_variable.h
+  * Remove copy of boost::condition_variable implementation from Boost 1.61 in namespace boost_161
+  * Revert some changes in include directives and in CMakeLists.txt to minimize the diff to melodic-devel
+  Addresses https://github.com/ros/ros_comm/pull/1878#pullrequestreview-354109870.
+  * use wait_for(), remove TimerManagerTraits
+  * Revert "use wait_for(), remove TimerManagerTraits"
+  This reverts commit 2a67cf6780c32fef3af96fac9da405f4e6eb0298.
+  Co-authored-by: Antoine Hoarau <703240+ahoarau@users.noreply.github.com>
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* roscpp: disable rosout via ROSCPP_NO_ROSOUT env var (#1858)
+  Introduce the ROSCPP_NO_ROSOUT env var to disable rosout.
+  This is more convenient than programmatically passing the `NoRosout` init option,
+  and especially needed for nodelets where this option cannot be passed.
+* conditionally gaurd sys/socket.h for Windows. (#1876)
+* explicit include of socket.h to support FreeBSD (#1864)
+  * explicit include of socket.h to support FreeBSD
+  * additional explicit include of socket.h to support FreeBSD
+* Remove DEBUG statements from getImpl (#1823)
+  These statements can potentially be called from within a logging
+  function, which causes a "recursive print" warning.
+* use c++11 std::snprintf (#1820)
+* roscpp: TransportTCP: Allow socket() to return 0 (#1707)
+  * roscpp: TransportTCP: Allow socket() to return 0
+  In situations that an application has stdin closed, socket() may (and will) return 0. This is totally fine.
+  * TransportUDP: fix incoming socket creation
+* #1577 revisited: Fix dynamic windowing for Topic Statistics (#1695)
+  * Add failing tests for topic statistics frequency for rospy and roscpp
+  * Fix TopicStatistics dynamic windowing to adjust evaluation frequency in the right direction
+  * test_roscpp: fixed topic_statistic_frequency
+  * test_roscpp/topic_statistic_frequency: cleanup
+* roscpp/service_publication: removed int-bool-comparison (#1710)
+* add Timer::isValid() const (#1779)
+  fix #1650
+* Added possibility to pass rospy.Duration as timeout to wait_for_service and wait_for_message. (#1703)
+  * Added possibility to pass rospy.Duration as timeout to wait_for_service and wait_for_message.
+  Fixes https://github.com/ros/ros_comm/issues/1658.
+  * spelling
+* Fix segfault in TransportPublisherLink (#1714)
+* roscpp/transport_tcp: enable poll event POLLRDHUP to detect dead (#1704)
+  connections properly
+* roscpp/transport_udp: zero-initialize sockaddr_in object (#1740)
+  * roscpp/transport_udp: zero-initialize sockaddr_in object
+  * rostcp/transport_udp: zero-initialize sockaddr_in members
+* unregisterService returns result of execute("unregisterService") (#1751)
+  fix #1744
+* fixing string check (#1771)
+* Resolve memory leak. (#1503)
+  * Resolve memory leak.
+  Delete g_rosout_appender explicitly instead of assigning it to NULL.
+  Follow deletion with NULL assignment.
+  * Deregister g_rosout_appender
+  * revert unrelated whitespace change
+  * Update init.cpp
+  * Increment version number.
+  * space in comments
+  * Merge
+  * Revert "Increment version number."
+  This reverts commit 795c8fda33821b635ad30a4828d9071bcc69bed4.
+  * Add newer rosconsole dependencies
+  * Update rosconsole dependencies in package.xml
+  * Sync with upstream completely
+  * Add changes
+  * Remove deregister function, since it is already done in shutdown().
+  * Remove unnecessary .catkin_workspace file.
+* /libros/node_handle: alternative way to fix #838 (#1656)
+* roscpp/TopicManager: avoid deadlock (#1645)
+* roscpp/service: use WallTime/WallDuration for waiting (#1638)
+* roscpp: added missin include path (for bazel workspaces) (#1636)
+* fixed bug in statistics decision making if one should publish (#1625)
+* Add hasStarted() const to WallTimer and SteadyTimer API (#1565)
+  * roscpp: copy hasStarted() member function from ros::Timer to ros::WallTimer and ros::SteadyTimer
+  ros::Timer::hasStarted() has been added in ros/ros_comm#1464. The same member function should exist in the other
+  two timer implementations, too, for completeness.
+  * Check for nullptr in WallTimer::hasStarted() and SteadyTimer::hasStarted()
+  Analogous to fe9479cdbf0be0caa542c74c7c1fb8229ea8164d (ros/ros_comm#1541).
+* Remove signals from find_package(Boost COMPONENTS ...) (#1580)
+  The packages use signals2, not signals. Only boost libraries with
+  compiled code should be passed to find_package(Boost COMPONENTS ...),
+  and the signals2 library has always been header only.
+  Boost 1.69 has removed the deprecated signals library, so the otherwise
+  useless but harmless `signals` component now breaks the build.
+* Fix string error on windows (#1582)
+  Check if name is empty before read it, or it will cause 'cannot decrement string iterator before begin' error on Windows in debug mode.
+* visibility macros update (#1591)
+* Fix race due unprotected access to callbacks\_ in roscpp client (#1595)
+* Removed nullptr access from Timer().hasStarted() (#1541)
+* roscpp: Add const specifier to `NodeHandle::param(param_name, default_val)`. (#1539)
+* Update wiki.ros.org URLs (#1536)
+* Fix stamp_age_mean overflow when stamp age very big (#1526)
+* [C++14] remove explicit -std=c++11, default to 14 (#1525)
+  From REP-0003
+  > Melodic
+  > As of ROS Melodic, we are using the C++14 (ISO/IEC 14882:2014) standard.
+  Related to discussion on ros-planning/moveit#1146
+* Fix memory error due to missing rosout_disable_topics_generation para… (#1507)
+  * Fix memory error due to missing rosout_disable_topics_generation parameter
+  * Initialise disable_topics\_ in constructor of ROSOutAppender
+  * Removed security check for rosout_disable_topics_generation parameter in favour of a class initialiser
+* Fix issues when built or run on Windows (#1466)
+  * Fix roslz4 build issue on Windows
+  * Fix xmlrpcpp build issue on Windows, fix polling fails when run on Windows
+  * Fix roscpp build issue on Windows
+  * Fix rosbag_storage build issue on Windows
+  * fix issues in python scripts to run roscore on Windows
+  * revert unrelated whitespace changes
+  * Revert changes in roslogging.py
+  * declare const for source_cnt
+* Contributors: Adel Fakih, Alex Moriarty, Arkady Shapkin, Arusekk, Barry Xu, C. Andy Martin, Chen Lihui, Christopher Wecht, Daniel Wang, Dino Hüllmann, Dirk Thomas, Felix Ruess, Gabriel Arjones, Hans-Joachim Krauch, Igor Semenov, Ivor Wanders, Jacob Perron, James Xu, Jeremie Deray, Johannes Meyer, Johnson Shih, Kunal Tyagi, Maarten de Vries, Martin Pecka, Michael Carroll, Michael Johnson, Mikael Arguedas, Mike Purvis, Sean Yen, Shane Loretz, Tahsincan Köse, Victor Lamoine, Zbyněk Winkler, astere-cpr, dodsonmg, foodtooth, randoms, tomoya, wentz89
+
 1.14.3 (2018-08-06)
 -------------------
 * add hasStarted() to Timer API (`#1464 <https://github.com/ros/ros_comm/issues/1464>`_)
