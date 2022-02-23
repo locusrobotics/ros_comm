@@ -67,6 +67,123 @@ Changelog for package xmlrpcpp
 * fix test code build issues on Windows (`#1479 <https://github.com/ros/ros_comm/issues/1479>`_)
 * fix issues when built or run on Windows (`#1466 <https://github.com/ros/ros_comm/issues/1466>`_)
 
+Forthcoming
+-----------
+* 1.15.11
+* 1.15.10
+* Portable fix to recent Windows build breaks. (#2110)
+  * Portable fix.
+  * include <climits>
+  * Adding missing headers.
+  * Adding #include <vector>
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* Trap for overly large input to XmlRPCPP (#2065)
+  * Trap for overly large input to XmlRPCPP which could cause problems with int <-> size_t conversions.
+  - In XmlRpcClient, XmlRpcServerConnection and XmlRpcSocket, recognize when incoming or outgoing data is too large, generate an error and discard the data when practical.
+  - Use the safe strtol() rather than atoi() to decode an incoming content-length header, and generate an error if the length is invalid or too large.
+  - In XmlRpcUtil, prevent attempts to parse overly large XML input.
+  - Add tests where they can reasonably be inserted into existing test routines.
+  Although this fix could be cleaner the update is written to make the update ABI compatible.
+  This fix addresses CVE-2020-16124 / Integer overflow in ros_comm.
+  * Trap for memory allocation error in tests
+  * Revert earlier change
+  * Update tests
+  Replace call to GTEST_SKIP with output to stderr. Remove the
+  redResponseOversize test since out-of-memory errors during
+  testing cannot easily be handled within the existing test objects.
+  * Improve test error handling
+  Use GTEST_SKIP if available, otherwise print to stderr. Remove test
+  that's being killed because it takes too long to handle the oversize
+  test values
+* fix misspell. (#2066)
+* XmlRpcValue::_doubleFormat should be used during write. (#2003)
+  * XmlRpcValue::_doubleFormat should be used during write.
+  * allocate buffer dynamically for XmlRpcValue::_doubleFormat if necessary.
+  * add test for XmlRpcValue::_doubleFormat.
+  * check return code from std::snprintf, save/restore DoubleFormat for test.
+  * add one time warning message for DoubleFormat.
+  * use XmlRpcUtil::error instead of ROS_ERROR.
+  * use static_cast and minor fixes.
+  * delete unrelated change and fix invalid format case.
+  * get rid of redundant condition from if statement.
+* 1.15.8
+* update changelogs
+* Added const versions of XmlRpcValue converting operators. (#1978)
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* Check if enough FDs are free, instead counting the total free FDs. (#1929)
+* 1.15.4
+* update changelogs
+* [noetic] Restrict boost dependencies to components used (#1871)
+  * [roscpp] declare specific boost dependencies
+  * [rosbag] declare specific boost dependencies
+  * [rosbag_storage] declare specific boost dependencies
+  * [rostest] declare specific boost dependencies
+  * [xmlrpcpp] declare specific boost dependencies
+  * [message_filters] declare specific boost dependencies
+  * [test_rosbag] declare specific boost dependencies
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* [Windows][melodic-devel] workaround WSAPoll doesn't report failed connections. (#1816)
+  * workaround wsapoll not report failed connections.
+  * add link for reference.
+* Fix base64 decode error on ARM platforms (#1853)
+  * Revert "fix base64 encode error (#1769)"
+  This reverts commit ec8b0ef34a7d8063066af27aee33ac559b3043d1.
+  * libb64: integer overflows
+  Copied from https://sourceforge.net/p/libb64/bugs/2/:
+  > The attached patch fixes integers overflows in the decoder.
+  > The first hunk is needed for systems with signed chars (e.g. i386).
+  > The other hunks fix the decoder on unsigned-char systems (on which it's currently completely broken).
+  Co-authored-by: Jonathan Wakely <github@kayari.org>
+* use c++11 std::snprintf (#1820)
+* Fix dead loop if accept connection error in XmlRpcServer (#1791)
+* Fixed test build errors. (#1723)
+* fix base64 encode error (#1769)
+* XmlRpcValue added bool assignment operator (#1709)
+* Added const indexer for xmlrpc (#1759)
+* xmlrpcpp: fixed invalid zero index as suggested in #1547 (#1631)
+* Avoid calling memcpy on NULL pointer with size 0. (#1546)
+* Revert "Revert "move the winsock2.h into cpp."" (#1588)
+  This reverts commit e3e2bfbd75615b52231956285eeddc7fd2cf22c1.
+* visibility macros update (#1591)
+* [C++14] remove explicit -std=c++11, default to 14 (#1525)
+  From REP-0003
+  > Melodic
+  > As of ROS Melodic, we are using the C++14 (ISO/IEC 14882:2014) standard.
+  Related to discussion on ros-planning/moveit#1146
+* Fix test code build issues on Windows (#1479)
+  * Fix test code build issues on Windows
+  * Change not to touch XmlRpcClient header, expose the enum from test code
+  * Add missing header file back
+* Fix issues when built or run on Windows (#1466)
+  * Fix roslz4 build issue on Windows
+  * Fix xmlrpcpp build issue on Windows, fix polling fails when run on Windows
+  * Fix roscpp build issue on Windows
+  * Fix rosbag_storage build issue on Windows
+  * fix issues in python scripts to run roscore on Windows
+  * revert unrelated whitespace changes
+  * Revert changes in roslogging.py
+  * declare const for source_cnt
+* Contributors: Alex Moriarty, Christopher Wecht, Dirk Thomas, Hanno Böck, Jacob Perron, James Xu, Jason Wang, Johannes Meyer, Johnson Shih, Martin Pecka, Mikael Arguedas, Sean Yen, Shane Loretz, Sid Faber, randoms, tomoya
+
 1.14.3 (2018-08-06)
 -------------------
 

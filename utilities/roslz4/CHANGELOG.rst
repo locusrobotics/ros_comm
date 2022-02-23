@@ -51,6 +51,62 @@ Changelog for package roslz4
 * update install destination for roslz4 (`#1620 <https://github.com/ros/ros_comm/issues/1620>`_)
 * fix issues when built or run on Windows (`#1466 <https://github.com/ros/ros_comm/issues/1466>`_)
 
+Forthcoming
+-----------
+* 1.15.11
+* 1.15.10
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* fix misspell. (#2066)
+* 1.15.8
+* update changelogs
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* Fix #923 (use undefined dynamic_lookup on OSX) (#1923)
+  See https://github.com/conda-forge/ros-roslz4-feedstock/pull/3 and https://gitter.im/RoboStack/Lobby?at=5e830ffdbd09254f83ea7d4c and https://blog.tim-smith.us/2015/09/python-extension-modules-os-x/ for details.
+* 1.15.4
+* update changelogs
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* Use setuptools instead of distutils (#1870)
+  * Use setuptools instead of distutils
+  * Remove explicit setuptools dependency
+  * revert unrelated package format changes
+  * restore xml version
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* Add alternative lz4 name for Windows. (#1821)
+* check for XXH_malloc NULL return (#1778)
+  fix #1753
+* update install destination for roslz4 (#1620)
+  * Fixing installation target for Windows.
+  * add comment (#50)
+* Fix issues when built or run on Windows (#1466)
+  * Fix roslz4 build issue on Windows
+  * Fix xmlrpcpp build issue on Windows, fix polling fails when run on Windows
+  * Fix roscpp build issue on Windows
+  * Fix rosbag_storage build issue on Windows
+  * fix issues in python scripts to run roscore on Windows
+  * revert unrelated whitespace changes
+  * Revert changes in roslogging.py
+  * declare const for source_cnt
+* Contributors: Dirk Thomas, Jacob Perron, James Xu, Jeremie Deray, Johnson Shih, Sean Yen, Shane Loretz, Tobias Fischer, tomoya
+
 1.14.3 (2018-08-06)
 -------------------
 

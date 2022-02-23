@@ -93,6 +93,257 @@ Changelog for package roslaunch
 * improve exception handling when resource is not found (`#1476 <https://github.com/ros/ros_comm/issues/1476>`_)
 * fix issues when built or run on Windows (`#1466 <https://github.com/ros/ros_comm/issues/1466>`_)
 
+Forthcoming
+-----------
+* REMOVEME: Force to use python3 for now
+* Handling eval tag inside yaml files (#16)
+* 1.15.11
+* 1.15.10
+* Fix AttributeError isAlive (#2092)
+  * fix: roscore -> AttributeError: 'ProcessMonitor' object has no attribute 'isAlive'
+  * Fix AttributeError: 'Thread' object has no attribute 'isAlive'
+  * Update remaining instances of isAlive to is_alive
+  Keep mock method isAlive to keep backwards compatibility for users who happen to be using the mock object.
+  Co-authored-by: Jacob Perron <jacob@openrobotics.org>
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* [Windows] Single quote string fix-up (#2051)
+  * add split_with_single_quote_enclosed_fixup
+  * address feedback.
+  * revert the renaming.
+* fix misspell. (#2066)
+* Change error message (#2035)
+  As far as I can tell, not being able to ping itself does not *cause* the issue (at least if ping refers to using the `ping` program to check if a host can be reached). Not sure if this wording is the optimal.
+* Ignore underscores when parsing literal numeric values (#2022)
+  * Ignore underscores when parsing literal numeric values
+  Python 3, due to PEP515, allows numerical values to be (visually)
+  grouped via underscores. However, here, we want to consider literals
+  containing an underscore as a string.
+  * add comment
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.15.8
+* update changelogs
+* fix bad relative import (still python 2 style) (#1973)
+* 1.15.7
+* update changelogs
+* fix NameError in launch error handling (#1965)
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* roslaunch: Allow passing _TIMEOUT_SIGINT and _TIMEOUT_SIGTERM as parameters (#1937)
+  * Added --sigint-timeout and --sigterm-timeout parameters.
+  * Fixed propagating sigint- and sigterm-timeout to remote nodes.
+  * Added tests for sigint- and sigterm-timeout.
+  * Decrease CPU load of timeout tests.
+  * roslaunch: readded DEFAULT_TIMEOUT_SIGINT and DEFAULT_TIMEOUT_SIGTERM
+  * roslaunch: --sigint_timeout, --sigterm-timeout take floats now
+  * Fixing int to float in docs for sigint_timeout and sigterm_timeout
+  * Reduced flakyness of test_roslaunch_parent and test_nodeprocess
+  * Migrate test/signal_logger.py to Python 3.
+  * roslaunch: Better exception handling, undoing whitespace changes.
+  * roslaunch: Fix whitespace.
+  Co-authored-by: Christopher Wecht <christopher.wecht@student.kit.edu>
+* roslaunch-check: Search dir recursively (#1914)
+  * roslaunch-check: Search dir recursively
+  This will simply check all .launch files in the directory you pass, including
+  subdirectories. I recently set up roslaunch-check on a CI server, and
+  missed having a feature like this.
+  However, the directory you pass must still be a ROS package
+  or a subdirectory of a ROS package. If you have, say, a dir
+  containing many packages, and you want to check every launch
+  file in every package in that dir, then you'll need to invoke
+  roslaunch-check once for each package.
+  * roslaunch-check: Don't search hidden folders
+* Sort printed nodes by namespace alphabetically (#1934)
+* [roslaunch] remove pycrypto import (not used) (#1922)
+  pycrypto used to be installed through rosbag. This was dropped in #1609
+  making roslaunch on remote hosts fail.
+* 1.15.4
+* update changelogs
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* Use setuptools instead of distutils (#1870)
+  * Use setuptools instead of distutils
+  * Remove explicit setuptools dependency
+  * revert unrelated package format changes
+  * restore xml version
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.15.0
+* update changelogs
+* update test to pass with old and new yaml (#1893)
+* 1.14.4
+* update changelog
+* Allow empty machine arg in node tag. (#1885)
+  * Allow empty machine tag.
+  Fixes #274.
+  * Fix tests for machine arg in node tag.
+  * Remove obsolete test.
+  * Remove obsolete test
+* Use double quotes for portable roslaunch-check command. (#1883)
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* wrap env prefix with double quotes (#1810)
+  * wrap env prefix with double quotes
+  * remove unnecessary string literal prefix
+* [roslaunch] Add ignore default args option to roslaunch-check (#1788)
+  * Add ignore default args option to roslaunch-check
+  * Add '-i' option for ignoring default arg check
+  * Add ignore default args option for roslaunch_add_file_check
+  * Refactor ignore default args logic
+  * Add unit test for ignore-default-args option
+  * Update depends.py with proper ignore_default_args logic
+  * Refactor 'ignore-default-args' param to 'ignore-unset-args'
+  * Update test_roslaunch_rlutil.py with test changes
+* add platform check for --args code path (#1809)
+* [windows] Workaround for Python 2 xmlrpc performance issues. (#1872)
+  * workaround for Python 2 xmlrpc performance issues.
+  * address the feedback.
+* Allowed empty ssh password for remote launching (#1826)
+* Escape drive as well as path separator (#1815)
+* more Python 3 compatibility (#1795)
+  * avoid using nose.tools without dependency being declared
+  * seek(0)
+  * subprocess decode
+  * import urlparse
+  * fix hash arg encode
+  * print function
+  * replace tabs used for indenting Python code with spaces
+* use condition attributes to specify Python 2 and 3 dependencies (#1792)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* [Windows][melodic-devel] Skip `cat` related test cases on Windows build (#1724)
+  * Skip `cat` related test cases on Windows build
+  * revert unrelated changes.
+  * style PEP 8
+  * style PEP 8
+  * fix wrong argument names.
+* Taskkill process tree. (#1725)
+* Missing args (#1733)
+* Small fixes for roslaunch-check on Python 3.
+* roslaunch added --required option (#1681)
+* more Python 3 compatibility (#1783)
+* more Python 3 compatibility (#1782)
+* Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (#1688)
+  * Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning
+  * Change all usages of yaml.load to yaml.safe_load
+  * Extend PyYAML's SafeLoader and use it with `yaml.load`
+  Also added convenience functions for using this loader for reuse in
+  `roslaunch`
+  * fix typo in rosparam.yaml_load_all
+  * Modify Loader and SafeLoader in yaml module directly
+  * Revert whitespace change
+  * Revert unrelated change to import through global variable construction
+* Fix $(dirname) for roslaunch-check. (#1624)
+* change how commands are executed (#1628)
+  * Use non-posix way to split command string.
+  * Use shell feature for roslaunch command.
+  * Resolved the merge again.
+  * rework shell=True for Windows change (#51)
+  * rework shell=True for Windows change
+  * remove .exe handling, prepend python for python scripts instead
+  * update Windows search logic
+  * move comments around and remove unnecessary comments
+  * minor refactor
+  * file is a keyword in python2, rename as f
+  * remove unnecessary \ at the end of line
+  * use sys.executable to launch Python interpreter
+  * follow inline comment style in PEP8
+  * invert logic
+* #1468 revisited: add option to hide summary from roslaunch output. (#1655)
+  * add option to hide summary from roslaunch output.
+  * roslaunch no_summary: default is False, avoid double negative
+  * roslaunch/parent.py: moved new argument at the end, fixed documentation
+  * move new keyword argument to the end
+  * spelling
+* #1455 reviseted: make roslaunch-check respect arg remappings with command line argument (#1653)
+  * make roslaunch-check respect arg remappings with command line argument (:=)
+  * added exmpale for commandline arg remappings,
+  scripts/roslaunch-check resources/example.launch commandline_true_arg:=false should be fail
+  * roslaunch: removed rospy run dependency
+* add POSIX flag for shlex.split() (#1619)
+  * Fix more shlex.split usage for Windows.
+  * remove space between args
+* respawn if process died while checking should_respawn() (#1590)
+  * If process died when checking should_respawn, treat it as over-due and respawn (#32)
+  * fix how the return value of should_respawn() is checked
+* add python prefix for python scripts when there is no .py extension (#1589)
+  * add python prefix for python script when there is no .py extension
+  * consolidate and minimize change to existing code
+  * update comment
+  * revert unnecessary change from sys.platform to os.name
+* roslaunch/xmlloader: use continue instead of pass for args_only (#1540)
+* fix various test problems (#1601)
+  * move test files to separate package
+  * move publishtest into separate package since it requires rostopic which rostest can't depend on
+  * [rosbag_storage] add missing dependency on std_msgs
+  * duplicate talker.py test node since rospy doesn't install the file
+  * modify test to pass when rospy.get_name isn't available without a dependency declared on it
+* normalize strings to utf-8 before setting as environment variable (#1593)
+  * normalize the string to utf-8 before passing to environment block.
+  * convert from unicode to string when setting env variable (#21)
+* Fixed typos: awhile -> a while (#1534)
+* Added more useful helper text here to indicate that this might be a permission error. (#1568)
+* Fix #889 : Exclude unused args check if pass_all_args is set (#1520)
+  * Exclude unused args check if pass_all_args is set
+  * Add test for pass_all_args fix
+* roslaunch: add an option in XmlLoader to only load arg tags (#1521)
+  This fixes #1300. It's off/false by default, but it's used by `arg_dump`
+  to stop roslaunch-autocomplete from failing if any arg has no default value.
+* Update wiki.ros.org URLs (#1536)
+* [roslaunch] Better exception handling when resource is not found. (#1476)
+  * [roslaunch] Better exception handling when resource is not found.
+  When `$(find pkg)` fail to return a resource in `arg` tag, `roslaunch` fails without printing useful output. With this PR it provides better explanation.
+  Without this PR:
+  ```
+  $ roslaunch /tmp/invalid_arg.launch
+  :
+  Invalid <arg> tag: foo
+  ROS path [0]=/opt/ros/kinetic/share/ros
+  ROS path [1]=/home/n130s/ROS/indigo_trusty/cws_rosdt/src/ros/ros_comm/tools/roslaunch
+  ROS path [2]=/opt/ros/kinetic/share
+  Arg xml is <arg default="$(find foo)/.config" name="foo"/>
+  The traceback for the exception was written to the log file
+  ```
+  With this PR:
+  ```
+  $ roslaunch /tmp/invalid_arg.launch
+  :
+  Invalid <arg> tag: Make sure the following is found in ROS_PACKAGE_PATH: foo
+  ROS path [0]=/opt/ros/kinetic/share/ros
+  ROS path [1]=/home/n130s/ROS/indigo_trusty/cws_rosdt/src/ros/ros_comm/tools/roslaunch
+  ROS path [2]=/opt/ros/kinetic/share
+  Arg xml is <arg default="$(find foo)/.config" name="foo"/>
+  The traceback for the exception was written to the log file
+  ```
+  ```
+  $ more /tmp/invalid_arg.launch
+  <?xml version="1.0"?>
+  <launch>
+  <arg name="foo" default="$(find foo)/.config" />
+  <arg name="baa" default="$(arg foo)/hoge.yaml" />
+  </launch>
+  ```
+  * [roslaunch] Raise appropriate exception when a resource was not found.
+  Applyin feedback https://github.com/ros/ros_comm/pull/1476#discussion_r209081340
+  * shortened the exception message a bit
+* Fix issues when built or run on Windows (#1466)
+  * Fix roslz4 build issue on Windows
+  * Fix xmlrpcpp build issue on Windows, fix polling fails when run on Windows
+  * Fix roscpp build issue on Windows
+  * Fix rosbag_storage build issue on Windows
+  * fix issues in python scripts to run roscore on Windows
+  * revert unrelated whitespace changes
+  * Revert changes in roslogging.py
+  * declare const for source_cnt
+* Contributors: 5tan, Alessandro Tondo, Andreas Vinter-Hviid, Brutus The Tschiepel, Christophe, Christopher Wecht, Collin Scribner, Daniel Ingram, David V. Lu!!, Dirk Thomas, Gary Servin, Isaac I.Y. Saito, Jacob Perron, James Xu, Jochen Sprickerhof, Johnson Shih, Lucas Walter, Martijn Buijs, Martin Pecka, Mike Purvis, Morten Fyhn Amundsen, Sean Yen, Shane Loretz, Tom Moore, Victor Lamoine, Xaver Kroischke, betab0t, tomoya
+
 1.14.3 (2018-08-06)
 -------------------
 

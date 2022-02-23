@@ -82,6 +82,178 @@ Changelog for package rosbag
 * publish last message from latch topics when start time > 0 (`#1537 <https://github.com/ros/ros_comm/issues/1537>`_)
 * add a new option to publish when a bag write begin (`#1527 <https://github.com/ros/ros_comm/issues/1527>`_)
 
+Forthcoming
+-----------
+* Fixing latched record updating (#28)
+* Writing out connection header for latched topics (#26)
+* Passing time args through to the actual rosbag play executable
+* Adding real clock time display option (#25)
+* REMOVEME: Force to use python3 for now
+* Initializing the repeat_latched option (#17)
+  * Initializing the repeat_latched option and adding test
+* Fix latched timestamps (#15)
+  * Overwrite message receipt time to prevent gaps.
+  * Revert unrelated whitespace changes
+* Added --repeat-latched option to rosbag record
+  (cherry picked from commit f777d6e39ec776cafde481f3462e80ff230156a9)
+* 1.15.11
+* handle SIGINT in rosbag play (#2150)
+  This is copy&paste from https://github.com/ros/ros_comm/pull/2038/files#diff-8c5ae1a482044f103bf9b2fa9188ff9639ed617f259a8dd816075bc9e4005ef9R152
+  where the SIGINT handler was added to rosbag record.
+* rosbag: recorder: Catch all exceptions in record thread. (#2151)
+* fix issue 2141: raw_input does not exist in python 3 (#2143)
+  * fix for python 3.x where raw_input does not exist anymore
+* 1.15.10
+* Add missing Boost (#2108)
+* rosbag: start player in paused state (#2086)
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* fix misspell. (#2066)
+* Gracefully stop recording upon SIGTERM and SIGINT (#2038)
+  * Add SIGTERM and SIGINT handlers to rosbag record
+  * Add unit test for rosbag record SIGINT handling
+  Add unit test for rosbag record SIGTERM handling
+  * Address review comments
+  Fix sending SIGINT to main process
+  * Revert added whitespace
+  * Revert SIGINT handler addition: use default
+  * Remove unnecessary wait
+  * Use BSD License
+  * Add test improvements
+  * Move test helper function
+  * Remove redundant test rosbag launch
+  * Add Amazon to new python test copyright
+  * Remove unrelated whitespace
+  * Split record cleanup unit tests
+  Add record cleanup unit test helper
+  * Revert whitespace change
+  * revert white space change
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* [roscpp] Update boost::placeholders usage for boost 1.73 (and later) (#2023)
+  * more port fix.
+  * boost::placeholders migration.
+  * fix more.
+  * revert boost/bind/bind.hpp for back-compatible.
+* Use heapq.merge instead of custom merge sort code (#2017)
+* 1.15.8
+* update changelogs
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* Add option to repeat latched messages at the start of bag splits (#1850)
+  * Added --repeat-latched option to rosbag record
+  (cherry picked from commit f777d6e39ec776cafde481f3462e80ff230156a9)
+  * Overwrite message receipt time to prevent gaps.
+  (cherry picked from commit e407e164d6f69c6dea17cb59ca07fef4629e26aa)
+  * Revert unrelated whitespace changes
+  (cherry picked from commit 836a4e5f1338697ecb643790e400b7068555f569)
+  * revert unrelated whitespace changes
+  * revert unrelated whitespace changes
+  Co-authored-by: eric <etappan@locusrobotics.com>
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* Fix bag migration failures caused by typo in connection_header assignment (#1952)
+  Bag migration failed with follwoing errors:
+  NameError: global name 'connection_header' is not defined
+  This change fixes that by using local name conn_header
+* 1.15.4
+* update changelogs
+* [noetic] Restrict boost dependencies to components used (#1871)
+  * [roscpp] declare specific boost dependencies
+  * [rosbag] declare specific boost dependencies
+  * [rosbag_storage] declare specific boost dependencies
+  * [rostest] declare specific boost dependencies
+  * [xmlrpcpp] declare specific boost dependencies
+  * [message_filters] declare specific boost dependencies
+  * [test_rosbag] declare specific boost dependencies
+* 1.15.3
+* update changelogs
+* remove Boost version check since Noetic only targets platforms with 1.67+ (#1903)
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* Use setuptools instead of distutils (#1870)
+  * Use setuptools instead of distutils
+  * Remove explicit setuptools dependency
+  * revert unrelated package format changes
+  * restore xml version
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* Add quotes around file name so they can be click selected in terminal. (#1813)
+  It's convenient to click on the printed rosbag name to copy it and use as a parameter elsewhere, but the period will get included in the click without the quotes (at least in Ubuntu 18.04 + gnome terminal).
+* [rosbag] Catch exceptions by const ref. (#1874)
+* Read GPG passphrase from an environment variable (#1856)
+  * Read passphrase from an environment variable
+  * Accept passphrase from the encryptor's initialize method
+* Bug: roslib not being imported (#1818)
+  * Added import of roslib for bug fix.
+  * Changed import to more specific import.
+* Correct an issue from pycrypodome switchover. (#1814)
+* use condition attributes to specify Python 2 and 3 dependencies (#1792)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* Add pycryptodome as default on melodic (#1609)
+* Encrypted rosbag fixes for Python 3. (#1777)
+* fixed #1776 deadcode (#1786)
+* rosbag fix: keep latched topics latched (#1708)
+* Wrap the rosbag filter eval in a lambda (#1712)
+* rosbag/record: fix signed int overflow (#1741)
+* Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (#1688)
+  * Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning
+  * Change all usages of yaml.load to yaml.safe_load
+  * Extend PyYAML's SafeLoader and use it with `yaml.load`
+  Also added convenience functions for using this loader for reuse in
+  `roslaunch`
+  * fix typo in rosparam.yaml_load_all
+  * Modify Loader and SafeLoader in yaml module directly
+  * Revert whitespace change
+  * Revert unrelated change to import through global variable construction
+* Pickleable rosbag exceptions (#1210 revisited). (#1652)
+  * test_rosbag/test_bag.py: test, if rosbag exception can be pickled
+  * rosbag/bag.py: rosbag exceptions can now be unpickled
+  * pep8
+* fix topic message count for rosbag indexed v1.2. (#1648)
+* Fix wrong error handling in migration. (#1639)
+  * Fix wrong error handling in migration.
+  self.(old|new)_types is supposed to be a dictionary, not a list
+  * Address PR 1639 comments.
+  * remove duplicate warning message
+* rosbag modernization: replaced BOOST_FOREACH with range-based for-loo… (#1641)
+  * rosbag modernization: replaced BOOST_FOREACH with range-based for-loops, used algorithm where appropriated
+  * /rosbag: changed formatting
+  * single level indentation
+  * single level indentation
+* fix IOError during Python file operation (#1617)
+  * fix IOError from python file operation in r+ mode (#41)
+  * move file.seek into _stop_writing, add comment (#42)
+* add Windows.h usage explicitly (#44) (#1616)
+  * attempt to remove unused header.
+  * Add windows.h usage explicitly
+  * Update statistics.h
+* [rosbag] Fix waitForSubscribers hanging with simtime (#1543)
+  * [rosbag] Fix waitForSubscribers hanging with simtime
+  Use Walltime for sleep as clock is not running yet
+  * Simplify wallsleep in waitForSubscribers
+  Co-Authored-By: AlexReimann <alexander.reimann@enway.ai>
+* Publish last message from latch topics when start time > 0 (#1537)
+  * Publish last message from latch topics when start time > 0
+  * cuddle brace
+  I know the ROS 1 style guide says otherwise but for my sanity of reading it I saved the vertical space
+* Add a new option to publish when a bag write begin (#1527)
+  * Add a new option to publish when a bag write begin
+  * Add the option in rosbag_main to use rosbag record
+* Contributors: Alexander Reimann, AnthonyBirot, Christopher Wecht, Dallin Briggs, Daniel Wang, Devin Bonnie, Dirk Thomas, Enrique Fernández Perdomo, Eric Tappan, Florian Friesdorf, Francisco Vina, Gary Servin, Jacob Perron, James Xu, Lucas Walter, Martijn Buijs, Martin Pecka, Maxime St-Pierre, Mikael Arguedas, Mike Purvis, Natesh Narain, Olivier Mangin, Sean Yen, Sebastian Scherer, Shane Loretz, Thomas, Timo Röhling, Tom Moore, kmiku7, pseyfert, tomoya
+
 1.14.3 (2018-08-06)
 -------------------
 * restore API compatibility (`#1473 <https://github.com/ros/ros_comm/issues/1473>`_) (regression from 1.14.0)

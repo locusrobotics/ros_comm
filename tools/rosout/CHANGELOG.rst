@@ -48,6 +48,53 @@ Changelog for package rosout
 * include cctype for std::tolower (`#1587 <https://github.com/ros/ros_comm/issues/1587>`_)
 * disable rosout.log by using environment variable (`#1425 <https://github.com/ros/ros_comm/issues/1425>`_)
 
+Forthcoming
+-----------
+* 1.15.11
+* 1.15.10
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* fix misspell. (#2066)
+* 1.15.8
+* update changelogs
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* 1.15.4
+* update changelogs
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* Fix use-after-free issue in rosout (#1764)
+* include cctype for std::tolower (#1587)
+* Disable rosout.log by using environment variable (#1425)
+  * Disable rosout.log by using environment variable
+  The parameter server may not be available at the time rosout is
+  starting.
+  * Add dependency for boost
+  * add boost include dirs in cmake
+  * add 'REQUIRED1
+  * as long as the env is defined, treat it as true for unknown values
+  * remove boost dependency
+  * revert unrelated changes
+  * revert unrelated changes
+  * trailing operators
+* Contributors: Daniel Wang, Dirk Thomas, Jacob Perron, James Xu, Shane Loretz, Yong Li, tomoya
+
 1.14.3 (2018-08-06)
 -------------------
 

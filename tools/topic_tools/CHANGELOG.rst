@@ -62,6 +62,116 @@ Changelog for package topic_tools
 * fix topic_tools environment hook (`#1486 <https://github.com/ros/ros_comm/issues/1486>`_)
 * mux: add ~latch option (`#1489 <https://github.com/ros/ros_comm/issues/1489>`_)
 
+Forthcoming
+-----------
+* 1.15.11
+* 1.15.10
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* [roscpp] Update boost::placeholders usage for boost 1.73 (and later) (#2023)
+  * more port fix.
+  * boost::placeholders migration.
+  * fix more.
+  * revert boost/bind/bind.hpp for back-compatible.
+* 1.15.8
+* update changelogs
+* Add latch param to throttle (#1944)
+  This allows to force the advertised throttled publisher to be latched or
+  not, instead of using the same latching property value as the input
+  topic.
+  It defaults to the previous behaviour, i.e. it uses the same latching
+  property value as the input topic.
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* [noetic] Avoid infinite recursion in rosrun tab completion when rosbash is not installed (#1948)
+  * Avoid infinite recursion
+  This avoids infinite recusion that happens if tab completion is
+  attempted but rosbash is not installed.
+  * remove empty line
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* Fix bare pointer in topic_tools::ShapeShifter (#1722)
+  The Copy constructor and assignment operator on the ShapeShifter class
+  were wrong because the class was using a bare pointer for its internal
+  buffer.  This switches to using a std::vector, so the constructors are
+  automatically handled correctly.
+* 1.15.4
+* update changelogs
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* Use setuptools instead of distutils (#1870)
+  * Use setuptools instead of distutils
+  * Remove explicit setuptools dependency
+  * revert unrelated package format changes
+  * restore xml version
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.15.0
+* update changelogs
+* fix flakyness of transform test (#1890)
+* 1.14.4
+* update changelog
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* #1470 revisited: Use node namespace when looking up topic  (#1663)
+  * Use node namespace when looking up topic #1427
+  * Don't add namespace if topic is absolute path #1427
+  * Add transform test, one within namespace and another using absolute path #1427
+  * Restore whitespace
+  * topic_tools/transform: simplified namspace lookup
+  * TransformSub: simlifications using wait_for_message
+  Co-authored-by: Lucas Walter <wsacul@gmail.com>
+* Add more Windows test code fixes. (#1727)
+* more Python 3 compatibility (#1795)
+  * avoid using nose.tools without dependency being declared
+  * seek(0)
+  * subprocess decode
+  * import urlparse
+  * fix hash arg encode
+  * print function
+  * replace tabs used for indenting Python code with spaces
+* topic_tools/relay: fixed boost::lock exception (#1696)
+  * topic_tools/relay: fixed boost::lock exception
+  * topic_tools/relay: better name for timer
+* /topic_tools/relay_field: added --tcpnodely (#1682)
+* Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (#1688)
+  * Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning
+  * Change all usages of yaml.load to yaml.safe_load
+  * Extend PyYAML's SafeLoader and use it with `yaml.load`
+  Also added convenience functions for using this loader for reuse in
+  `roslaunch`
+  * fix typo in rosparam.yaml_load_all
+  * Modify Loader and SafeLoader in yaml module directly
+  * Revert whitespace change
+  * Revert unrelated change to import through global variable construction
+* rostest: fix flaky hztests (#1661)
+  * rostest: fix flaky hztests
+  * add retry to all hztests
+  * fix concerns
+  * fix more wrong retry-attributes
+* topic_tools/transfom: create publisher before subscriber, because callback may use the publisher (#1669)
+* duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
+* /topic_tools/mux: do not dereference the end-iterator (#1579)
+* fix topic_tools environment hook (#1486)
+  Without this commit, `source /opt/ros/$ROS_DISTRO/setup.bash` fails under the following conditions:
+  1. topic_tools is installed
+  2. rosbash is not installed
+  3. the bash shell has the following options set (which is the default in GitLab CI):
+  set -o errexit
+  set -o pipefail
+  What happens is that since rosbash is not installed, `$(complete | grep -w rosrun)` finds no match, and grep exits with status 1. Since `pipefail` is enabled, this error code is propagated to the return value of the pipe. Since `errexit` is enabled, the script exits immediately.
+  This commit catches grep exit status 1 (= "no match") and passes everything else through.
+* topic_tools/mux: add ~latch option (#1489)
+* Contributors: Aaron Miller, Christopher Wecht, Dirk Thomas, Enrique Fernandez Perdomo, Jacob Perron, Martijn Buijs, Martin Günther, Sean Yen, Shane Loretz, Yuki Furuta, beetleskin
+
 1.14.3 (2018-08-06)
 -------------------
 
