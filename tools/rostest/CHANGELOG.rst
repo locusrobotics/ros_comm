@@ -59,8 +59,8 @@ Changelog for package rostest
 * fix various test problems (`#1601 <https://github.com/ros/ros_comm/issues/1601>`_)
 * invoke rostest from CMake with the PYTHON_EXECUTABLE (`#1583 <https://github.com/ros/ros_comm/issues/1583>`_)
 
-Forthcoming
------------
+1.16.0 (2022-02-23)
+-------------------
 * 1.15.11
 * 1.15.10
 * 1.15.9 package.xmls

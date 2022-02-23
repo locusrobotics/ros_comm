@@ -2,8 +2,8 @@
 Changelog for package test_roslaunch
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.16.0 (2022-02-23)
+-------------------
 * REMOVEME: Force to use python3 for now
 * 1.15.11
 * 1.15.10
