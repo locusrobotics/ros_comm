@@ -1,0 +1,30 @@
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Changelog for package test_rostest
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Forthcoming
+-----------
+* 1.15.11
+* 1.15.10
+* 1.15.9 package.xmls
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* 1.15.8
+* 1.15.7
+* 1.15.6
+* 1.15.5
+* 1.15.4
+* 1.15.3
+* 1.15.2
+* 1.15.1
+* 1.15.0
+* 1.14.4
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* fix various test problems (#1601)
+  * move test files to separate package
+  * move publishtest into separate package since it requires rostopic which rostest can't depend on
+  * [rosbag_storage] add missing dependency on std_msgs
+  * duplicate talker.py test node since rospy doesn't install the file
+  * modify test to pass when rospy.get_name isn't available without a dependency declared on it
+* Contributors: Dirk Thomas, Jacob Perron, Shane Loretz
