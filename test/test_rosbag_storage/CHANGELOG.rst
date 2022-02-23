@@ -2,8 +2,8 @@
 Changelog for package test_rosbag_storage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.16.0 (2022-02-23)
+-------------------
 * 1.15.11
 * 1.15.10
 * 1.15.9 package.xmls

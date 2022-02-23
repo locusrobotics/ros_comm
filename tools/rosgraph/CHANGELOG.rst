@@ -66,8 +66,8 @@ Changelog for package rosgraph
 * fix various test problems (`#1601 <https://github.com/ros/ros_comm/issues/1601>`_)
 * fix typos: awhile -> a while (`#1534 <https://github.com/ros/ros_comm/issues/1534>`_)
 
-Forthcoming
------------
+1.16.0 (2022-02-23)
+-------------------
 * RST-3950: Add timeout to handshake (#30)
   * Add timeout to handshake
   * Minimise diff

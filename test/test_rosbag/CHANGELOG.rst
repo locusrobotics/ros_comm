@@ -2,8 +2,8 @@
 Changelog for package test_rosbag
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.16.0 (2022-02-23)
+-------------------
 * REMOVEME: Force to use python3 for now
 * Initializing the repeat_latched option (#17)
   * Initializing the repeat_latched option and adding test

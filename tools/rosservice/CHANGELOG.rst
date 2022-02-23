@@ -49,8 +49,8 @@ Changelog for package rosservice
 * catch exeption when searching for services and a single service fails (`#1519 <https://github.com/ros/ros_comm/issues/1519>`_)
 * update wiki.ros.org URLs (`#1536 <https://github.com/ros/ros_comm/issues/1536>`_)
 
-Forthcoming
------------
+1.16.0 (2022-02-23)
+-------------------
 * 1.15.11
 * 1.15.10
 * 1.15.9 package.xmls

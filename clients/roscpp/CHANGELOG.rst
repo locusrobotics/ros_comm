@@ -104,8 +104,8 @@ Changelog for package roscpp
 * fix memory error due to missing rosout_disable_topics_generation parameter (`#1507 <https://github.com/ros/ros_comm/issues/1507>`_)
 * fix issues when built or run on Windows (`#1466 <https://github.com/ros/ros_comm/issues/1466>`_)
 
-Forthcoming
------------
+1.16.0 (2022-02-23)
+-------------------
 * Transport hint fix debug (#21)
 * Transporthint tos (#20)
   * Added TOS level to TransportHints
