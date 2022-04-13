@@ -36,6 +36,8 @@ from rosmaster.util import remove_server_proxy
 from rosmaster.util import xmlrpcapi
 import rosmaster.exceptions
 
+import logging
+
 """Data structures for representing registration data in the Master"""
 
 class NodeRef(object):
@@ -56,8 +58,8 @@ class NodeRef(object):
         self.param_subscriptions = []
         self.topic_subscriptions = []
         self.topic_publications  = []
-        self.services  = []        
-        
+        self.services  = []
+
     def clear(self):
         """
         Delete all state from this NodeRef except for the api location
@@ -65,18 +67,18 @@ class NodeRef(object):
         self.param_subscriptions = []
         self.topic_subscriptions = []
         self.topic_publications  = []
-        self.services  = []        
+        self.services  = []
 
     def is_empty(self):
         """
         @return: True if node has no active registrations
         """
         return sum((len(x) for x in
-                    [self.param_subscriptions, 
+                    [self.param_subscriptions,
                      self.topic_subscriptions,
                      self.topic_publications,
                      self.services,])) == 0
-    
+
     def add(self, type_, key):
         if type_ == Registrations.TOPIC_SUBSCRIPTIONS:
             if not key in self.topic_subscriptions:
@@ -95,7 +97,7 @@ class NodeRef(object):
 
     def remove(self, type_, key):
         if type_ == Registrations.TOPIC_SUBSCRIPTIONS:
-            if key in self.topic_subscriptions:        
+            if key in self.topic_subscriptions:
                 self.topic_subscriptions.remove(key)
         elif type_ == Registrations.TOPIC_PUBLICATIONS:
             if key in self.topic_publications:
@@ -116,7 +118,7 @@ def shutdown_node_task(api, caller_id, reason):
     """
     Method to shutdown another ROS node. Generally invoked within a
     separate thread as this is used to cleanup hung nodes.
-    
+
     @param api: XML-RPC API of node to shutdown
     @type  api: str
     @param caller_id: name of node being shutdown
@@ -129,7 +131,7 @@ def shutdown_node_task(api, caller_id, reason):
     except:
         pass #expected in many common cases
     remove_server_proxy(api)
-    
+
 class Registrations(object):
     """
     All calls may result in access/modifications to node registrations
@@ -137,14 +139,14 @@ class Registrations(object):
 
     Data structure for storing a set of registrations (e.g. publications, services).
     The underlying data storage is the same except for services, which have the
-    constraint that only one registration may be active for a given key. 
+    constraint that only one registration may be active for a given key.
     """
 
     TOPIC_SUBSCRIPTIONS = 1
     TOPIC_PUBLICATIONS = 2
     SERVICE = 3
     PARAM_SUBSCRIPTIONS = 4
-    
+
     def __init__(self, type_):
         """
         ctor.
@@ -160,7 +162,7 @@ class Registrations(object):
             raise rosmaster.exceptions.InternalException("invalid registration type: %s"%type_)
         self.type = type_
         ## { key: [(caller_id, caller_api)] }
-        self.map = {} 
+        self.map = {}
         self.service_api_map = None
 
     def __bool__(self):
@@ -189,14 +191,14 @@ class Registrations(object):
         @param service: service name
         @type  service: str
         @return str: service_api for registered key or None if
-        registration is no longer valid. 
+        registration is no longer valid.
         @type: str
         """
         if self.service_api_map and service in self.service_api_map:
             caller_id, service_api = self.service_api_map[service]
             return service_api
         return None
-    
+
     def get_apis(self, key):
         """
         Only valid if self.type != SERVICE.
@@ -212,7 +214,7 @@ class Registrations(object):
         Emulate mapping type for has_key()
         """
         return key in self.map
-    
+
     def __getitem__(self, key):
         """
         @param key: registration key (e.g. topic/service/param name)
@@ -234,7 +236,7 @@ class Registrations(object):
         @rtype: bool
         """
         return key in self.map
-    
+
     def get_state(self):
         """
         @return: state in getSystemState()-friendly format [ [key, [callerId1...callerIdN]] ... ]
@@ -250,13 +252,13 @@ class Registrations(object):
         Add caller_id into the map as a provider of the specified
         service (key).  caller_id must not have been previously
         registered with a different caller_api.
-    
+
         Subroutine for managing provider map data structure (essentially a multimap).
         @param key: registration key (e.g. topic/service/param name)
         @type  key: str
         @param caller_id: caller_id of provider
         @type  caller_id: str
-        @param caller_api: API URI of provider 
+        @param caller_api: API URI of provider
         @type  caller_api: str
         @param service_api: (keyword) ROS service API URI if registering a service
         @type  service_api: str
@@ -274,8 +276,8 @@ class Registrations(object):
                self.service_api_map = {}
             self.service_api_map[key] = (caller_id, service_api)
         elif self.type == Registrations.SERVICE:
-            raise rosmaster.exceptions.InternalException("service_api must be specified for Registrations.SERVICE")            
-                   
+            raise rosmaster.exceptions.InternalException("service_api must be specified for Registrations.SERVICE")
+
     def unregister_all(self, caller_id):
         """
         Remove all registrations associated with caller_id
@@ -303,7 +305,7 @@ class Registrations(object):
                     dead_keys.append(key)
             for k in dead_keys:
                 del self.service_api_map[k]
-    
+
     def unregister(self, key, caller_id, caller_api, service_api=None):
         """
         Remove caller_id from the map as a provider of the specified service (key).
@@ -312,7 +314,7 @@ class Registrations(object):
         @type  key: str
         @param caller_id: caller_id of provider
         @type  caller_id: str
-        @param caller_api: API URI of provider            
+        @param caller_api: API URI of provider
         @type  caller_api: str
         @param service_api: (keyword) ROS service API URI if registering a service
         @type  service_api: str
@@ -322,9 +324,9 @@ class Registrations(object):
         """
         # if we are unregistering a topic, validate against the caller_api
         if service_api:
-            # validate against the service_api 
+            # validate against the service_api
             if self.service_api_map is None:
-                return 1, "[%s] is not a provider of [%s]"%(caller_id, key), 0 
+                return 1, "[%s] is not a provider of [%s]"%(caller_id, key), 0
             if self.service_api_map.get(key, None) != (caller_id, service_api):
                 return 1, "[%s] is no longer the current service api handle for [%s]"%(service_api, key), 0
             else:
@@ -347,7 +349,7 @@ class Registrations(object):
 class RegistrationManager(object):
     """
     Stores registrations for Master.
-    
+
     RegistrationManager is not threadsafe, so access must be externally locked as appropriate
     """
 
@@ -363,9 +365,9 @@ class RegistrationManager(object):
         self.publishers  = Registrations(Registrations.TOPIC_PUBLICATIONS)
         self.subscribers = Registrations(Registrations.TOPIC_SUBSCRIPTIONS)
         self.services = Registrations(Registrations.SERVICE)
-        self.param_subscribers = Registrations(Registrations.PARAM_SUBSCRIPTIONS)        
+        self.param_subscribers = Registrations(Registrations.PARAM_SUBSCRIPTIONS)
 
-    
+
     def reverse_lookup(self, caller_api):
         """
         Get a NodeRef by caller_api
@@ -380,7 +382,7 @@ class RegistrationManager(object):
         matches = [n for n in self.nodes.items() if n.api == caller_api]
         if matches:
             return matches
-        
+
     def get_node(self, caller_id):
         return self.nodes.get(caller_id, None)
 
@@ -390,12 +392,15 @@ class RegistrationManager(object):
         node_ref.add(r.type, key)
         # update pub/sub/service indicies
         if changed:
+            logging.getLogger('rosmaster.master').warn(
+                "Node API changed: type[%d], key[%s], caller_id[%s], caller_api[%s], service_api[%s]",
+                r.type, key, caller_id, caller_api, service_api)
             self.publishers.unregister_all(caller_id)
             self.subscribers.unregister_all(caller_id)
             self.services.unregister_all(caller_id)
             self.param_subscribers.unregister_all(caller_id)
         r.register(key, caller_id, caller_api, service_api)
-        
+
     def _unregister(self, r, key, caller_id, caller_api, service_api=None):
         node_ref = self.nodes.get(caller_id, None)
         if node_ref != None:
@@ -408,7 +413,7 @@ class RegistrationManager(object):
         else:
             retval = 1, "[%s] is not a registered node"%caller_id, 0
         return retval
-    
+
     def register_service(self, service, caller_id, caller_api, service_api):
         """
         Register service provider
@@ -437,21 +442,21 @@ class RegistrationManager(object):
     def unregister_service(self, service, caller_id, service_api):
         caller_api = None
         return self._unregister(self.services, service, caller_id, caller_api, service_api)
-        
+
     def unregister_subscriber(self, topic, caller_id, caller_api):
         return self._unregister(self.subscribers, topic, caller_id, caller_api)
     def unregister_publisher(self, topic, caller_id, caller_api):
         return self._unregister(self.publishers, topic, caller_id, caller_api)
     def unregister_param_subscriber(self, param, caller_id, caller_api):
         return self._unregister(self.param_subscribers, param, caller_id, caller_api)
-        
+
     def _register_node_api(self, caller_id, caller_api):
         """
         @param caller_id: caller_id of provider
         @type  caller_id: str
         @param caller_api: caller_api of provider
         @type  caller_api: str
-        @return: (registration_information, changed_registration). changed_registration is true if 
+        @return: (registration_information, changed_registration). changed_registration is true if
         caller_api is differet than the one registered with caller_id
         @rtype: (NodeRef, bool)
         """
@@ -462,6 +467,9 @@ class RegistrationManager(object):
             if node_ref.api == caller_api:
                 return node_ref, False
             else:
+                logging.getLogger('rosmaster.master').warn(
+                    "Registering new Node API: caller_id[%s], old API[%s], new API[%s]",
+                    caller_id, node_ref.api, caller_api)
                 bumped_api = node_ref.api
                 self.thread_pool.queue_task(bumped_api, shutdown_node_task,
                                             (bumped_api, caller_id, "new node registered with same name"))
@@ -469,5 +477,3 @@ class RegistrationManager(object):
         node_ref = NodeRef(caller_id, caller_api)
         self.nodes[caller_id] = node_ref
         return (node_ref, bumped_api != None)
-
-
