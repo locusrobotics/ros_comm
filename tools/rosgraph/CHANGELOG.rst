@@ -2,6 +2,14 @@
 Changelog for package rosgraph
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* RST-3950: Add timeout to handshake (`#30 <https://github.com/locusrobotics/ros_comm/issues/30>`_)
+  * Add timeout to handshake
+  * Minimise diff
+  * Increase timeout to 3 seconds
+* Contributors: Michael Johnson
+
 1.16.3 (2021-09-10)
 -------------------
 
