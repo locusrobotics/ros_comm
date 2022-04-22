@@ -2,8 +2,8 @@
 Changelog for package rosgraph
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.16.4 (2022-04-22)
+-------------------
 * RST-3950: Add timeout to handshake (`#30 <https://github.com/locusrobotics/ros_comm/issues/30>`_)
   * Add timeout to handshake
   * Minimise diff
