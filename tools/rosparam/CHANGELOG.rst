@@ -49,8 +49,8 @@ Changelog for package rosparam
 * switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (`#1688 <https://github.com/ros/ros_comm/issues/1688>`_)
 * update wiki.ros.org URLs (`#1536 <https://github.com/ros/ros_comm/issues/1536>`_)
 
-Forthcoming
------------
+1.17.1 (2022-11-07)
+-------------------
 
 1.16.0 (2022-02-23)
 -------------------

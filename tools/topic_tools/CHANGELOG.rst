@@ -62,8 +62,8 @@ Changelog for package topic_tools
 * fix topic_tools environment hook (`#1486 <https://github.com/ros/ros_comm/issues/1486>`_)
 * mux: add ~latch option (`#1489 <https://github.com/ros/ros_comm/issues/1489>`_)
 
-Forthcoming
------------
+1.17.1 (2022-11-07)
+-------------------
 
 1.16.0 (2022-02-23)
 -------------------

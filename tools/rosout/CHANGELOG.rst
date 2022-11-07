@@ -48,8 +48,8 @@ Changelog for package rosout
 * include cctype for std::tolower (`#1587 <https://github.com/ros/ros_comm/issues/1587>`_)
 * disable rosout.log by using environment variable (`#1425 <https://github.com/ros/ros_comm/issues/1425>`_)
 
-Forthcoming
------------
+1.17.1 (2022-11-07)
+-------------------
 
 1.16.0 (2022-02-23)
 -------------------

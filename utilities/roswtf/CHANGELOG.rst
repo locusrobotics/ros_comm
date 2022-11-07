@@ -57,8 +57,8 @@ Changelog for package roswtf
 * fix typos: awhile -> a while (`#1534 <https://github.com/ros/ros_comm/issues/1534>`_)
 * improve msg replacement for 'No package or stack in context'. (`#1505 <https://github.com/ros/ros_comm/issues/1505>`_)
 
-Forthcoming
------------
+1.17.1 (2022-11-07)
+-------------------
 
 1.16.0 (2022-02-23)
 -------------------
