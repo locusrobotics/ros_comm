@@ -51,6 +51,9 @@ Changelog for package roslz4
 * update install destination for roslz4 (`#1620 <https://github.com/ros/ros_comm/issues/1620>`_)
 * fix issues when built or run on Windows (`#1466 <https://github.com/ros/ros_comm/issues/1466>`_)
 
+Forthcoming
+-----------
+
 1.16.0 (2022-02-23)
 -------------------
 * 1.15.11

@@ -45,6 +45,9 @@ Changelog for package ros_comm
 * bump CMake minimum version to avoid CMP0048 warning (`#1869 <https://github.com/ros/ros_comm/issues/1869>`_)
 * update wiki.ros.org URLs (`#1536 <https://github.com/ros/ros_comm/issues/1536>`_)
 
+Forthcoming
+-----------
+
 1.16.0 (2022-02-23)
 -------------------
 * 1.15.11

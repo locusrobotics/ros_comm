@@ -53,6 +53,9 @@ Changelog for package rosmaster
 * fix docstring in unregisterSubscriber (`#1553 <https://github.com/ros/ros_comm/issues/1553>`_)
 * set correctly typed @apivalidate default return values (`#1472 <https://github.com/ros/ros_comm/issues/1472>`_)
 
+Forthcoming
+-----------
+
 1.16.0 (2022-02-23)
 -------------------
 * 1.15.11

@@ -53,6 +53,9 @@ Changelog for package rosnode
 * explicitly handle socket.timeout in rosnode ping (`#1517 <https://github.com/ros/ros_comm/issues/1517>`_)
 * show connection info on rosnode info (`#1497 <https://github.com/ros/ros_comm/issues/1497>`_)
 
+Forthcoming
+-----------
+
 1.16.0 (2022-02-23)
 -------------------
 * 1.15.11

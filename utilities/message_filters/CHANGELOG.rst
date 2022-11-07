@@ -54,6 +54,9 @@ Changelog for package message_filters
 * remove signals from find_package(Boost COMPONENTS ...) (`#1580 <https://github.com/ros/ros_comm/issues/1580>`_)
 * fix message_filters build issue on the template syntax (`#1483 <https://github.com/ros/ros_comm/issues/1483>`_)
 
+Forthcoming
+-----------
+
 1.16.0 (2022-02-23)
 -------------------
 * 1.15.11

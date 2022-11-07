@@ -77,6 +77,11 @@ Changelog for package rospy
 * show connection info on rosnode info (`#1497 <https://github.com/ros/ros_comm/issues/1497>`_)
 * import socket, threading in udpros.py (`#1494 <https://github.com/ros/ros_comm/issues/1494>`_)
 
+Forthcoming
+-----------
+* If a default is passed, store in cache (`#31 <https://github.com/locusrobotics/ros_comm/issues/31>`_)
+* Contributors: Michael Johnson
+
 1.16.0 (2022-02-23)
 -------------------
 * Fixing sleep timing issue in _reconnect (#29)
