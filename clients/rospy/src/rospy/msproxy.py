@@ -158,7 +158,7 @@ class MasterProxy(object):
         else:
             raise rospy.exceptions.ROSException("cannot search for parameter: %s"%msg)
 
-    def get_param_cached(self, key):
+    def get_param_cached(self, key, default={}):
         resolved_key = rospy.names.resolve_name(key)
         try:
             # check for value in the parameter server cache
@@ -168,10 +168,17 @@ class MasterProxy(object):
             code, msg, value = self.target.subscribeParam(rospy.names.get_caller_id(), rospy.core.get_node_uri(), resolved_key)
             if code != 1: #unwrap value with Python semantics
                 raise KeyError(key)
+
+            if isinstance(value, dict) and not value:
+                # Param is not set on the server.
+                # Set the default value in the cache so that it's marked as subscribed and we don't
+                # spam the master. Keep the default local to the cache to avoid race conditions if
+                # nodes have different defaults.
+                rospy.impl.paramserver.get_param_server_cache().set(resolved_key, default)
+                raise KeyError(key)
+
             # set the value in the cache so that it's marked as subscribed
             rospy.impl.paramserver.get_param_server_cache().set(resolved_key, value)
-            if isinstance(value, dict) and not value:
-                raise KeyError(key)
             return value
         
     def __delitem__(self, key):
