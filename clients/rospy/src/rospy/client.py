@@ -487,7 +487,12 @@ def get_param_cached(param_name, default=_unspecified):
     """
     try:
         _init_param_server()
-        return _param_server.get_param_cached(param_name)
+        if default == _unspecified:
+            # No default supplied
+            return _param_server.get_param_cached(param_name)
+        else:
+            return _param_server.get_param_cached(param_name, default)
+
     except KeyError:
         if default != _unspecified:
             return default
