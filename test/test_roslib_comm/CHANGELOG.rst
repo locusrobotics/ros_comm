@@ -36,3 +36,6 @@ Changelog for package test_roslib_comm
   * Revert unrelated change to import through global variable construction
 * duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
 * Contributors: Dirk Thomas, Jacob Perron, Martijn Buijs, Sean Yen, Shane Loretz
+
+1.9.0 (2022-02-23)
+-------------------

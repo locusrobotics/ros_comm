@@ -28,3 +28,6 @@ Changelog for package test_rostest
   * duplicate talker.py test node since rospy doesn't install the file
   * modify test to pass when rospy.get_name isn't available without a dependency declared on it
 * Contributors: Dirk Thomas, Jacob Perron, Shane Loretz
+
+1.9.0 (2022-02-23)
+-------------------

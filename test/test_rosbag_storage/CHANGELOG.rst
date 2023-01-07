@@ -27,3 +27,6 @@ Changelog for package test_rosbag_storage
 * 1.14.4
 * Bump CMake version to avoid CMP0048 warning (#1869)
 * Contributors: Dirk Thomas, Jacob Perron, Sean Yen, Shane Loretz
+
+1.9.0 (2022-02-23)
+-------------------

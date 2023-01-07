@@ -67,3 +67,6 @@ Changelog for package test_roscpp
 * Fix test_roscpp build issues on Windows (#1482)
 * reduce test threshold to avoid flakiness (#1485)
 * Contributors: Christopher Wecht, Dirk Thomas, Ivor Wanders, Jacob Perron, Johannes Meyer, Johnson Shih, Maarten de Vries, Mike Purvis, Sean Yen, Shane Loretz, betab0t
+
+1.9.0 (2022-02-23)
+-------------------

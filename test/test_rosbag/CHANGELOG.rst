@@ -75,3 +75,6 @@ Changelog for package test_rosbag
 * test_rosbag modernization: replaced BOOST_FOREACH with range-based for-loops (#1642)
 * duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
 * Contributors: Christopher Wecht, Devin Bonnie, Dirk Thomas, Gary Servin, Jacob Perron, Mikael Arguedas, Shane Loretz, Tom Moore, beetleskin, tomoya
+
+1.9.0 (2022-02-23)
+-------------------
