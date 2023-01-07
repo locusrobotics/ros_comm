@@ -49,3 +49,6 @@ Changelog for package test_rosparam
   * Revert whitespace change
   * Revert unrelated change to import through global variable construction
 * Contributors: Dirk Thomas, Jacob Perron, Levko Ivanchuk, Martijn Buijs, Sean Yen, Shane Loretz
+
+1.9.0 (2022-02-23)
+-------------------

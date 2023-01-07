@@ -43,3 +43,6 @@ Changelog for package test_rosmaster
 * Fixed typos: awhile -> a while (#1534)
 * Update wiki.ros.org URLs (#1536)
 * Contributors: Daniel Ingram, Dirk Thomas, Jacob Perron, Martijn Buijs, Shane Loretz, Victor Lamoine
+
+1.9.0 (2022-02-23)
+-------------------

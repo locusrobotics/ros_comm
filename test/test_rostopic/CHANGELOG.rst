@@ -32,3 +32,6 @@ Changelog for package test_rostopic
   * Revert whitespace change
   * Revert unrelated change to import through global variable construction
 * Contributors: Dirk Thomas, Jacob Perron, Martijn Buijs, Shane Loretz
+
+1.9.0 (2022-02-23)
+-------------------
