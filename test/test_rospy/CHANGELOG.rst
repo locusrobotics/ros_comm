@@ -88,3 +88,6 @@ Changelog for package test_rospy
   * apply escaping only when the string is used for comparison
 * duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
 * Contributors: Christopher Wecht, Dirk Thomas, Jacob Perron, James Xu, Martin Pecka, Miaofei Mei, Shane Loretz, tomoya
+
+1.9.0 (2022-02-23)
+-------------------
