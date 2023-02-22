@@ -76,8 +76,8 @@ Changelog for package test_rosbag
 * duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
 * Contributors: Christopher Wecht, Devin Bonnie, Dirk Thomas, Gary Servin, Jacob Perron, Mikael Arguedas, Shane Loretz, Tom Moore, beetleskin, tomoya
 
-Forthcoming
------------
+1.18.0 (2023-02-22)
+-------------------
 * 1.17.0
 * Fix changelog
 * 1.16.0

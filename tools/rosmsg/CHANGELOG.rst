@@ -120,8 +120,8 @@ Changelog for package rosmsg
 * Update wiki.ros.org URLs (#1536)
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Kyle Fazzari, Sean Yen, Shane Loretz, Victor Lamoine, tomoya
 
-Forthcoming
------------
+1.18.0 (2023-02-22)
+-------------------
 * 1.17.0
 * 1.16.0
 * Update changelogs

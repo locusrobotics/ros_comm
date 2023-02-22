@@ -150,8 +150,8 @@ Changelog for package rostest
 * Directly run python script if run test through cmake (#24) (#1583)
 * Contributors: Dirk Thomas, Jacob Perron, James Xu, Kai Hermann, Levko Ivanchuk, Mateus Amarante, Mikael Arguedas, Shane Loretz, Yuki Furuta, beetleskin, tomoya
 
-Forthcoming
------------
+1.18.0 (2023-02-22)
+-------------------
 * 1.17.0
 * 1.16.0
 * Update changelogs

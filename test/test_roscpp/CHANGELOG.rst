@@ -68,8 +68,8 @@ Changelog for package test_roscpp
 * reduce test threshold to avoid flakiness (#1485)
 * Contributors: Christopher Wecht, Dirk Thomas, Ivor Wanders, Jacob Perron, Johannes Meyer, Johnson Shih, Maarten de Vries, Mike Purvis, Sean Yen, Shane Loretz, betab0t
 
-Forthcoming
------------
+1.18.0 (2023-02-22)
+-------------------
 * 1.17.0
 * Fix changelog
 * 1.16.0

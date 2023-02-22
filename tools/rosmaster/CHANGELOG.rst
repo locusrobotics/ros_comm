@@ -140,8 +140,8 @@ Changelog for package rosmaster
 * Setting correctly typed @apivalidate default return values (#1472)
 * Contributors: BoukeKromTNO, Carl Saldanha, Christopher Wecht, Dirk Thomas, Jacob Perron, John Fettig, Kostya, Shane Loretz, tomoya
 
-Forthcoming
------------
+1.18.0 (2023-02-22)
+-------------------
 * 1.17.0
 * 1.16.0
 * Update changelogs

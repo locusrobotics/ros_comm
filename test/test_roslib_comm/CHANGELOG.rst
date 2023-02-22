@@ -37,8 +37,8 @@ Changelog for package test_roslib_comm
 * duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
 * Contributors: Dirk Thomas, Jacob Perron, Martijn Buijs, Sean Yen, Shane Loretz
 
-Forthcoming
------------
+1.18.0 (2023-02-22)
+-------------------
 * 1.17.0
 * Fix changelog
 * 1.16.0
