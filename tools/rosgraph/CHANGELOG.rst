@@ -173,6 +173,116 @@ Changelog for package rosgraph
 * Fixed typos: awhile -> a while (#1534)
 * Contributors: Adrian Brzozowski, Christopher Wecht, Daniel Ingram, Daniel Wang, Dirk Thomas, Gary Servin, Hansruedi Patzen, Jacob Perron, James Xu, Jesse Ikawa, Martijn Buijs, Michael Johnson, Sean Yen, Shane Loretz, Tamaki Nishino, Tobias Pfeiffer, tomoya
 
+Forthcoming
+-----------
+* 1.17.0
+* 1.16.0
+* Update changelogs
+* RST-3950: Add timeout to handshake (#30)
+  * Add timeout to handshake
+  * Minimise diff
+  * Increase timeout to 3 seconds
+* REMOVEME: Force to use python3 for now
+* 1.15.11
+* 1.15.10
+* Fix HTTP for kernel < 4.16 (#2132)
+  Addressing performance issues described in https://github.com/ros/ros_comm/issues/2118
+  Co-authored-by: Emerson Knapp <537409+emersonknapp@users.noreply.github.com>
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* fix misspell. (#2066)
+* 1.15.8
+* update changelogs
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* 1.15.4
+* update changelogs
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* Add timestamp formatting for rosconsole (#1892)
+* 1.15.1
+* update changelogs
+* Use setuptools instead of distutils (#1870)
+  * Use setuptools instead of distutils
+  * Remove explicit setuptools dependency
+  * revert unrelated package format changes
+  * restore xml version
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* #961 revisited: Add default ROS_MASTER_URI (#1666)
+  * Add default ROS_MASTER_URI
+  * roscpp: added getDefaultMasterUri()
+  * moved DEFAULT_MASTER_PORT and DEFAULT_MASTER_URI from rospy to rosgraph to make them usable in get_master_uri
+  * removed not needed try-catch-block in get_master_uri
+  * style of touched lines
+  * style of touched lines
+  * style of touched lines
+  Co-authored-by: Jochen Sprickerhof <github@jochen.sprickerhof.de>
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* fix test which fails on Noetic (#1891)
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* [Windows][melodic] Python 3 compatibility. (#1819)
+  * Python 3 compatibility.
+  * simplified the ForkingMixIn check.
+* fix escape sequences in regular expressions (#1837)
+* compatibility: RospyLogger findCaller arguments (#1838)
+  In python 3.8 the findCaller() function will take an additional `stacklevel` argument (see: https://docs.python.org/3/library/logging.html#logging.Logger.findCaller). Since we are ignoring the stack_info argument already, we can just use *args and *kwargs to be compatible with python 3.7 and also python 3.8.
+* [Windows][melodic-devel] Make test code to be more portable (#1726)
+  * Make test code to be more portable.
+  * unrelated change
+* fix Coverity forward null (#1787)
+  * fixed 1746
+  * add additional check
+* Make log config from rosgraph optional (#1797)
+* use condition attributes to specify Python 2 and 3 dependencies (#1792)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* added is_legal_remap() to rosgraph to make remap-detection more precise (#1683)
+  * added is_legal_remap() to rosgraph
+  * test_rospy/test_rospy_client.py: fixed failing test
+  * removed unrelated change
+* more Python 3 compatibility (#1783)
+* more Python 3 compatibility (#1782)
+* Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (#1688)
+  * Switch to yaml.safe_load(_all) to prevent YAMLLoadWarning
+  * Change all usages of yaml.load to yaml.safe_load
+  * Extend PyYAML's SafeLoader and use it with `yaml.load`
+  Also added convenience functions for using this loader for reuse in
+  `roslaunch`
+  * fix typo in rosparam.yaml_load_all
+  * Modify Loader and SafeLoader in yaml module directly
+  * Revert whitespace change
+  * Revert unrelated change to import through global variable construction
+* rosgraph/network: use urlparse for parsing the port, whick makes ipv6 possible (#1698)
+  * rosgraph/network: use urlparse for parsing the port, this makes ipv6 possible
+  * remove unnecessary assert and comment
+* fix paths (and regex for paths) comparison issues (#1592)
+  * add os.path.normcase for return value of Logger.FindCaller, escape windows path delimiter for regex comparison
+  * escape os path separator for regular expression comparison
+  * use os.path.sep to indicate path separator
+  * use re.escape to escape metacharacters
+  * apply escaping only when the string is used for comparison
+* fix various test problems (#1601)
+  * move test files to separate package
+  * move publishtest into separate package since it requires rostopic which rostest can't depend on
+  * [rosbag_storage] add missing dependency on std_msgs
+  * duplicate talker.py test node since rospy doesn't install the file
+  * modify test to pass when rospy.get_name isn't available without a dependency declared on it
+* Fixed typos: awhile -> a while (#1534)
+* Contributors: Adrian Brzozowski, Christopher Wecht, Daniel Ingram, Daniel Wang, Dirk Thomas, Gary Servin, Hansruedi Patzen, Jacob Perron, James Xu, Jesse Ikawa, Martijn Buijs, Michael Johnson, Sean Yen, Shane Loretz, Tamaki Nishino, Tobias Pfeiffer, tomoya
+
 1.14.3 (2018-08-06)
 -------------------
 
