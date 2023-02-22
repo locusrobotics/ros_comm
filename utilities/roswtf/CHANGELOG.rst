@@ -147,8 +147,8 @@ Changelog for package roswtf
   ```
 * Contributors: Christopher Wecht, Daniel Ingram, Dirk Thomas, Felix Ruess, Gary Servin, Isaac I.Y. Saito, Jacob Perron, James Xu, Nicholas Paul, Shane Loretz, tomoya
 
-Forthcoming
------------
+1.18.0 (2023-02-22)
+-------------------
 * 1.17.0
 * 1.16.0
 * Update changelogs

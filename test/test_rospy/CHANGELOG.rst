@@ -89,8 +89,8 @@ Changelog for package test_rospy
 * duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
 * Contributors: Christopher Wecht, Dirk Thomas, Jacob Perron, James Xu, Martin Pecka, Miaofei Mei, Shane Loretz, tomoya
 
-Forthcoming
------------
+1.18.0 (2023-02-22)
+-------------------
 * 1.17.0
 * Fix changelog
 * 1.16.0

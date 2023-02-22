@@ -23,8 +23,8 @@ Changelog for package test_rosgraph
 * Bump CMake version to avoid CMP0048 warning (#1869)
 * Contributors: Dirk Thomas, Jacob Perron, Shane Loretz
 
-Forthcoming
------------
+1.18.0 (2023-02-22)
+-------------------
 * 1.17.0
 * Fix changelog
 * 1.16.0
