@@ -31,6 +31,7 @@
   <depend>rosbag_storage</depend>
   <depend>rosconsole</depend>
   <depend>roscpp</depend>
+  <depend>std_msgs</depend>
   <depend>std_srvs</depend>
   <depend>xmlrpcpp</depend>
 

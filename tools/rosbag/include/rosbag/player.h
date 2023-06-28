@@ -206,6 +206,8 @@ private:
 
     ros::ServiceServer pause_service_;
 
+    ros::Publisher playback_finished_publisher_;
+
     bool paused_;
     bool delayed_;
 

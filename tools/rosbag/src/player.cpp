@@ -42,6 +42,7 @@
 
 #include <boost/format.hpp>
 
+#include "std_msgs/Bool.h"
 #include "rosgraph_msgs/Clock.h"
 
 #include <ctime>
@@ -123,6 +124,7 @@ Player::Player(PlayerOptions const& options) :
 {
   ros::NodeHandle private_node_handle("~");
   pause_service_ = private_node_handle.advertiseService("pause_playback", &Player::pauseCallback, this);
+  playback_finished_publisher_ = private_node_handle.advertise<std_msgs::Bool>("playback_finished", 1, true);
 }
 
 Player::~Player() {
@@ -292,6 +294,9 @@ void Player::publish() {
     while (true) {
         // Set up our time_translator and publishers
 
+        std_msgs::Bool replay_finished;
+        replay_finished.data = false;
+
         time_translator_.setTimeScale(options_.time_scale);
 
         start_time_ = view.begin()->getTime();
@@ -315,6 +320,7 @@ void Player::publish() {
 
         paused_time_ = now_wt;
 
+        playback_finished_publisher_.publish(replay_finished);
         // Call do-publish for each message
         for (const MessageInstance& m : view) {
             if (!node_handle_.ok())
@@ -322,7 +328,8 @@ void Player::publish() {
 
             doPublish(m);
         }
-
+        replay_finished.data = true;
+        playback_finished_publisher_.publish(replay_finished);
         if (options_.keep_alive)
             while (node_handle_.ok())
                 doKeepAlive();
