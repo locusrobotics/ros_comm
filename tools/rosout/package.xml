@@ -1,6 +1,6 @@
 <package>
   <name>rosout</name>
-  <version>1.18.0</version>
+  <version>1.19.0</version>
   <description>
      System-wide logging mechanism for messages sent to the /rosout topic.
   </description>

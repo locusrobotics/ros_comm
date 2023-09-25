@@ -158,8 +158,8 @@ Changelog for package rosparam
 * Update wiki.ros.org URLs (#1536)
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, Martijn Buijs, Maxime St-Pierre, Shane Loretz, Victor Lamoine
 
-Forthcoming
------------
+1.19.0 (2023-09-25)
+-------------------
 * 1.18.0
 * Update changelogs
 * 1.17.0

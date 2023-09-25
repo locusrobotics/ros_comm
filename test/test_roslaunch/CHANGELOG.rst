@@ -92,8 +92,8 @@ Changelog for package test_roslaunch
 * REMOVEME: Force to use python3 for now
 * Contributors: Gary Servin
 
-Forthcoming
------------
+1.19.0 (2023-09-25)
+-------------------
 * 1.18.0
 * Update changelogs
 * 1.17.0
