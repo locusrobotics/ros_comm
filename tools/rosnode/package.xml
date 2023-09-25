@@ -1,6 +1,6 @@
 <package>
   <name>rosnode</name>
-  <version>1.18.0</version>
+  <version>1.19.0</version>
   <description>
     rosnode is a command-line tool for displaying debug information
     about ROS <a href="http://wiki.ros.org/Nodes">Nodes</a>,

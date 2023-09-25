@@ -186,8 +186,8 @@ Changelog for package rostopic
 * Update wiki.ros.org URLs (#1536)
 * Contributors: Christopher Wecht, Dirk Thomas, Gary Servin, Jacob Perron, Martijn Buijs, Sean Yen, Shane Loretz, Victor Lamoine, Yoshiya Hinosawa
 
-Forthcoming
------------
+1.19.0 (2023-09-25)
+-------------------
 * 1.18.0
 * Update changelogs
 * 1.17.0

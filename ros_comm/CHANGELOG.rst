@@ -114,8 +114,8 @@ Changelog for package ros_comm
 * Update wiki.ros.org URLs (#1536)
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, Shane Loretz, Victor Lamoine
 
-Forthcoming
------------
+1.19.0 (2023-09-25)
+-------------------
 * 1.18.0
 * Update changelogs
 * 1.17.0

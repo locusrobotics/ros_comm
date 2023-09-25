@@ -160,8 +160,8 @@ Changelog for package rosnode
 * show connection info on rosnode info (#1497)
 * Contributors: Akif Hacinecipoglu, Dirk Thomas, Gary Servin, Jacob Perron, Mateusz Sadowski, Maxime St-Pierre, Shane Loretz, Victor Lamoine, mabaue, tomoya
 
-Forthcoming
------------
+1.19.0 (2023-09-25)
+-------------------
 * 1.18.0
 * Update changelogs
 * 1.17.0
