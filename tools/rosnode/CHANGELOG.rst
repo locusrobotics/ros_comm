@@ -160,6 +160,63 @@ Changelog for package rosnode
 * show connection info on rosnode info (#1497)
 * Contributors: Akif Hacinecipoglu, Dirk Thomas, Gary Servin, Jacob Perron, Mateusz Sadowski, Maxime St-Pierre, Shane Loretz, Victor Lamoine, mabaue, tomoya
 
+Forthcoming
+-----------
+* 1.18.0
+* Update changelogs
+* 1.17.0
+* 1.16.0
+* Update changelogs
+* 1.15.11
+* 1.15.10
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* fix misspell. (#2066)
+* Remove unavailable nodes from local node cache _caller_apis (#2010)
+  * rosnode_cleanup() now also removes unavailable nodes from the local node cache _caller_apis. This prevents buggy behaviour when nodes become unvailable because they exit the ros network due to wifi issues but then reconnect to it later on.
+  * Fixed indentation
+* Add skip_cache parameter to rosnode_ping() (#2009)
+  * Added skip_cache parameter to rosnode_ping() to give programmers the possibility to skip looking into the cache of nodes and instead force looking them up from master
+  * Fixed indentation and added keyword argument
+* 1.15.8
+* update changelogs
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* 1.15.4
+* update changelogs
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* Use setuptools instead of distutils (#1870)
+  * Use setuptools instead of distutils
+  * Remove explicit setuptools dependency
+  * revert unrelated package format changes
+  * restore xml version
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* prevent indefinitely trapping in unknown error state (#1854)
+* duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
+* Update wiki.ros.org URLs (#1536)
+* rosnode: Explicitly handle socket.timeout in rosnode ping (#1517)
+  * Explicitly handle socket.timeout in rosnode ping
+  * Change error string when handling socket.error
+* show connection info on rosnode info (#1497)
+* Contributors: Akif Hacinecipoglu, Dirk Thomas, Gary Servin, Jacob Perron, Mateusz Sadowski, Maxime St-Pierre, Shane Loretz, Victor Lamoine, mabaue, tomoya
+
 1.14.3 (2018-08-06)
 -------------------
 

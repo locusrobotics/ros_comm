@@ -247,6 +247,103 @@ Changelog for package rosbag_storage
   * declare const for source_cnt
 * Contributors: Christopher Wecht, Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Jeremie Deray, Johnson Shih, Mikael Arguedas, Sean Yen, Shane Loretz, Ted Kern, dodsonmg, elektrokokke, ipa-fez, jalkino
 
+Forthcoming
+-----------
+* 1.18.0
+* Update changelogs
+* 1.17.0
+* 1.16.0
+* Update changelogs
+* 1.15.11
+* 1.15.10
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* [roscpp] Update boost::placeholders usage for boost 1.73 (and later) (#2023)
+  * more port fix.
+  * boost::placeholders migration.
+  * fix more.
+  * revert boost/bind/bind.hpp for back-compatible.
+* 1.15.8
+* update changelogs
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* Fix brief description comments after members (#1920)
+  Current description comments after members start with '//!', resulting in broken documentation showing the descriptions on the wrong members. Change that to '//!<' according to doxygen documentation to have descriptions correctly associated with the respective members.
+* 1.15.4
+* update changelogs
+* [noetic] Restrict boost dependencies to components used (#1871)
+  * [roscpp] declare specific boost dependencies
+  * [rosbag] declare specific boost dependencies
+  * [rosbag_storage] declare specific boost dependencies
+  * [rostest] declare specific boost dependencies
+  * [xmlrpcpp] declare specific boost dependencies
+  * [message_filters] declare specific boost dependencies
+  * [test_rosbag] declare specific boost dependencies
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* catch polymorphic exceptions by reference (#1887)
+  * catch polymorphic exceptions by reference
+  * make the catched exception references const
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* rosbag_storage:  use find_library for abs path of crypto and gpgme libraries (#1867)
+  * use find_library for abs path of crypto and libgpgme libraries
+  * fix find_library invocation
+* rosbag_storage: Fixed unnecessary writing to map  in write only mode #1742 (#1798)
+* Check for fclose returning 0 in rosbag_storage (#1750)
+  fix #1743
+* fix windows build for rosbag_storage (#1687)
+  * fix broken changes. (#55)
+  Fix broken changes.
+  * add comment, include rosbag_storage first
+  * remove unhelpful comment
+* fix #1474 move bag encryption plugins into separate library (#1499)
+  * fix #1474 move bag encryption plugins into separate library
+  This setup is required by the class_loader, which is part of the pluginlib, see  http://wiki.ros.org/class_loader#Caution_of_Linking_Directly_Against_Plugin_Libraries
+  * fix unit tests of aes_encryptor
+* rosbag_storage modernization: replaced BOOST_FOREACH with range-based for loops, used algorithm, where appropriated (#1640)
+* rosbag_storage: fixed dangeling if-else (#1637)
+* fix infinite loop in rosbag buffer resize (#1623)
+  * fix infinite loop in rosbag buffer resize
+  * grow to max size
+* update CMakeLists.txt in rosbag_storage (#1618)
+  * binplace rosbag_storage.dll to CATKIN_GLOBAL_IN
+  * Move rosbag_storage.dll to package lib destination
+  * Export NoEncryptor from Dll and install encryptor_plugins.xml for Windows (#19)
+  * update library install destination (#47)
+  * Remove unnecessary ROSBAG_STORAGE_DECL (#28)
+* fix various test problems (#1601)
+  * move test files to separate package
+  * move publishtest into separate package since it requires rostopic which rostest can't depend on
+  * [rosbag_storage] add missing dependency on std_msgs
+  * duplicate talker.py test node since rospy doesn't install the file
+  * modify test to pass when rospy.get_name isn't available without a dependency declared on it
+* visibility macros update (#1591)
+* Fix issues when built or run on Windows (#1466)
+  * Fix roslz4 build issue on Windows
+  * Fix xmlrpcpp build issue on Windows, fix polling fails when run on Windows
+  * Fix roscpp build issue on Windows
+  * Fix rosbag_storage build issue on Windows
+  * fix issues in python scripts to run roscore on Windows
+  * revert unrelated whitespace changes
+  * Revert changes in roslogging.py
+  * declare const for source_cnt
+* Contributors: Christopher Wecht, Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Jeremie Deray, Johnson Shih, Mikael Arguedas, Sean Yen, Shane Loretz, Ted Kern, dodsonmg, elektrokokke, ipa-fez, jalkino
+
 1.14.3 (2018-08-06)
 -------------------
 
