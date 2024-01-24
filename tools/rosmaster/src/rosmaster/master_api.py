@@ -61,6 +61,7 @@ import logging
 import threading
 import time
 import traceback
+import xmlrpc.client
 
 from rosgraph.xmlrpc import XmlRpcHandler
 
@@ -211,7 +212,7 @@ def publisher_update_task(api, topic, pub_uris):
         msg_suffix = "result=%s" % ret
     except Exception as ex:
         msg_suffix = "exception=%s" % ex
-        raise
+        mloginfo(msg_suffix)
     finally:
         delta_sec = time.time() - start_sec
         mloginfo("%s: sec=%0.2f, %s", msg, delta_sec, msg_suffix)
