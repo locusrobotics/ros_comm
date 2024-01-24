@@ -61,7 +61,6 @@ import logging
 import threading
 import time
 import traceback
-import xmlrpc.client
 
 from rosgraph.xmlrpc import XmlRpcHandler
 
