@@ -257,8 +257,8 @@ Changelog for package message_filters
 * Fix message_filters build issue on the template syntax (#1483)
 * Contributors: Christian Rauch, Dirk Thomas, Gary Servin, Jacob Perron, Johnson Shih, Kevin Hallenbeck, Maarten de Vries, Ross Lannen, Sean Yen, Shane Loretz, Yuki Furuta, tykurtz
 
-Forthcoming
------------
+1.20.0 (2024-02-02)
+-------------------
 * 1.19.0
 * Update changelogs
 * 1.18.0
