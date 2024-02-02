@@ -260,6 +260,79 @@ Changelog for package rosmsg
 * Update wiki.ros.org URLs (#1536)
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Kyle Fazzari, Sean Yen, Shane Loretz, Victor Lamoine, tomoya
 
+Forthcoming
+-----------
+* 1.19.0
+* Update changelogs
+* 1.18.0
+* Update changelogs
+* 1.17.0
+* 1.16.0
+* Update changelogs
+* REMOVEME: Force to use python3 for now
+* 1.15.11
+* 1.15.10
+* rosmsg: clean up test dependencies (#2103)
+  All dependencies must be declared in the package.xml, and all these
+  dependencies must be in the ROS distro. rosmsg doesn't meet either of
+  these requirements today, by using but not depending on both rostest and
+  std_srvs, and by using test_rosmaster, which isn't in the ROS distro at
+  all.
+  Update rosmsg to properly depend upon what it requires, and stop using
+  test_rosmaster completely. In place of test_rosmaster, use
+  diagnostic_msgs, which satisfies the same requirements of the existing
+  tests by having both messages and services as well as standalone and
+  recursive messages.
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* fix misspell. (#2066)
+* 1.15.8
+* update changelogs
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* 1.15.4
+* update changelogs
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* Use setuptools instead of distutils (#1870)
+  * Use setuptools instead of distutils
+  * Remove explicit setuptools dependency
+  * revert unrelated package format changes
+  * restore xml version
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* Add more Windows test code fixes. (#1727)
+* [Windows][melodic-devel] Make test code to be more portable (#1726)
+  * Make test code to be more portable.
+  * unrelated change
+* use condition attributes to specify Python 2 and 3 dependencies (#1792)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* more Python 3 compatibility (#1783)
+* normalize paths before comparison in rosmsg (#1586)
+  * normalize paths before comparison in rosmsg
+  * remove use of normcase and remove path_in_workspaces temp variable
+  * remove duplicated control
+  * revert unrelated whitespace changes
+  * keep order of operands
+* Update wiki.ros.org URLs (#1536)
+* Contributors: Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Kyle Fazzari, Sean Yen, Shane Loretz, Victor Lamoine, tomoya
+
 1.14.3 (2018-08-06)
 -------------------
 

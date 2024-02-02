@@ -335,6 +335,103 @@ Changelog for package roswtf
   ```
 * Contributors: Christopher Wecht, Daniel Ingram, Dirk Thomas, Felix Ruess, Gary Servin, Isaac I.Y. Saito, Jacob Perron, James Xu, Nicholas Paul, Shane Loretz, tomoya
 
+Forthcoming
+-----------
+* 1.19.0
+* Update changelogs
+* 1.18.0
+* Update changelogs
+* 1.17.0
+* 1.16.0
+* Update changelogs
+* REMOVEME: Force to use python3 for now
+* 1.15.11
+* 1.15.10
+* Fix /use_sim_time parameter typo in roswtf error (#2102)
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* fix misspell. (#2066)
+* 1.15.8
+* update changelogs
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* 1.15.4
+* update changelogs
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* Use setuptools instead of distutils (#1870)
+  * Use setuptools instead of distutils
+  * Remove explicit setuptools dependency
+  * revert unrelated package format changes
+  * restore xml version
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* #961 revisited: Add default ROS_MASTER_URI (#1666)
+  * Add default ROS_MASTER_URI
+  * roscpp: added getDefaultMasterUri()
+  * moved DEFAULT_MASTER_PORT and DEFAULT_MASTER_URI from rospy to rosgraph to make them usable in get_master_uri
+  * removed not needed try-catch-block in get_master_uri
+  * style of touched lines
+  * style of touched lines
+  * style of touched lines
+  Co-authored-by: Jochen Sprickerhof <github@jochen.sprickerhof.de>
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* do not try to run online checks if there are no roslaunch uris (#1848)
+* more Python 3 compatibility (#1796)
+  * keep subscribers around
+  * more subprocess decode
+  * add another seek(0), remove an unncessary one
+* use condition attributes to specify Python 2 and 3 dependencies (#1792)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* [roswtf] Print exception content to show better idea why loading plugin failed. (#1721)
+  Add the content exception to print when `roswtf` failed to load a plugin.
+  When loading a wtf plugin failed the message looks something like the following without any info about the reason it was not loaded:
+  ```
+  Loaded plugin tf.tfwtf
+  Unable to load plugin [B_utility.roswtf.B_wtf_plugin.py] from package [B_utility].
+  ```
+  For the same context, error message prints the exception, which helps debugging.
+  ```
+  Loaded plugin tf.tfwtf
+  Unable to load plugin [B_utility.roswtf.B_wtf_plugin.py] from package [B_utility]. Exception: [cannot import name RemovedMsgTypeA]
+  ```
+  (In my case RemovedMsgTypeA is the message type that is the package depends on but is recently removed so not found).
+* duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
+* query ipv6 only if specified (#1596)
+  * Query resolved_ips according to ipv6()
+  * Add missing import name (#20)
+* Fixed typos: awhile -> a while (#1534)
+* [roswtf] Better msg replacement for 'No package or stack in context'. (#1505)
+  When there's no ROS pkg is found on the current directory when `roswtf` is run, a message `No package or stack in context` appears. This message is not useful IMO because "context" is unclear.
+  This PR suggests clearer message.
+  **How to reproduce the behavior**
+  ```
+  $ cd ~
+  $ roswtf
+  :
+  No package or stack in context
+  :
+  $ rosversion roswtf
+  1.12.14
+  ```
+* Contributors: Christopher Wecht, Daniel Ingram, Dirk Thomas, Felix Ruess, Gary Servin, Isaac I.Y. Saito, Jacob Perron, James Xu, Nicholas Paul, Shane Loretz, tomoya
+
 1.14.3 (2018-08-06)
 -------------------
 

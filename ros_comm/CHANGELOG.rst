@@ -152,6 +152,46 @@ Changelog for package ros_comm
 * Update wiki.ros.org URLs (#1536)
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, Shane Loretz, Victor Lamoine
 
+Forthcoming
+-----------
+* 1.19.0
+* Update changelogs
+* 1.18.0
+* Update changelogs
+* 1.17.0
+* 1.16.0
+* Update changelogs
+* 1.15.11
+* 1.15.10
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* 1.15.8
+* update changelogs
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* 1.15.4
+* update changelogs
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* Update wiki.ros.org URLs (#1536)
+* Contributors: Dirk Thomas, Gary Servin, Jacob Perron, Shane Loretz, Victor Lamoine
+
 1.14.3 (2018-08-06)
 -------------------
 

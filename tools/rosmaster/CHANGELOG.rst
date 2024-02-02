@@ -322,6 +322,104 @@ Changelog for package rosmaster
 * Setting correctly typed @apivalidate default return values (#1472)
 * Contributors: BoukeKromTNO, Carl Saldanha, Christopher Wecht, Dirk Thomas, Gary Servin, Jacob Perron, John Fettig, Kostya, Shane Loretz, tomoya
 
+Forthcoming
+-----------
+* Remove raise (#35)
+  * remove raise
+  * fix
+  * remove
+* 1.19.0
+* Update changelogs
+* 1.18.0
+* Update changelogs
+* 1.17.0
+* 1.16.0
+* Update changelogs
+* 1.15.11
+* 1.15.10
+* 1.15.9 package.xmls
+* 1.15.9
+* Update maintainers (#2075)
+  Previous: @dirk-thomas
+  New: @jacobperron, @mjcarroll, @sloretz
+* cached parameter should be unsubscribed (#2068)
+  * add unsubscribeCachedParam.
+  * unsubscribe all the cached parameters.
+  * add const S_string::iterator.
+  * delete unnecessary if statement.
+  * unsubscribeCachedParam should be called when parameter is deleted.
+  * fix parenthesis location.
+* fix misspell. (#2066)
+* 1.15.8
+* update changelogs
+* Add which node has been registered with the same name (#1992)
+  * Add which node has been registered with the same name
+  Was looking through logs of several nodes that had been launched at the same time and it was getting hard to tell which node was being duplicated. This would allow you do to see the name of the node that caused the issue
+  * switch to shutdown_node_task
+* 1.15.7
+* update changelogs
+* 1.15.6
+* update changelogs
+* 1.15.5
+* update changelogs
+* 1.15.4
+* update changelogs
+* 1.15.3
+* update changelogs
+* 1.15.2
+* update changelogs
+* 1.15.1
+* update changelogs
+* Use setuptools instead of distutils (#1870)
+  * Use setuptools instead of distutils
+  * Remove explicit setuptools dependency
+  * revert unrelated package format changes
+  * restore xml version
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+* 1.15.0
+* update changelogs
+* 1.14.4
+* update changelog
+* Bump CMake version to avoid CMP0048 warning (#1869)
+* Use thread local storage for caching instances of ServerProxy (#1732)
+  xmlrpc.client.ServerProxy is not thread safe. See
+  https://bugs.python.org/issue6907
+  The symptom of this bug is exceptions in the publisherUpdate
+  logged in the master.log. For example:
+  [rosmaster.threadpool][ERROR] : Traceback (most recent call last):
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rosmaster/threadpool.py", line 218, in run
+  result = cmd(*args)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rosmaster/master_api.py", line 210, in publisher_update_task
+  ret = xmlrpcapi(api).publisherUpdate('/master', topic, pub_uris)
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rosmaster/util.py", line 68, in xmlrpcapi
+  close_half_closed_sockets()
+  File "/opt/ros/kinetic/lib/python2.7/dist-packages/rosmaster/util.py", line 79, in close_half_closed_sockets
+  state = transport._connection[1].sock.getsockopt(socket.SOL_TCP, socket.TCP_INFO)
+  File "/usr/lib/python2.7/socket.py", line 228, in meth
+  return getattr(self._sock,name)(*args)
+  File "/usr/lib/python2.7/socket.py", line 174, in _dummy
+  raise error(EBADF, 'Bad file descriptor')
+  error: [Errno 9] Bad file descriptor
+  Some subscribers get the update but some do not. For example, the topic
+  is recorded in a rosbag but not received by nodes that depend on it.
+  Issue: https://github.com/ros/ros_comm/issues/1523
+* use condition attributes to specify Python 2 and 3 dependencies (#1792)
+  * use condition attributes to specify Python 2 and 3 dependencies
+  * use python3-pil
+* Fixed issue occuring during alternating calls of getParamCached and setParam (#1439)
+  * test_roscpp/params/added getParamCachedSetParamLoop
+  * rosmaster: set_param: the not update the caller!
+  * rosmaster: set_param: do not update the caller more fine grained
+  * /rosmaster/paramserver/compute_params_update, apply filter only if caller_id_to_ignore is not None
+  * /test_rospy/talker: set publishers queue_size to supress warning
+  * /test_rospy/sub_to_multple_pubs: moved listener up to avoid warnings
+  * refactor for readability
+  * pep8
+* Fixed docstring in unregisterSubscriber (#1553)
+  Fixes #1508.
+* Setting correctly typed @apivalidate default return values (#1472)
+* Contributors: BoukeKromTNO, Carl Saldanha, Christopher Wecht, Dirk Thomas, Gary Servin, Jacob Perron, John Fettig, Joshua Wallace, Kostya, Shane Loretz, tomoya
+
 1.14.3 (2018-08-06)
 -------------------
 
