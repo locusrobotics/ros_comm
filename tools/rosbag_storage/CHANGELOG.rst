@@ -344,8 +344,8 @@ Changelog for package rosbag_storage
   * declare const for source_cnt
 * Contributors: Christopher Wecht, Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Jeremie Deray, Johnson Shih, Mikael Arguedas, Sean Yen, Shane Loretz, Ted Kern, dodsonmg, elektrokokke, ipa-fez, jalkino
 
-Forthcoming
------------
+1.21.0 (2024-06-17)
+-------------------
 
 1.20.0 (2024-02-02)
 -------------------
