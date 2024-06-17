@@ -216,6 +216,9 @@ Changelog for package rosservice
 * Update wiki.ros.org URLs (#1536)
 * Contributors: Christopher Wecht, Dirk Thomas, Gary Servin, Jacob Perron, Martijn Buijs, Shane Loretz, Victor Lamoine, mistoll
 
+Forthcoming
+-----------
+
 1.20.0 (2024-02-02)
 -------------------
 * 1.19.0

@@ -105,6 +105,9 @@ Changelog for package test_rostopic
   * Revert unrelated change to import through global variable construction
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, Martijn Buijs, Shane Loretz
 
+Forthcoming
+-----------
+
 1.20.0 (2024-02-02)
 -------------------
 * 1.19.0

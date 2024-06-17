@@ -138,6 +138,9 @@ Changelog for package test_roslaunch
 * duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, Sean Yen, Shane Loretz
 
+Forthcoming
+-----------
+
 1.20.0 (2024-02-02)
 -------------------
 * 1.19.0

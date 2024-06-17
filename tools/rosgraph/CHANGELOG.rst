@@ -395,6 +395,12 @@ Changelog for package rosgraph
 * Fixed typos: awhile -> a while (#1534)
 * Contributors: Adrian Brzozowski, Christopher Wecht, Daniel Ingram, Daniel Wang, Dirk Thomas, Gary Servin, Hansruedi Patzen, Jacob Perron, James Xu, Jesse Ikawa, Martijn Buijs, Michael Johnson, Sean Yen, Shane Loretz, Tamaki Nishino, Tobias Pfeiffer, tomoya
 
+Forthcoming
+-----------
+* rosgraph: update code from Python 3.11
+  (cherry picked from commit 2dc0ee9290012ee4674284f077355a39cc94c459)
+* Contributors: Jochen Sprickerhof
+
 1.20.0 (2024-02-02)
 -------------------
 * 1.19.0
