@@ -798,22 +798,11 @@ class TCPROSTransport(Transport):
                         msgs = self.receive_once()
                         if not self.done and not is_shutdown():
                             msgs_callback(msgs, self)
-                    else:
-                        self._reconnect()
 
                 except TransportException as e:
-                    # set socket to None so we reconnect
-                    try:
-                        if self.socket is not None:
-                            try:
-                                self.socket.shutdown()
-                            except:
-                                pass
-                            finally:
-                                self.socket.close()
-                    except:
-                        pass
-                    self.socket = None
+                    # A transport exception means the connection has been closed from the other side.
+                    # Clean up our side.
+                    self.close()
 
                 except DeserializationError as e:
                     #TODO: how should we handle reconnect in this case?
