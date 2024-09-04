@@ -39,7 +39,7 @@
 #include "ros/file_log.h"
 #include <ros/assert.h>
 #include <sstream>
-#include <boost/bind.hpp>
+#include <boost/bind/bind.hpp>
 #include <boost/lexical_cast.hpp>
 #include <fcntl.h>
 #include <errno.h>
