@@ -197,8 +197,8 @@ Changelog for package rosout
   * trailing operators
 * Contributors: Daniel Wang, Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Shane Loretz, Yong Li, tomoya
 
-Forthcoming
------------
+1.22.0 (2024-09-16)
+-------------------
 
 1.21.0 (2024-06-17)
 -------------------
