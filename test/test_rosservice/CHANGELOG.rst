@@ -117,6 +117,9 @@ Changelog for package test_rosservice
 * duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, Martijn Buijs, Sean Yen, Shane Loretz
 
+Forthcoming
+-----------
+
 1.21.0 (2024-06-17)
 -------------------
 
