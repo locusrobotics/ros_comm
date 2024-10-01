@@ -462,18 +462,6 @@ void Recorder::startWriting() {
         {
             // Overwrite the original receipt time, otherwise the new bag will
             // have a gap before the new messages start.
-            bag_.write(out.second.topic, now, *out.second.msg);
-        }
-    }
-
-    if (options_.repeat_latched)
-    {
-        // Start each new bag file with copies of all latched messages.
-        ros::Time now = ros::Time::now();
-        for (auto const& out : latched_msgs_)
-        {
-            // Overwrite the original receipt time, otherwise the new bag will
-            // have a gap before the new messages start.
             bag_.write(out.second.topic, now, *out.second.msg, out.second.connection_header);
         }
     }
