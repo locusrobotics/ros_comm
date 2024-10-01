@@ -578,24 +578,13 @@ class Bag(object):
         if self._chunk_open:
             self._stop_writing_chunk()
 
-    def write(self, topic, msg, t=None, raw=False, connection_header=None):
-        """
-        Write a message to the bag.
-        @param topic: name of topic
-        @type  topic: str
-        @param msg: message to add to bag, or tuple (if raw)
-        @type  msg: Message or tuple of raw message data
-        @param t: ROS time of message publication, if None specified, use current time [optional]
-        @type  t: U{genpy.Time}
-        @param raw: if True, msg is in raw format, i.e. (msg_type, serialized_bytes, md5sum, pytype)
-        @type  raw: bool
-        @raise ValueError: if arguments are invalid or bag is closed
-        """
+    def _write(self, topic, msg, connection_info, serialized_bytes, t=None):
         if not self._file:
             raise ValueError('I/O operation on closed bag')
 
         if not topic:
             raise ValueError('topic is invalid')
+
         if not msg:
             raise ValueError('msg is invalid')
 
@@ -609,7 +598,143 @@ class Bag(object):
         if not self._chunk_open:
             self._start_writing_chunk(t)
 
+        # if topic in self._topic_connections:
+        #     # connection_info = self._topic_connections[topic]
+        #     conn_id = connection_info.id
+        # else:
+        #     conn_id = len(self._connections)
+        #     connection_info = _ConnectionInfo(conn_id, topic, connection_header)
+        #     # No need to encrypt connection records in chunk (encrypt=False)
+        #     self._write_connection_record(connection_info, False)
+
+        #     self._connections[conn_id] = connection_info
+        #     self._topic_connections[topic] = connection_info
+
+        # Create an index entry
+        index_entry = _IndexEntry200(t, self._curr_chunk_info.pos, self._get_chunk_offset())
+
+        # Update the indexes and current chunk info 
+        if connection_info.id not in self._curr_chunk_connection_indexes:
+            # This is the first message on this connection in the chunk
+            self._curr_chunk_connection_indexes[connection_info.id] = [index_entry]
+            self._curr_chunk_info.connection_counts[connection_info.id] = 1
+        else:
+            curr_chunk_connection_index = self._curr_chunk_connection_indexes[connection_info.id]
+            if index_entry >= curr_chunk_connection_index[-1]:
+                # Test if we're writing chronologically.  Can skip binary search if so.
+                curr_chunk_connection_index.append(index_entry)
+            else:
+                bisect.insort_right(curr_chunk_connection_index, index_entry)
+
+            self._curr_chunk_info.connection_counts[connection_info.id] += 1
+
+        if connection_info.id not in self._connection_indexes:
+            self._connection_indexes[connection_info.id] = [index_entry]
+        else:
+            bisect.insort_right(self._connection_indexes[connection_info.id], index_entry)
+
+        # Update the chunk start/end times
+        if t > self._curr_chunk_info.end_time:
+            self._curr_chunk_info.end_time = t
+        elif t < self._curr_chunk_info.start_time:
+            self._curr_chunk_info.start_time = t
+
+        # Write message data record
+        self._write_message_data_record(connection_info.id, t, serialized_bytes)
+        
+        # Check if we want to stop this chunk
+        chunk_size = self._get_chunk_offset()
+        if chunk_size > self._chunk_threshold:
+            self._stop_writing_chunk()
+    
+    def write(self, topic, msg, t=None, raw=False, connection_header=None):
+        """
+        Write a message to the bag.
+        @param topic: name of topic
+        @type  topic: str
+        @param msg: message to add to bag, or tuple (if raw)
+        @type  msg: Message or tuple of raw message data
+        @param t: ROS time of message publication, if None specified, use current time [optional]
+        @type  t: U{genpy.Time}
+        @param raw: if True, msg is in raw format, i.e. (msg_type, serialized_bytes, md5sum, pytype)
+        @type  raw: bool
+        @raise ValueError: if arguments are invalid or bag is closed
+        """
+        # if not self._file:
+        #     raise ValueError('I/O operation on closed bag')
+
+        # if not topic:
+        #     raise ValueError('topic is invalid')
+        # if not msg:
+        #     raise ValueError('msg is invalid')
+
+        # if t is None:
+        #     t = genpy.Time.from_sec(time.time())
+
+        # # Seek to end (in case previous operation was a read)
+        # self._file.seek(0, os.SEEK_END)
+
+        # # Open a chunk, if needed
+        # if not self._chunk_open:
+        #     self._start_writing_chunk(t)
+
         # Unpack raw
+        # if raw:
+        #     if len(msg) == 5:
+        #         msg_type, serialized_bytes, md5sum, pos, pytype = msg
+        #     elif len(msg) == 4:
+        #         msg_type, serialized_bytes, md5sum, pytype = msg
+        #     else:
+        #         raise ValueError('msg must be of length 4 or 5')
+
+        # Write connection record, if necessary (currently using a connection per topic; ignoring message connection header)
+        # if topic in self._topic_connections:
+        #     connection_info = self._topic_connections[topic]
+        #     conn_id = connection_info.id
+        # else:
+        #     conn_id = len(self._connections)
+
+        #     if raw:
+        #         if len(msg) == 5:
+        #             msg_type, serialized_bytes, md5sum, pos, pytype = msg
+        #         elif len(msg) == 4:
+        #             msg_type, serialized_bytes, md5sum, pytype = msg
+        #         else:
+        #             raise ValueError('msg must be of length 4 or 5')
+
+        #         if pytype is None:
+        #             try:
+        #                 pytype = genpy.message.get_message_class(msg_type)
+        #             except Exception:
+        #                 pytype = None
+        #         if pytype is None:
+        #             raise ROSBagException('cannot locate message class and no message class provided for [%s]' % msg_type)
+    
+        #         if pytype._md5sum != md5sum:
+        #             print('WARNING: md5sum of loaded type [%s] does not match that specified' % msg_type, file=sys.stderr)
+        #             #raise ROSBagException('md5sum of loaded type does not match that of data being recorded')
+
+        #         header = connection_header if connection_header is not None else {
+        #             'topic': topic,
+        #             'type': msg_type,
+        #             'md5sum': md5sum,
+        #             'message_definition': pytype._full_text
+        #         }
+        #     else:
+        #         header = connection_header if connection_header is not None else {
+        #             'topic': topic,
+        #             'type': msg.__class__._type,
+        #             'md5sum': msg.__class__._md5sum,
+        #             'message_definition': msg._full_text
+        #         }
+
+        #     connection_info = _ConnectionInfo(conn_id, topic, header)
+        #     # No need to encrypt connection records in chunk (encrypt=False)
+        #     self._write_connection_record(connection_info, False)
+
+        #     self._connections[conn_id] = connection_info
+        #     self._topic_connections[topic] = connection_info
+
         if raw:
             if len(msg) == 5:
                 msg_type, serialized_bytes, md5sum, pos, pytype = msg
@@ -618,90 +743,116 @@ class Bag(object):
             else:
                 raise ValueError('msg must be of length 4 or 5')
 
-        # Write connection record, if necessary (currently using a connection per topic; ignoring message connection header)
-        if topic in self._topic_connections:
-            connection_info = self._topic_connections[topic]
-            conn_id = connection_info.id
+            if pytype is None:
+                try:
+                    pytype = genpy.message.get_message_class(msg_type)
+                except Exception:
+                    pytype = None
+            if pytype is None:
+                raise ROSBagException('cannot locate message class and no message class provided for [%s]' % msg_type)
+
+            if pytype._md5sum != md5sum:
+                print('WARNING: md5sum of loaded type [%s] does not match that specified' % msg_type, file=sys.stderr)
+                #raise ROSBagException('md5sum of loaded type does not match that of data being recorded')
+
+            connection_header = connection_header if connection_header is not None else {
+                'topic': topic,
+                'type': msg_type,
+                'md5sum': md5sum,
+                'message_definition': pytype._full_text
+            }
         else:
-            conn_id = len(self._connections)
+            connection_header = connection_header if connection_header is not None else {
+                'topic': topic,
+                'type': msg.__class__._type,
+                'md5sum': msg.__class__._md5sum,
+                'message_definition': msg._full_text
+            }
 
-            if raw:
-                if pytype is None:
-                    try:
-                        pytype = genpy.message.get_message_class(msg_type)
-                    except Exception:
-                        pytype = None
-                if pytype is None:
-                    raise ROSBagException('cannot locate message class and no message class provided for [%s]' % msg_type)
-    
-                if pytype._md5sum != md5sum:
-                    print('WARNING: md5sum of loaded type [%s] does not match that specified' % msg_type, file=sys.stderr)
-                    #raise ROSBagException('md5sum of loaded type does not match that of data being recorded')
-
-                header = connection_header if connection_header is not None else {
-                    'topic': topic,
-                    'type': msg_type,
-                    'md5sum': md5sum,
-                    'message_definition': pytype._full_text
-                }
-            else:
-                header = connection_header if connection_header is not None else {
-                    'topic': topic,
-                    'type': msg.__class__._type,
-                    'md5sum': msg.__class__._md5sum,
-                    'message_definition': msg._full_text
-                }
-
-            connection_info = _ConnectionInfo(conn_id, topic, header)
-            # No need to encrypt connection records in chunk (encrypt=False)
-            self._write_connection_record(connection_info, False)
-
-            self._connections[conn_id] = connection_info
-            self._topic_connections[topic] = connection_info
-
-        # Create an index entry
-        index_entry = _IndexEntry200(t, self._curr_chunk_info.pos, self._get_chunk_offset())
-
-        # Update the indexes and current chunk info 
-        if conn_id not in self._curr_chunk_connection_indexes:
-            # This is the first message on this connection in the chunk
-            self._curr_chunk_connection_indexes[conn_id] = [index_entry]
-            self._curr_chunk_info.connection_counts[conn_id] = 1
-        else:
-            curr_chunk_connection_index = self._curr_chunk_connection_indexes[conn_id]
-            if index_entry >= curr_chunk_connection_index[-1]:
-                # Test if we're writing chronologically.  Can skip binary search if so.
-                curr_chunk_connection_index.append(index_entry)
-            else:
-                bisect.insort_right(curr_chunk_connection_index, index_entry)
-
-            self._curr_chunk_info.connection_counts[conn_id] += 1
-
-        if conn_id not in self._connection_indexes:
-            self._connection_indexes[conn_id] = [index_entry]
-        else:
-            bisect.insort_right(self._connection_indexes[conn_id], index_entry)
-
-        # Update the chunk start/end times
-        if t > self._curr_chunk_info.end_time:
-            self._curr_chunk_info.end_time = t
-        elif t < self._curr_chunk_info.start_time:
-            self._curr_chunk_info.start_time = t
-
-        if not raw:
             # Serialize the message to the buffer
             self._buffer.seek(0)
             self._buffer.truncate(0)
             msg.serialize(self._buffer)
             serialized_bytes = self._buffer.getvalue()
 
-        # Write message data record
-        self._write_message_data_record(conn_id, t, serialized_bytes)
+        if topic in self._topic_connections:
+            connection_info = self._topic_connections[topic]
+            # conn_id = connection_info.id
+        else:
+            conn_id = len(self._connections)
+            connection_info = _ConnectionInfo(conn_id, topic, connection_header)
+            # No need to encrypt connection records in chunk (encrypt=False)
+            self._write_connection_record(connection_info, False)
+
+            self._connections[conn_id] = connection_info
+            self._topic_connections[topic] = connection_info
+
+        self._write(topic, msg, connection_info, serialized_bytes, t)
+
+        # # Create an index entry
+        # index_entry = _IndexEntry200(t, self._curr_chunk_info.pos, self._get_chunk_offset())
+
+        # # Update the indexes and current chunk info 
+        # if conn_id not in self._curr_chunk_connection_indexes:
+        #     # This is the first message on this connection in the chunk
+        #     self._curr_chunk_connection_indexes[conn_id] = [index_entry]
+        #     self._curr_chunk_info.connection_counts[conn_id] = 1
+        # else:
+        #     curr_chunk_connection_index = self._curr_chunk_connection_indexes[conn_id]
+        #     if index_entry >= curr_chunk_connection_index[-1]:
+        #         # Test if we're writing chronologically.  Can skip binary search if so.
+        #         curr_chunk_connection_index.append(index_entry)
+        #     else:
+        #         bisect.insort_right(curr_chunk_connection_index, index_entry)
+
+        #     self._curr_chunk_info.connection_counts[conn_id] += 1
+
+        # if conn_id not in self._connection_indexes:
+        #     self._connection_indexes[conn_id] = [index_entry]
+        # else:
+        #     bisect.insort_right(self._connection_indexes[conn_id], index_entry)
+
+        # # Update the chunk start/end times
+        # if t > self._curr_chunk_info.end_time:
+        #     self._curr_chunk_info.end_time = t
+        # elif t < self._curr_chunk_info.start_time:
+        #     self._curr_chunk_info.start_time = t
+
+        # if not raw:
+        #     # Serialize the message to the buffer
+        #     self._buffer.seek(0)
+        #     self._buffer.truncate(0)
+        #     msg.serialize(self._buffer)
+        #     serialized_bytes = self._buffer.getvalue()
+
+        # # Write message data record
+        # self._write_message_data_record(conn_id, t, serialized_bytes)
         
-        # Check if we want to stop this chunk
-        chunk_size = self._get_chunk_offset()
-        if chunk_size > self._chunk_threshold:
-            self._stop_writing_chunk()
+        # # Check if we want to stop this chunk
+        # chunk_size = self._get_chunk_offset()
+        # if chunk_size > self._chunk_threshold:
+        #     self._stop_writing_chunk()
+
+    def write_full_message(self, topic, msg, t, connection_header):
+        # Serialize the message to the buffer
+        self._buffer.seek(0)
+        self._buffer.truncate(0)
+        msg.serialize(self._buffer)
+        serialized_bytes = self._buffer.getvalue()
+
+        if topic in self._topic_connections:
+            conn_id = self._topic_connections[topic].id
+        else:
+            conn_id = len(self._connections)
+
+        connection_info = _ConnectionInfo(conn_id, topic, connection_header)
+        # No need to encrypt connection records in chunk (encrypt=False)
+        self._write_connection_record(connection_info, False)
+
+        self._connections[conn_id] = connection_info
+        self._topic_connections[topic] = connection_info
+
+        self._write(topic, msg, connection_info, serialized_bytes, t)
 
     def reindex(self):
         """
