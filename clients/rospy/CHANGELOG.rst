@@ -1191,6 +1191,11 @@ Changelog for package rospy
   ```
 * Contributors: Brutus The Tschiepel, Christopher Wecht, Dirk Thomas, Gary Servin, Hans Gaiser, Jacob Perron, Markus Grimm, Martijn Buijs, Martin Pecka, Maxime St-Pierre, Miaofei Mei, Michael Johnson, Paul Bovbel, Paweł Lorek, Sean Yen, Shane Loretz, Steve Nogar, Tom Moore, Victor Lamoine, Yong Li, Yuchen Ying, abencz, cclauss, henryzhang0506, larslue, mikolajz, salihmarangoz, tomoya, 金梦磊
 
+Forthcoming
+-----------
+* Remove reconnect for read errors (`#36 <https://github.com/locusrobotics/ros_comm/issues/36>`_)
+* Contributors: Michael Johnson
+
 1.21.0 (2024-06-17)
 -------------------
 
