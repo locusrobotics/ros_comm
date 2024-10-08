@@ -227,8 +227,8 @@ Changelog for package roslz4
   * declare const for source_cnt
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Jeremie Deray, Johnson Shih, Sean Yen, Shane Loretz, Tobias Fischer, tomoya
 
-Forthcoming
------------
+1.21.1 (2024-10-08)
+-------------------
 
 1.21.0 (2024-06-17)
 -------------------
