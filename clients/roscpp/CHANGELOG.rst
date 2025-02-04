@@ -988,8 +988,8 @@ Changelog for package roscpp
   * declare const for source_cnt
 * Contributors: Adel Fakih, Alex Moriarty, Arkady Shapkin, Arusekk, Barry Xu, C. Andy Martin, Chen Lihui, Christopher Wecht, Daniel Wang, Dino Hüllmann, Dirk Thomas, Felix Ruess, Gabriel Arjones, Gary Servin, Hans-Joachim Krauch, Igor Semenov, Ivor Wanders, Jacob Perron, James Xu, Jeremie Deray, Johannes Meyer, Johnson Shih, Kunal Tyagi, Maarten de Vries, Martin Pecka, Michael Carroll, Michael Johnson, Mikael Arguedas, Mike Purvis, Sean Yen, Shane Loretz, Tahsincan Köse, Victor Lamoine, Zbyněk Winkler, astere-cpr, dodsonmg, foodtooth, randoms, tomoya, wentz89
 
-Forthcoming
------------
+1.23.0 (2025-02-04)
+-------------------
 
 1.22.0 (2024-09-16)
 -------------------
