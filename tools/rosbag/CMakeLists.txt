@@ -14,8 +14,20 @@ catkin_python_setup()
 # Support large bags (>2GB) on 32-bit systems
 add_definitions(-D_FILE_OFFSET_BITS=64)
 
-include_directories(include ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}
-  ${BZIP2_INCLUDE_DIR}
+# ignore BOOST deprecated headers
+add_definitions("-DBOOST_ALLOW_DEPRECATED_HEADERS")
+add_definitions("-DBOOST_BIND_GLOBAL_PLACEHOLDERS")
+add_definitions("-DBOOST_TIMER_ENABLE_DEPRECATED")
+
+include_directories(
+  include
+)
+
+include_directories(
+  SYSTEM
+    ${catkin_INCLUDE_DIRS}
+    ${Boost_INCLUDE_DIRS}
+    ${BZIP2_INCLUDE_DIR}
 )
 
 catkin_package(
