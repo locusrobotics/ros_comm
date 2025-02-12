@@ -160,8 +160,8 @@ class TestRospyCore(unittest.TestCase):
 
                     log_file = ' '.join([
                         '\[rosout\]\[' + lvl2loglvl(lvl) + '\]',
-                        '(\d+[-\/]\d+[-\/]\d+)',
-                        '(\d+[:]\d+[:]\d+[,]\d+):',
+                        r'(\d+[-\/]\d+[-\/]\d+)',
+                        r'(\d+[:]\d+[:]\d+[,]\d+):',
                         lvl
                     ])
                     fileline = lf.readline()
