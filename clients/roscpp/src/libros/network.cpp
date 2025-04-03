@@ -49,7 +49,7 @@ namespace network
 std::string g_host;
 uint16_t g_tcpros_server_port = 0;
 #ifdef HAVE_IFADDRS_H
-std::mutex g_ifaddrs_mutex;
+std::recursive_mutex g_ifaddrs_mutex;
 #endif
 
 const std::string& getHost()
@@ -128,7 +128,7 @@ std::string determineHost()
   // Fourth, fall back on interface search, which will yield an IP address
 
 #ifdef HAVE_IFADDRS_H
-  std::lock_guard<std::mutex> lock(g_ifaddrs_mutex);
+  std::lock_guard<std::recursive_mutex> lock(g_ifaddrs_mutex);
   struct ifaddrs *ifa = NULL, *ifp = NULL;
   int rc;
   if ((rc = getifaddrs(&ifp)) < 0)

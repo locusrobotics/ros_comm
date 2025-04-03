@@ -80,7 +80,7 @@ Transport::Transport()
   // for ipv4 loopback, we'll explicitly search for 127.* in isHostAllowed()
   // now we need to iterate all local interfaces and add their addresses
   // from the getifaddrs manpage:  (maybe something similar for windows ?) 
-  std::lock_guard<std::mutex> lock(ifaddrs_mutex_);
+  std::lock_guard<std::recursive_mutex> lock(ifaddrs_mutex_);
   ifaddrs *ifaddr;
   if (-1 == getifaddrs(&ifaddr))
   {

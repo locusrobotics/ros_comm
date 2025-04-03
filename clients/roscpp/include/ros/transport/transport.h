@@ -150,7 +150,7 @@ protected:
 private:
   bool only_localhost_allowed_;
   std::vector<std::string> allowed_hosts_;
-  std::mutex ifaddrs_mutex_;
+  std::recursive_mutex ifaddrs_mutex_;
 };
 
 }
