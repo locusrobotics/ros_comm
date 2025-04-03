@@ -166,6 +166,7 @@ bool TransportUDP::connect(const std::string& host, int port, int connection_id)
   sin.sin_family = AF_INET;
   if (inet_addr(host.c_str()) == INADDR_NONE)
   {
+    std::lock_guard<std::recursive_mutex> lock(addrinfo_mutex_);
     struct addrinfo* addr;
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));

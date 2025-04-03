@@ -287,6 +287,7 @@ bool TransportTCP::connect(const std::string& host, int port)
   }
   else
   {
+    std::lock_guard<std::recursive_mutex> lock(addrinfo_mutex_);
     struct addrinfo* addr;
     struct addrinfo hints;
     memset(&hints, 0, sizeof(hints));

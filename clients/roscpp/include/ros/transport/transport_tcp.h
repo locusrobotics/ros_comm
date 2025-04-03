@@ -165,6 +165,7 @@ private:
 
   std::string connected_host_;
   int connected_port_;
+  std::recursive_mutex addrinfo_mutex_;
 };
 
 }

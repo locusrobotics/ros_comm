@@ -42,6 +42,8 @@
 #include "ros/io.h"
 #include <ros/common.h>
 
+#include <mutex>
+
 namespace ros
 {
 
@@ -169,6 +171,7 @@ private:
   uint8_t* reorder_start_;
   TransportUDPHeader reorder_header_;
   uint32_t reorder_bytes_;
+  std::recursive_mutex addrinfo_mutex_;
 };
 
 }
