@@ -39,6 +39,7 @@
 #include <boost/function.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <mutex>
 #include <vector>
 
 namespace ros
@@ -149,6 +150,7 @@ protected:
 private:
   bool only_localhost_allowed_;
   std::vector<std::string> allowed_hosts_;
+  std::mutex ifaddrs_mutex_;
 };
 
 }
