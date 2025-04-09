@@ -6,6 +6,7 @@
   -->
 <launch>
   <group ns="/">
+    <param name="rosout_disable_topics_generation" type="bool" value="true"/>
     <param name="rosversion" command="rosversion roslaunch" />
     <param name="rosdistro" command="rosversion -d" />
     <node pkg="rosout" type="rosout" name="rosout" respawn="true"/>
