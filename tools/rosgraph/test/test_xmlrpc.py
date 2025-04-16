@@ -33,7 +33,7 @@
 import os
 import sys
 import time
-import mock
+from unittest import mock
 
 def test_XmlRpcHandler():
     from rosgraph.xmlrpc import XmlRpcHandler    
