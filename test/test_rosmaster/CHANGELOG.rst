@@ -138,8 +138,8 @@ Changelog for package test_rosmaster
 * Update wiki.ros.org URLs (#1536)
 * Contributors: Daniel Ingram, Dirk Thomas, Gary Servin, Jacob Perron, Martijn Buijs, Shane Loretz, Victor Lamoine
 
-Forthcoming
------------
+1.23.1 (2025-04-16)
+-------------------
 
 1.23.0 (2025-02-04)
 -------------------

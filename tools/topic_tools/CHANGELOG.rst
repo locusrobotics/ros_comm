@@ -400,8 +400,8 @@ Changelog for package topic_tools
 * topic_tools/mux: add ~latch option (#1489)
 * Contributors: Aaron Miller, Christopher Wecht, Dirk Thomas, Enrique Fernandez Perdomo, Gary Servin, Jacob Perron, Martijn Buijs, Martin Günther, Sean Yen, Shane Loretz, Yuki Furuta, beetleskin
 
-Forthcoming
------------
+1.23.1 (2025-04-16)
+-------------------
 
 1.23.0 (2025-02-04)
 -------------------
