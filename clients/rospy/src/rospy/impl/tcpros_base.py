@@ -63,6 +63,7 @@ from rospy.msg import deserialize_messages, serialize_message
 from rospy.service import ServiceException
 
 from rospy.impl.transport import Transport, BIDIRECTIONAL
+from errno import EAGAIN, EWOULDBLOCK
 
 logger = logging.getLogger('rospy.tcpros')
 
@@ -101,12 +102,18 @@ def recv_buff(sock, b, buff_size):
     @return: number of bytes read
     @rtype: int
     """
-    d = sock.recv(buff_size)
-    if d:
-        b.write(d)
-        return len(d)
-    else: #bomb out
-        raise TransportTerminated("unable to receive data from sender, check sender's logs for details")
+    try:
+        d = sock.recv(buff_size)
+        if d:
+            b.write(d)
+            return len(d)
+        else: #bomb out
+            raise TransportTerminated("unable to receive data from sender, check sender's logs for details")
+    except socket.error as ex:
+        if ex.errno not in (EAGAIN, EWOULDBLOCK):
+            raise TransportTerminated("unable to receive data from sender, check sender's logs for details")
+        else:
+            return 0
 
 class TCPServer(object):
     """
@@ -799,6 +806,11 @@ class TCPROSTransport(Transport):
                         if not self.done and not is_shutdown():
                             msgs_callback(msgs, self)
 
+                except TransportTerminated as e:
+                    logdebug("[%s] failed to receive incoming message : %s" % (self.name, str(e)))
+                    rospydebug("[%s] failed to receive incoming message: %s" % (self.name, traceback.format_exc()))
+                    break
+
                 except TransportException as e:
                     # A transport exception means the connection has been closed from the other side.
                     # Clean up our side.
@@ -834,6 +846,13 @@ class TCPROSTransport(Transport):
                         pass
                     finally:
                         self.socket.close()
+            except AttributeError:
+                # this is a workaround to avoid a race condition: thread A
+                # checks the self.socket to be not None (above in
+                # this function), thread B sets it to None (below in this
+                # function) and then thread A executes self.socket.close()
+                # (above in this function)
+                pass
             finally:
                 self.socket = self.read_buff = self.write_buff = self.protocol = None
                 super(TCPROSTransport, self).close()
