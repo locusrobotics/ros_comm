@@ -59,6 +59,7 @@
 #include <rosgraph_msgs/Clock.h>
 
 #include <algorithm>
+#include <atomic>
 
 #include <signal.h>
 
@@ -104,7 +105,7 @@ static boost::mutex g_start_mutex;
 static bool g_ok = false;
 static uint32_t g_init_options = 0;
 static bool g_shutdown_requested = false;
-static volatile bool g_shutting_down = false;
+static std::atomic<bool> g_shutting_down = false;
 static boost::recursive_mutex g_shutting_down_mutex;
 static boost::thread g_internal_queue_thread;
 
