@@ -210,6 +210,31 @@ Changelog for package test_roscpp
 * reduce test threshold to avoid flakiness (#1485)
 * Contributors: Christopher Wecht, Dirk Thomas, Gary Servin, Ivor Wanders, Jacob Perron, Johannes Meyer, Johnson Shih, Maarten de Vries, Mike Purvis, Sean Yen, Shane Loretz, betab0t
 
+Forthcoming
+-----------
+* Fix occasional crash during shutdown when explicitly calling ros::start but not ros::shutdown (#2355)
+  * Fix occasional crash during shutdown
+  * add link to PR
+  * comment
+  * fix implementation
+  * add missing hasError = true;
+  * also call deInit
+  * only deInit once
+  * only deinit once
+  * yet more fixes
+  * add another test for init only
+  * revert
+  * preserve legacy behavior
+  * add gtest wrapper
+  * minimize code changes
+  * add test
+  * reduce changes even more
+  * add comment
+  * comment
+  (cherry picked from commit 845f74602c7464e08ef5ac6fd9e26c97d0fe42c9)
+  (cherry picked from commit 7d66154a62e43720d8eba5c57d1d3b1ef70cdeaa)
+* Contributors: David Gossow
+
 1.23.0 (2025-02-04)
 -------------------
 

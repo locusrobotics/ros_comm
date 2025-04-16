@@ -988,6 +988,34 @@ Changelog for package roscpp
   * declare const for source_cnt
 * Contributors: Adel Fakih, Alex Moriarty, Arkady Shapkin, Arusekk, Barry Xu, C. Andy Martin, Chen Lihui, Christopher Wecht, Daniel Wang, Dino Hüllmann, Dirk Thomas, Felix Ruess, Gabriel Arjones, Gary Servin, Hans-Joachim Krauch, Igor Semenov, Ivor Wanders, Jacob Perron, James Xu, Jeremie Deray, Johannes Meyer, Johnson Shih, Kunal Tyagi, Maarten de Vries, Martin Pecka, Michael Carroll, Michael Johnson, Mikael Arguedas, Mike Purvis, Sean Yen, Shane Loretz, Tahsincan Köse, Victor Lamoine, Zbyněk Winkler, astere-cpr, dodsonmg, foodtooth, randoms, tomoya, wentz89
 
+Forthcoming
+-----------
+* Fix occasional crash during shutdown when explicitly calling ros::start but not ros::shutdown (#2355)
+  * Fix occasional crash during shutdown
+  * add link to PR
+  * comment
+  * fix implementation
+  * add missing hasError = true;
+  * also call deInit
+  * only deInit once
+  * only deinit once
+  * yet more fixes
+  * add another test for init only
+  * revert
+  * preserve legacy behavior
+  * add gtest wrapper
+  * minimize code changes
+  * add test
+  * reduce changes even more
+  * add comment
+  * comment
+  (cherry picked from commit 845f74602c7464e08ef5ac6fd9e26c97d0fe42c9)
+  (cherry picked from commit 7d66154a62e43720d8eba5c57d1d3b1ef70cdeaa)
+* use recursive mutex to fix dead lock (#2209)
+  (cherry picked from commit 63c9bbb5c2480a232530cfa13308a22d727f20b8)
+  (cherry picked from commit be5033adbd45f48d2a04947e586e5c7ee8c71ce7)
+* Contributors: Chen Lihui, David Gossow
+
 1.23.0 (2025-02-04)
 -------------------
 

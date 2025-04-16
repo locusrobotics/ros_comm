@@ -1191,6 +1191,9 @@ Changelog for package rospy
   ```
 * Contributors: Brutus The Tschiepel, Christopher Wecht, Dirk Thomas, Gary Servin, Hans Gaiser, Jacob Perron, Markus Grimm, Martijn Buijs, Martin Pecka, Maxime St-Pierre, Miaofei Mei, Michael Johnson, Paul Bovbel, Paweł Lorek, Sean Yen, Shane Loretz, Steve Nogar, Tom Moore, Victor Lamoine, Yong Li, Yuchen Ying, abencz, cclauss, henryzhang0506, larslue, mikolajz, salihmarangoz, tomoya, 金梦磊
 
+Forthcoming
+-----------
+
 1.23.0 (2025-02-04)
 -------------------
 
