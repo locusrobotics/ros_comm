@@ -2,6 +2,29 @@
 Changelog for package rosbag_storage
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.17.0 (2024-09-13)
+-------------------
+* Fix segfault with default-constructed rosbag::ChunkedFile::swap (`#2363 <https://github.com/ros/ros_comm/issues/2363>`_)
+* Contributors: Hugal31
+
+1.16.0 (2023-02-15)
+-------------------
+
+1.15.15 (2022-11-23)
+--------------------
+* Move @jacobperron from maintainer to author (`#2302 <https://github.com/ros/ros_comm/issues/2302>`_)
+* Add missing include (`#2248 <https://github.com/ros/ros_comm/issues/2248>`_)
+* Contributors: Jochen Sprickerhof, Shane Loretz
+
+1.15.14 (2022-01-06)
+--------------------
+
+1.15.13 (2021-09-22)
+--------------------
+
+1.15.12 (2021-09-21)
+--------------------
+
 1.15.11 (2021-04-06)
 --------------------
 

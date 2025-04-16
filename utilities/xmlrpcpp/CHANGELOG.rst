@@ -2,6 +2,34 @@
 Changelog for package xmlrpcpp
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.17.0 (2024-09-13)
+-------------------
+* Fix printing XmlRpcValue with GTest (`#2224 <https://github.com/ros/ros_comm/issues/2224>`_)
+* Fix EINTR handling in XmlRpcDispatch::work (`#2278 <https://github.com/ros/ros_comm/issues/2278>`_)
+* Contributors: Hugal31, Martin Pecka
+
+1.16.0 (2023-02-15)
+-------------------
+
+1.15.15 (2022-11-23)
+--------------------
+* Move @jacobperron from maintainer to author (`#2302 <https://github.com/ros/ros_comm/issues/2302>`_)
+* Contributors: Shane Loretz
+
+1.15.14 (2022-01-06)
+--------------------
+* Keep the persistent connection only if rosmaster supports http1.1 (`#2208 <https://github.com/ros/ros_comm/issues/2208>`_)
+* Contributors: Chen Lihui
+
+1.15.13 (2021-09-22)
+--------------------
+
+1.15.12 (2021-09-21)
+--------------------
+* Fix XMLRPC endless loop (`#2185 <https://github.com/ros/ros_comm/issues/2185>`_)
+* Fix build when gtest is not available (`#2177 <https://github.com/ros/ros_comm/issues/2177>`_)
+* Contributors: Chris Lalancette, Wolfgang Merkt
+
 1.15.11 (2021-04-06)
 --------------------
 
