@@ -348,11 +348,10 @@ void Recorder::doQueue(const ros::MessageEvent<topic_tools::ShapeShifter const>&
                 ros::M_string::const_iterator it2 = out.connection_header->find("callerid");
                 if (it2 != out.connection_header->end())
                 {
-                    auto latched_it = latched_msgs_.insert({{subscriber->getTopic(), it2->second}, out});
-
-                    if (!latched_it.second)
+                    auto const result = latched_msgs_.insert({{subscriber->getTopic(), it2->second}, out});
+                    if (not result.second)  // The map::insert function does not update values of existing keys
                     {
-                        latched_it.first->second = out;
+                        result.first->second = out;
                     }
                 }
             }
