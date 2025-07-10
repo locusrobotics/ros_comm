@@ -576,7 +576,10 @@ class ROSMasterHandler(object):
         @type  param_value: str
         """
         mloginfo("paramUpdate[%s]", param_key)
-        code, _, _ = xmlrpcapi(caller_api).paramUpdate('/master', param_key, param_value)
+        try:
+            code, _, _ = xmlrpcapi(caller_api).paramUpdate('/master', param_key, param_value)
+        except ConnectionRefusedError as ex:
+            return
         if code == -1:
             try:
                 # ps_lock is required due to potential self.reg_manager modification
