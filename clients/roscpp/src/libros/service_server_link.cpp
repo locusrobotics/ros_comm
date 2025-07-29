@@ -42,7 +42,6 @@
 
 #include <boost/bind/bind.hpp>
 
-#include <chrono>
 #include <sstream>
 
 namespace ros
