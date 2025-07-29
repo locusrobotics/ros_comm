@@ -41,7 +41,8 @@ namespace ros
 struct ROSCPP_DECL ServiceClientOptions
 {
   ServiceClientOptions()
-  : persistent(false)
+  : persistent(false),
+    timeout(-1.0)
   {
   }
 
@@ -52,11 +53,12 @@ struct ROSCPP_DECL ServiceClientOptions
    * \param _persistent Whether or not to keep the connection open to the service for future calls
    * \param _header Any extra values to be passed along in the connection header
    */
-  ServiceClientOptions(const std::string& _service, const std::string& _md5sum, bool _persistent, const M_string& _header)
+  ServiceClientOptions(const std::string& _service, const std::string& _md5sum, bool _persistent, const M_string& _header, const ros::Duration& _timeout = ros::Duration(-1.0))
   : service(_service)
   , md5sum(_md5sum)
   , persistent(_persistent)
   , header(_header)
+  , timeout(_timeout)
   {
   }
 
@@ -69,7 +71,7 @@ struct ROSCPP_DECL ServiceClientOptions
    * \param _header Any extra values to be passed along in the connection header
    */
   template <class MReq, class MRes>
-  void init(const std::string& _service, bool _persistent, const M_string& _header)
+  void init(const std::string& _service, bool _persistent, const M_string& _header, const ros::Duration& _timeout = ros::Duration(-1.0))
   {
     namespace st = service_traits;
 
@@ -77,6 +79,7 @@ struct ROSCPP_DECL ServiceClientOptions
     md5sum = st::md5sum<MReq>();
     persistent = _persistent;
     header = _header;
+    timeout = _timeout;
   }
 
   /*
@@ -87,7 +90,7 @@ struct ROSCPP_DECL ServiceClientOptions
    * \param _header Any extra values to be passed along in the connection header
    */
   template <class Service>
-  void init(const std::string& _service, bool _persistent, const M_string& _header)
+  void init(const std::string& _service, bool _persistent, const M_string& _header, const ros::Duration& _timeout = ros::Duration(-1.0))
   {
     namespace st = service_traits;
 
@@ -95,12 +98,14 @@ struct ROSCPP_DECL ServiceClientOptions
     md5sum = st::md5sum<Service>();
     persistent = _persistent;
     header = _header;
+    timeout = _timeout;
   }
 
   std::string service;                                                      ///< Service to connect to
   std::string md5sum;                                                       ///< Service md5sum
   bool persistent;                                                          ///< Whether or not the connection should persist
   M_string header;                                                          ///< Extra key/value pairs to add to the connection header
+  ros::Duration timeout;                                                    ///< Timeout for the service call. -1 (< 0) means no timeout
 };
 
 

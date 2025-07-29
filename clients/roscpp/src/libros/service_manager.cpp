@@ -234,7 +234,7 @@ ServicePublicationPtr ServiceManager::lookupServicePublication(const std::string
 
 ServiceServerLinkPtr ServiceManager::createServiceServerLink(const std::string& service, bool persistent,
                                              const std::string& request_md5sum, const std::string& response_md5sum,
-                                             const M_string& header_values)
+                                             const M_string& header_values, double timeout_sec)
 {
 
   boost::recursive_mutex::scoped_lock shutdown_lock(shutting_down_mutex_);
@@ -260,7 +260,7 @@ ServiceServerLinkPtr ServiceManager::createServiceServerLink(const std::string& 
 
   if (transport->connect(serv_host, serv_port))
   {
-    ServiceServerLinkPtr client(boost::make_shared<ServiceServerLink>(service, persistent, request_md5sum, response_md5sum, header_values));
+    ServiceServerLinkPtr client(boost::make_shared<ServiceServerLink>(service, persistent, request_md5sum, response_md5sum, header_values, timeout_sec));
 
     {
       boost::mutex::scoped_lock lock(service_server_links_mutex_);

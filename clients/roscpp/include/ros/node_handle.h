@@ -1236,10 +1236,10 @@ if (service)  // Enter if advertised service is valid
    */
   template<class MReq, class MRes>
   ServiceClient serviceClient(const std::string& service_name, bool persistent = false, 
-                              const M_string& header_values = M_string())
+                              const M_string& header_values = M_string(), ros::Duration timeout = ros::Duration(-1.0))
   {
     ServiceClientOptions ops;
-    ops.template init<MReq, MRes>(service_name, persistent, header_values);
+    ops.template init<MReq, MRes>(service_name, persistent, header_values, timeout);
     return serviceClient(ops);
   }
 
@@ -1256,10 +1256,10 @@ if (service)  // Enter if advertised service is valid
    */
   template<class Service>
   ServiceClient serviceClient(const std::string& service_name, bool persistent = false, 
-                              const M_string& header_values = M_string())
+                              const M_string& header_values = M_string(), ros::Duration timeout = ros::Duration(-1.0))
   {
     ServiceClientOptions ops;
-    ops.template init<Service>(service_name, persistent, header_values);
+    ops.template init<Service>(service_name, persistent, header_values, timeout);
     return serviceClient(ops);
   }
 

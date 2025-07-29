@@ -42,13 +42,14 @@
 
 #include <boost/bind/bind.hpp>
 
+#include <chrono>
 #include <sstream>
 
 namespace ros
 {
 
 ServiceServerLink::ServiceServerLink(const std::string& service_name, bool persistent, const std::string& request_md5sum,
-                             const std::string& response_md5sum, const M_string& header_values)
+                             const std::string& response_md5sum, const M_string& header_values, double timeout_sec)
 : service_name_(service_name)
 , persistent_(persistent)
 , request_md5sum_(request_md5sum)
@@ -57,6 +58,7 @@ ServiceServerLink::ServiceServerLink(const std::string& service_name, bool persi
 , header_written_(false)
 , header_read_(false)
 , dropped_(false)
+, timeout_sec_(timeout_sec)
 {
 }
 
@@ -181,7 +183,38 @@ void ServiceServerLink::onRequestWritten(const ConnectionPtr& conn)
 {
   (void)conn;
   //ros::WallDuration(0.1).sleep();
+
+  boost::mutex::scoped_lock lock(call_queue_mutex_);
+
   connection_->read(5, boost::bind(&ServiceServerLink::onResponseOkAndLength, this, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, boost::placeholders::_4));
+
+  if (timeout_sec_ >= 0.0)
+  {
+    boost::thread timeout_checker(
+      boost::bind(
+        &ServiceServerLink::waitForTimeout,
+        this,
+        current_call_,
+        timeout_sec_));
+  }
+}
+
+void ServiceServerLink::waitForTimeout(CallInfoPtr info, double seconds)
+{
+  boost::mutex::scoped_lock finished_lock(info->finished_mutex_);
+  if (info && info->finished_condition_.wait_for(finished_lock, boost::chrono::duration<double>(seconds)) == boost::cv_status::timeout)
+  {
+    bool finished = info->finished_;
+    finished_lock.unlock();
+
+    // If we timeout, we need to cancel the call
+    ROS_WARN("Service call to [%s] timed out", service_name_.c_str());
+
+    if (info && !finished)
+    {
+      cancelCall(info);
+    }
+  }
 }
 
 void ServiceServerLink::onResponseOkAndLength(const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success)

@@ -77,13 +77,15 @@ public:
    * @param persistent Whether to keep this connection alive for more than one service call
    * @param request_md5sum The md5sum of the request message
    * @param response_md5sum The md5sum of the response message
+   * @param timeout The time, in seconds, until the service times out (-1 to never time out)
    *
    * @returns Shared pointer to the ServiceServerLink, empty shared pointer if none is found.
    */
   ServiceServerLinkPtr createServiceServerLink(const std::string& service,
                                                 bool persistent,
                                                 const std::string& request_md5sum, const std::string& response_md5sum,
-                                                const M_string& header_values);
+                                                const M_string& header_values,
+                                                double timeout_sec = -1.0);
 
   /** @brief Remove the specified service client from our list
    *

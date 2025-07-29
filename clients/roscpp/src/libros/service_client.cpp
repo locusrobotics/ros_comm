@@ -81,17 +81,18 @@ bool ServiceClient::Impl::isValid() const
   return server_link_->isValid();
 }
 
-ServiceClient::ServiceClient(const std::string& service_name, bool persistent, const M_string& header_values, const std::string& service_md5sum)
+ServiceClient::ServiceClient(const std::string& service_name, bool persistent, const M_string& header_values, const std::string& service_md5sum, const ros::Duration& timeout)
 : impl_(new Impl)
 {
   impl_->name_ = service_name;
   impl_->persistent_ = persistent;
   impl_->header_values_ = header_values;
   impl_->service_md5sum_ = service_md5sum;
+  impl_->timeout_sec_ = timeout.toSec();
 
   if (persistent)
   {
-    impl_->server_link_ = ServiceManager::instance()->createServiceServerLink(impl_->name_, impl_->persistent_, impl_->service_md5sum_, impl_->service_md5sum_, impl_->header_values_);
+    impl_->server_link_ = ServiceManager::instance()->createServiceServerLink(impl_->name_, impl_->persistent_, impl_->service_md5sum_, impl_->service_md5sum_, impl_->header_values_, impl_->timeout_sec_);
   }
 }
 
@@ -120,7 +121,7 @@ bool ServiceClient::call(const SerializedMessage& req, SerializedMessage& resp, 
   {
     if (!impl_->server_link_)
     {
-      impl_->server_link_ = ServiceManager::instance()->createServiceServerLink(impl_->name_, impl_->persistent_, service_md5sum, service_md5sum, impl_->header_values_);
+      impl_->server_link_ = ServiceManager::instance()->createServiceServerLink(impl_->name_, impl_->persistent_, service_md5sum, service_md5sum, impl_->header_values_, impl_->timeout_sec_);
 
       if (!impl_->server_link_)
       {
@@ -132,7 +133,7 @@ bool ServiceClient::call(const SerializedMessage& req, SerializedMessage& resp, 
   }
   else
   {
-    link = ServiceManager::instance()->createServiceServerLink(impl_->name_, impl_->persistent_, service_md5sum, service_md5sum, impl_->header_values_);
+    link = ServiceManager::instance()->createServiceServerLink(impl_->name_, impl_->persistent_, service_md5sum, service_md5sum, impl_->header_values_, impl_->timeout_sec_);
 
     if (!link)
     {

@@ -43,7 +43,7 @@ class ROSCPP_DECL ServiceClient
 {
 public:
   ServiceClient() {}
-  ServiceClient(const std::string& service_name, bool persistent, const M_string& header_values, const std::string& service_md5sum);
+  ServiceClient(const std::string& service_name, bool persistent, const M_string& header_values, const std::string& service_md5sum, const ros::Duration& timeout = ros::Duration(-1.0));
   ServiceClient(const ServiceClient& rhs);
   ~ServiceClient();
   ServiceClient& operator=(const ServiceClient& other) = default;
@@ -200,6 +200,7 @@ private:
     M_string header_values_;
     std::string service_md5sum_;
     bool is_shutdown_;
+    double timeout_sec_ { -1.0 };
   };
   typedef boost::shared_ptr<Impl> ImplPtr;
   typedef boost::weak_ptr<Impl> ImplWPtr;

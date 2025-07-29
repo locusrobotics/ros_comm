@@ -79,7 +79,7 @@ private:
 
 public:
   typedef std::map<std::string, std::string> M_string;
-  ServiceServerLink(const std::string& service_name, bool persistent, const std::string& request_md5sum, const std::string& response_md5sum, const M_string& header_values);
+  ServiceServerLink(const std::string& service_name, bool persistent, const std::string& request_md5sum, const std::string& response_md5sum, const M_string& header_values, double timeout_sec = -1.0);
   virtual ~ServiceServerLink();
 
   //
@@ -136,6 +136,13 @@ private:
   void onResponseOkAndLength(const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success);
   void onResponse(const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success);
 
+  /**
+   * \brief Used to time out service calls
+   * \param info - CallInfo that includes our finished mutex
+   * \param seconds - The number of seconds to wait for the timeout
+   */
+  void waitForTimeout(CallInfoPtr info, double seconds);
+
   ConnectionPtr connection_;
   std::string service_name_;
   bool persistent_;
@@ -152,6 +159,8 @@ private:
   CallInfoPtr current_call_;
 
   bool dropped_;
+
+  double timeout_sec_;
 };
 typedef boost::shared_ptr<ServiceServerLink> ServiceServerLinkPtr;
 
