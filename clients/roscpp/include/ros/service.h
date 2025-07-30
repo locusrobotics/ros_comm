@@ -30,6 +30,7 @@
 
 #include <string>
 #include "ros/common.h"
+#include "ros/duration.h"
 #include "ros/message.h"
 #include "ros/forwards.h"
 #include "ros/node_handle.h"
@@ -62,11 +63,11 @@ namespace service
  * @return true on success, false otherwise.
  */
 template<class MReq, class MRes>
-bool call(const std::string& service_name, MReq& req, MRes& res)
+bool call(const std::string& service_name, MReq& req, MRes& res, const ros::Duration& timeout = ros::Duration(-1.0))
 {
   namespace st = service_traits;
   NodeHandle nh;
-  ServiceClientOptions ops(ros::names::resolve(service_name), st::md5sum(req), false, M_string());
+  ServiceClientOptions ops(ros::names::resolve(service_name), st::md5sum(req), false, M_string(), timeout);
   ServiceClient client = nh.serviceClient(ops);
   return client.call(req, res);
 }
@@ -82,12 +83,12 @@ bool call(const std::string& service_name, MReq& req, MRes& res)
  * @return true on success, false otherwise.
  */
 template<class Service>
-bool call(const std::string& service_name, Service& service)
+bool call(const std::string& service_name, Service& service, const ros::Duration& timeout = ros::Duration(-1.0))
 {
   namespace st = service_traits;
 
   NodeHandle nh;
-  ServiceClientOptions ops(ros::names::resolve(service_name), st::md5sum(service), false, M_string());
+  ServiceClientOptions ops(ros::names::resolve(service_name), st::md5sum(service), false, M_string(), timeout);
   ServiceClient client = nh.serviceClient(ops);
   return client.call(service.request, service.response);
 }
@@ -131,10 +132,10 @@ ROSCPP_DECL bool exists(const std::string& service_name, bool print_failure_reas
  * @param header_values Key/value pairs you'd like to send along in the connection handshake
  */
 template<class MReq, class MRes>
-ServiceClient createClient(const std::string& service_name, bool persistent = false, const M_string& header_values = M_string())
+ServiceClient createClient(const std::string& service_name, bool persistent = false, const M_string& header_values = M_string(), const ros::Duration& timeout = ros::Duration(-1.0))
 {
   NodeHandle nh;
-  ServiceClient client = nh.template serviceClient<MReq, MRes>(ros::names::resolve(service_name), persistent, header_values);
+  ServiceClient client = nh.template serviceClient<MReq, MRes>(ros::names::resolve(service_name), persistent, header_values, timeout);
   return client;
 }
 
@@ -149,10 +150,10 @@ ServiceClient createClient(const std::string& service_name, bool persistent = fa
  * @param header_values Key/value pairs you'd like to send along in the connection handshake
  */
 template<class Service>
-ServiceClient createClient(const std::string& service_name, bool persistent = false, const M_string& header_values = M_string())
+ServiceClient createClient(const std::string& service_name, bool persistent = false, const M_string& header_values = M_string(), const ros::Duration& timeout = ros::Duration(-1.0))
 {
   NodeHandle nh;
-  ServiceClient client = nh.template serviceClient<Service>(ros::names::resolve(service_name), persistent, header_values);
+  ServiceClient client = nh.template serviceClient<Service>(ros::names::resolve(service_name), persistent, header_values, timeout);
   return client;
 }
 

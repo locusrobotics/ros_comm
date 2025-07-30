@@ -178,6 +178,39 @@ TEST(SrvCall, callSrvLongRunning)
   ASSERT_STREQ(res.str.c_str(), "CASE_flip");
 }
 
+TEST(SrvCall, callSrvLongRunningTimeout)
+{
+  test_roscpp::TestStringString::Request req;
+  test_roscpp::TestStringString::Response res;
+
+  req.str = std::string("case_FLIP");
+
+  ASSERT_TRUE(ros::service::waitForService("service_adv_long"));
+  ASSERT_FALSE(ros::service::call("service_adv_long", req, res, ros::Duration(1.0)));  // Service delay is 2 seconds
+
+  ASSERT_STRNE(res.str.c_str(), "CASE_flip");
+}
+
+TEST(SrvCall, callSrvLongRunningTimeoutRepeat)
+{
+  test_roscpp::TestStringString::Request req;
+  test_roscpp::TestStringString::Response res;
+
+  req.str = std::string("case_FLIP");
+
+  ASSERT_TRUE(ros::service::waitForService("service_adv_long"));
+  ASSERT_FALSE(ros::service::call("service_adv_long", req, res, ros::Duration(1.0)));  // Service delay is 2 seconds
+  ASSERT_FALSE(ros::service::call("service_adv_long", req, res, ros::Duration(1.5)));
+  ASSERT_FALSE(ros::service::call("service_adv_long", req, res, ros::Duration(0.5)));
+  ASSERT_FALSE(ros::service::call("service_adv_long", req, res, ros::Duration(1.8)));
+
+  ASSERT_STRNE(res.str.c_str(), "CASE_flip");
+
+  ASSERT_TRUE(ros::service::call("service_adv_long", req, res, ros::Duration(2.5)));
+
+  ASSERT_STREQ(res.str.c_str(), "CASE_flip");
+}
+
 TEST(SrvCall, callSrvWhichUnadvertisesInCallback)
 {
   test_roscpp::TestStringString::Request req;
