@@ -206,6 +206,7 @@ TEST(SrvCall, callSrvLongRunningTimeoutRepeat)
 
   ASSERT_STRNE(res.str.c_str(), "CASE_flip");
 
+  ros::Duration(5.0).sleep();  // Wait for all the delayed service calls to finish
   ASSERT_TRUE(ros::service::call("service_adv_long", req, res, ros::Duration(2.5)));
 
   ASSERT_STREQ(res.str.c_str(), "CASE_flip");

@@ -207,7 +207,7 @@ void ServiceServerLink::waitForTimeout(CallInfoPtr info, double seconds)
     finished_lock.unlock();
 
     // If we timeout, we need to cancel the call
-    ROS_WARN("Service call to [%s] timed out", service_name_.c_str());
+    ROS_WARN_STREAM("Service call to " << service_name_ << " timed out after " << seconds << " seconds");
 
     if (info && !finished)
     {
