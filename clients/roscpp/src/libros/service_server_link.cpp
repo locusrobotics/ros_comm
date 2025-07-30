@@ -74,6 +74,7 @@ void ServiceServerLink::cancelCall(const CallInfoPtr& info)
   {
     boost::mutex::scoped_lock lock(local->finished_mutex_);
     local->finished_ = true;
+    local->resp_ = nullptr;  // The response pointer is no longer valid
     local->finished_condition_.notify_all();
   }
 
@@ -184,6 +185,8 @@ void ServiceServerLink::onRequestWritten(const ConnectionPtr& conn)
   //ros::WallDuration(0.1).sleep();
 
   boost::mutex::scoped_lock lock(call_queue_mutex_);
+  auto current_call = current_call_;
+  lock.unlock();
 
   connection_->read(5, boost::bind(&ServiceServerLink::onResponseOkAndLength, this, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, boost::placeholders::_4));
 
@@ -193,7 +196,7 @@ void ServiceServerLink::onRequestWritten(const ConnectionPtr& conn)
       boost::bind(
         &ServiceServerLink::waitForTimeout,
         this,
-        current_call_,
+        current_call,
         timeout_sec_));
   }
 }
@@ -269,7 +272,9 @@ void ServiceServerLink::onResponse(const ConnectionPtr& conn, const boost::share
   {
     boost::mutex::scoped_lock queue_lock(call_queue_mutex_);
 
-    if (current_call_->success_)
+    // If this message was cancelled, the resp_ object will no longer be pointing at a valid response object
+    // (we reset it to null)
+    if (current_call_ && current_call_->success_ && current_call_->resp_)
     {
       *current_call_->resp_ = SerializedMessage(buffer, size);
     }
