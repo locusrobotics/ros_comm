@@ -43,7 +43,7 @@ public:
 protected:
   std::list<log4cxx::spi::LoggingEventPtr> list;
 };
-typedef log4cxx::helpers::ObjectPtrT<ListAppender> ListAppenderPtr;
+using ListAppenderPtr = std::shared_ptr<ListAppender>;
 
 static const char EXCEPTION[] = "custom exception message";
 
@@ -64,7 +64,7 @@ TEST(roscpp, ServiceThrowingException)
   ros::ServiceServer service = n.advertiseService(SERVICE, throwingService);
 
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger("ros.roscpp");
-  ListAppenderPtr appender = new ListAppender();
+  ListAppenderPtr appender = std::make_shared<ListAppender>();
   logger->addAppender(appender);
 
   ros::ServiceClient client = n.serviceClient<std_srvs::Empty>(SERVICE, true);
