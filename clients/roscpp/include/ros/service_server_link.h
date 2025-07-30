@@ -136,13 +136,6 @@ private:
   void onResponseOkAndLength(const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success);
   void onResponse(const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success);
 
-  /**
-   * \brief Used to time out service calls
-   * \param info - CallInfo that includes our finished mutex
-   * \param seconds - The number of seconds to wait for the timeout
-   */
-  void waitForTimeout(CallInfoPtr info, double seconds);
-
   ConnectionPtr connection_;
   std::string service_name_;
   bool persistent_;

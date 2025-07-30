@@ -74,7 +74,8 @@ void ServiceServerLink::cancelCall(const CallInfoPtr& info)
   {
     boost::mutex::scoped_lock lock(local->finished_mutex_);
     local->finished_ = true;
-    local->resp_ = nullptr;  // The response pointer is no longer valid
+    // If onResponse fires after we've returned from call() (due to this being cancelled), the pointer to resp_ will no longer be valid
+    local->resp_ = nullptr;
     local->finished_condition_.notify_all();
   }
 
@@ -189,34 +190,6 @@ void ServiceServerLink::onRequestWritten(const ConnectionPtr& conn)
   lock.unlock();
 
   connection_->read(5, boost::bind(&ServiceServerLink::onResponseOkAndLength, this, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, boost::placeholders::_4));
-
-  if (timeout_sec_ >= 0.0)
-  {
-    boost::thread timeout_checker(
-      boost::bind(
-        &ServiceServerLink::waitForTimeout,
-        this,
-        current_call,
-        timeout_sec_));
-  }
-}
-
-void ServiceServerLink::waitForTimeout(CallInfoPtr info, double seconds)
-{
-  boost::mutex::scoped_lock finished_lock(info->finished_mutex_);
-  if (info && info->finished_condition_.wait_for(finished_lock, boost::chrono::duration<double>(seconds)) == boost::cv_status::timeout)
-  {
-    bool finished = info->finished_;
-    finished_lock.unlock();
-
-    // If we timeout, we need to cancel the call
-    ROS_WARN_STREAM("Service call to " << service_name_ << " timed out after " << seconds << " seconds");
-
-    if (info && !finished)
-    {
-      cancelCall(info);
-    }
-  }
 }
 
 void ServiceServerLink::onResponseOkAndLength(const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success)
@@ -400,23 +373,50 @@ bool ServiceServerLink::call(const SerializedMessage& req, SerializedMessage& re
     processNextCall();
   }
 
+  auto status = boost::cv_status::no_timeout;
+
   {
     boost::mutex::scoped_lock lock(info->finished_mutex_);
 
     while (!info->finished_)
     {
-      info->finished_condition_.wait(lock);
+      if (timeout_sec_ >= 0.0)
+      {
+        status = info->finished_condition_.wait_for(lock, boost::chrono::duration<double>(timeout_sec_));
+
+        if (status == boost::cv_status::timeout)
+        {
+          bool finished = info->finished_;
+          lock.unlock();
+
+          if (!finished)
+          {
+            cancelCall(info);
+          }
+
+          ROS_WARN_STREAM("Service call to " << service_name_ << " timed out after " << timeout_sec_ << " seconds");
+        }
+      }
+      else
+      {
+        info->finished_condition_.wait(lock);
+      }
     }
   }
 
   info->call_finished_ = true;
+
+  if (status == boost::cv_status::timeout)
+  {
+    ROS_WARN_STREAM("Service call to " << service_name_ << " timed out after " << timeout_sec_ << " seconds");
+  }
 
   if (info->exception_string_.length() > 0)
   {
     ROS_ERROR("Service call failed: service [%s] responded with an error: %s", service_name_.c_str(), info->exception_string_.c_str());
   }
 
-  return info->success_;
+  return info->success_ && status != boost::cv_status::timeout;
 }
 
 bool ServiceServerLink::isValid() const
