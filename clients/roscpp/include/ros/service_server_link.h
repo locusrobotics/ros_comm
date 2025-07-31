@@ -66,7 +66,7 @@ private:
 
     bool finished_;
     boost::condition_variable finished_condition_;
-    boost::mutex finished_mutex_;
+    boost::mutex mutex_;
     boost::thread::id caller_thread_id_;
 
     bool success_;
@@ -116,7 +116,7 @@ private:
    * \brief Called when the currently queued call has finished.  Clears out the current call, notifying it that it
    * has finished, then calls processNextCall()
    */
-  void callFinished();
+  void callFinished(CallInfoPtr info);
   /**
    * \brief Pops the next call off the queue if one is available.  If this is a non-persistent connection and the queue is empty
    * it will also drop the connection.
@@ -133,8 +133,8 @@ private:
 
   void onHeaderWritten(const ConnectionPtr& conn);
   void onRequestWritten(const ConnectionPtr& conn);
-  void onResponseOkAndLength(const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success);
-  void onResponse(const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success);
+  void onResponseOkAndLength(CallInfoPtr info, const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success);
+  void onResponse(CallInfoPtr info, const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success);
 
   ConnectionPtr connection_;
   std::string service_name_;

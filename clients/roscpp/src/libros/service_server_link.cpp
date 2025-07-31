@@ -70,20 +70,27 @@ ServiceServerLink::~ServiceServerLink()
 
 void ServiceServerLink::cancelCall(const CallInfoPtr& info)
 {
-  CallInfoPtr local = info;
+  boost::thread::id caller_thread_id;
+  bool call_finished = false;
+
   {
-    boost::mutex::scoped_lock lock(local->finished_mutex_);
-    local->finished_ = true;
+    boost::mutex::scoped_lock lock(info->mutex_);
+    info->finished_ = true;
     // If onResponse fires after we've returned from call() (due to this being cancelled), the pointer to resp_ will no longer be valid
-    local->resp_ = nullptr;
-    local->finished_condition_.notify_all();
+    info->resp_ = nullptr;
+    info->finished_condition_.notify_all();
+    caller_thread_id = info->caller_thread_id_;
+    call_finished = info->call_finished_;
   }
 
-  if (boost::this_thread::get_id() != info->caller_thread_id_)
+  if (boost::this_thread::get_id() != caller_thread_id)
   {
-    while (!local->call_finished_)
+    while (!call_finished)
     {
       boost::this_thread::yield();
+
+      boost::mutex::scoped_lock lock(info->mutex_);
+      call_finished = info->call_finished_;
     }
   }
 }
@@ -189,10 +196,10 @@ void ServiceServerLink::onRequestWritten(const ConnectionPtr& conn)
   auto current_call = current_call_;
   lock.unlock();
 
-  connection_->read(5, boost::bind(&ServiceServerLink::onResponseOkAndLength, this, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, boost::placeholders::_4));
+  connection_->read(5, boost::bind(&ServiceServerLink::onResponseOkAndLength, this, current_call, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, boost::placeholders::_4));
 }
 
-void ServiceServerLink::onResponseOkAndLength(const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success)
+void ServiceServerLink::onResponseOkAndLength(CallInfoPtr info, const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success)
 {
   (void)size;
   ROS_ASSERT(conn == connection_);
@@ -216,25 +223,25 @@ void ServiceServerLink::onResponseOkAndLength(const ConnectionPtr& conn, const b
   }
 
   {
-    boost::mutex::scoped_lock lock(call_queue_mutex_);
+    boost::mutex::scoped_lock lock(info->mutex_);
     if ( ok != 0 ) {
-    	current_call_->success_ = true;
+      info->success_ = true;
     } else {
-    	current_call_->success_ = false;
+      info->success_ = false;
     }
   }
 
   if (len > 0)
   {
-    connection_->read(len, boost::bind(&ServiceServerLink::onResponse, this, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, boost::placeholders::_4));
+    connection_->read(len, boost::bind(&ServiceServerLink::onResponse, this, info, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, boost::placeholders::_4));
   }
   else
   {
-    onResponse(conn, boost::shared_array<uint8_t>(), 0, true);
+    onResponse(info, conn, boost::shared_array<uint8_t>(), 0, true);
   }
 }
 
-void ServiceServerLink::onResponse(const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success)
+void ServiceServerLink::onResponse(CallInfoPtr info, const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success)
 {
   (void)conn;
   ROS_ASSERT(conn == connection_);
@@ -243,47 +250,52 @@ void ServiceServerLink::onResponse(const ConnectionPtr& conn, const boost::share
     return;
 
   {
-    boost::mutex::scoped_lock queue_lock(call_queue_mutex_);
+    boost::mutex::scoped_lock queue_lock(info->mutex_);
 
     // If this message was cancelled, the resp_ object will no longer be pointing at a valid response object
     // (we reset it to null)
-    if (current_call_ && current_call_->success_ && current_call_->resp_)
+    if (info && info->success_ && !info->finished_ && info->resp_)
     {
-      *current_call_->resp_ = SerializedMessage(buffer, size);
+      *(info->resp_) = SerializedMessage(buffer, size);
     }
     else
     {
-      current_call_->exception_string_ = std::string(reinterpret_cast<char*>(buffer.get()), size);
+      info->exception_string_ = std::string(reinterpret_cast<char*>(buffer.get()), size);
     }
   }
 
-  callFinished();
+  callFinished(info);
 }
 
-void ServiceServerLink::callFinished()
+void ServiceServerLink::callFinished(CallInfoPtr info)
 {
   CallInfoPtr saved_call;
   ServiceServerLinkPtr self;
   {
-    boost::mutex::scoped_lock queue_lock(call_queue_mutex_);
-    boost::mutex::scoped_lock finished_lock(current_call_->finished_mutex_);
+    boost::mutex::scoped_lock finished_lock(info->mutex_);
 
     ROS_DEBUG_NAMED("superdebug", "Client to service [%s] call finished with success=[%s]", service_name_.c_str(), current_call_->success_ ? "true" : "false");
 
-    current_call_->finished_ = true;
-    current_call_->finished_condition_.notify_all();
-    current_call_->call_finished_ = true;
+    info->finished_ = true;
+    info->finished_condition_.notify_all();
+    info->call_finished_ = true;
+    saved_call = info;
+  }
 
-    saved_call = current_call_;
-    current_call_ = CallInfoPtr();
+  {
+    boost::mutex::scoped_lock queue_lock(call_queue_mutex_);
+
+    // Don't want to reassign current_call_ if the call that was just completed was a previous (timed out) one
+    if (saved_call == current_call_)
+    {
+      current_call_ = CallInfoPtr();
+    }
 
     // If the call queue is empty here, we may be deleted as soon as we release these locks, so keep a shared pointer to ourselves until we return
     // ugly
     // jfaust TODO there's got to be a better way
     self = shared_from_this();
   }
-
-  saved_call = CallInfoPtr();
 
   processNextCall();
 }
@@ -354,6 +366,7 @@ bool ServiceServerLink::call(const SerializedMessage& req, SerializedMessage& re
     if (connection_->isDropped())
     {
       ROSCPP_LOG_DEBUG("ServiceServerLink::call called on dropped connection for service [%s]", service_name_.c_str());
+      boost::mutex::scoped_lock lock(info->mutex_);
       info->call_finished_ = true;
       return false;
     }
@@ -376,7 +389,7 @@ bool ServiceServerLink::call(const SerializedMessage& req, SerializedMessage& re
   auto status = boost::cv_status::no_timeout;
 
   {
-    boost::mutex::scoped_lock lock(info->finished_mutex_);
+    boost::mutex::scoped_lock lock(info->mutex_);
 
     while (!info->finished_)
     {
@@ -386,15 +399,22 @@ bool ServiceServerLink::call(const SerializedMessage& req, SerializedMessage& re
 
         if (status == boost::cv_status::timeout)
         {
-          bool finished = info->finished_;
           lock.unlock();
 
-          if (!finished)
+          cancelCall(info);
+
+          // If we've timed out, we need to move on to the next call. If we don't, and the service server has crashed
+          // or restarted, the receiver thread will never reset current_call_ and the next call will never be
+          // processed.
+          boost::mutex::scoped_lock lock(call_queue_mutex_);
+
+          // If the receiver callback fired in between locks, then we might have already reassigned current_call_
+          if (info == current_call_)
           {
-            cancelCall(info);
+            current_call_ = CallInfoPtr();
           }
 
-          ROS_WARN_STREAM("Service call to " << service_name_ << " timed out after " << timeout_sec_ << " seconds");
+          break;
         }
       }
       else
@@ -404,19 +424,26 @@ bool ServiceServerLink::call(const SerializedMessage& req, SerializedMessage& re
     }
   }
 
-  info->call_finished_ = true;
+  bool success = false;
+  std::string exception_string;
+  {
+    boost::mutex::scoped_lock lock(info->mutex_);
+    info->call_finished_ = true;
+    success = info->success_;
+    exception_string = info->exception_string_;
+  }
 
   if (status == boost::cv_status::timeout)
   {
     ROS_WARN_STREAM("Service call to " << service_name_ << " timed out after " << timeout_sec_ << " seconds");
   }
 
-  if (info->exception_string_.length() > 0)
+  if (exception_string.length() > 0)
   {
-    ROS_ERROR("Service call failed: service [%s] responded with an error: %s", service_name_.c_str(), info->exception_string_.c_str());
+    ROS_ERROR("Service call failed: service [%s] responded with an error: %s", service_name_.c_str(), exception_string.c_str());
   }
 
-  return info->success_ && status != boost::cv_status::timeout;
+  return success && status != boost::cv_status::timeout;
 }
 
 bool ServiceServerLink::isValid() const
