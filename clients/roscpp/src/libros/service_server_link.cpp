@@ -95,6 +95,24 @@ void ServiceServerLink::cancelCall(const CallInfoPtr& info)
   }
 }
 
+void ServiceServerLink::handleTimeout(const CallInfoPtr& info)
+{
+  cancelCall(info);
+
+  connection_->stopRead();
+
+  // If we've timed out, we need to move on to the next call. If we don't, and the service server has crashed
+  // or restarted, the receiver thread will never reset current_call_ and the next call will never be
+  // processed.
+  boost::mutex::scoped_lock lock(call_queue_mutex_);
+
+  // If the receiver callback fired in between locks, then we might have already reassigned current_call_
+  if (info == current_call_)
+  {
+    current_call_ = CallInfoPtr();
+  }
+}
+
 void ServiceServerLink::clearCalls()
 {
   CallInfoPtr local_current;
@@ -401,18 +419,7 @@ bool ServiceServerLink::call(const SerializedMessage& req, SerializedMessage& re
         {
           lock.unlock();
 
-          cancelCall(info);
-
-          // If we've timed out, we need to move on to the next call. If we don't, and the service server has crashed
-          // or restarted, the receiver thread will never reset current_call_ and the next call will never be
-          // processed.
-          boost::mutex::scoped_lock lock(call_queue_mutex_);
-
-          // If the receiver callback fired in between locks, then we might have already reassigned current_call_
-          if (info == current_call_)
-          {
-            current_call_ = CallInfoPtr();
-          }
+          handleTimeout(info);
 
           break;
         }

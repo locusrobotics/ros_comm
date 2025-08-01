@@ -131,6 +131,11 @@ private:
    */
   void cancelCall(const CallInfoPtr& info);
 
+   /**
+   * \brief Utility method for handling cases where our most recent service call has timed out
+   */
+  void handleTimeout(const CallInfoPtr& info);
+
   void onHeaderWritten(const ConnectionPtr& conn);
   void onRequestWritten(const ConnectionPtr& conn);
   void onResponseOkAndLength(CallInfoPtr info, const ConnectionPtr& conn, const boost::shared_array<uint8_t>& buffer, uint32_t size, bool success);

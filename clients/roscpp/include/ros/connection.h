@@ -175,6 +175,11 @@ public:
   std::string getCallerId();
   std::string getRemoteString();
 
+  /**
+   * \brief Cancels any active read operation
+   */
+  void stopRead();
+
 private:
   /**
    * \brief Called by the Transport when there is data available to be read

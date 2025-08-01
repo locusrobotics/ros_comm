@@ -479,4 +479,20 @@ std::string Connection::getRemoteString()
   return ss.str();
 }
 
+void Connection::stopRead()
+{
+  boost::recursive_mutex::scoped_lock lock(read_mutex_);
+
+  if (has_read_callback_)
+  {
+    read_callback_.clear();
+    read_buffer_.reset();
+    read_size_ = 0;
+    read_filled_ = 0;
+    has_read_callback_ = 0;
+  }
+
+  transport_->disableRead();
+}
+
 }
