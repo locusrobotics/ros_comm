@@ -7,7 +7,7 @@
 #include <log4cxx/appenderskeleton.h>
 #ifdef _MSC_VER
   // Have to be able to encode wchar LogStrings on windows.
-# include <log4cxx/helpers/transcoder.h>
+#include <log4cxx/helpers/transcoder.h>
 #endif
 #include <ros/console.h>
 #include <ros/poll_manager.h>
@@ -43,7 +43,8 @@ public:
 protected:
   std::list<log4cxx::spi::LoggingEventPtr> list;
 };
-typedef log4cxx::helpers::ObjectPtrT<ListAppender> ListAppenderPtr;
+ 
+LOG4CXX_PTR_DEF(ListAppender); // support for new log4cxx std::shared_ptr. Ref: https://logging.apache.org/log4cxx/1.3.1/changelog.html#rel_12_0
 
 static const char EXCEPTION[] = "custom exception message";
 
@@ -64,7 +65,7 @@ TEST(roscpp, ServiceThrowingException)
   ros::ServiceServer service = n.advertiseService(SERVICE, throwingService);
 
   log4cxx::LoggerPtr logger = log4cxx::Logger::getLogger("ros.roscpp");
-  ListAppenderPtr appender = new ListAppender();
+  ListAppenderPtr appender(new ListAppender()); // support new log4cxx changes
   logger->addAppender(appender);
 
   ros::ServiceClient client = n.serviceClient<std_srvs::Empty>(SERVICE, true);
