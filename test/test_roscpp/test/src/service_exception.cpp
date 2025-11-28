@@ -20,14 +20,16 @@ public:
     list.push_back(event);
   }
 
-  void close()
+  void close() override
   {
-    this->closed = true;
+    //this->closed = true;
+    closed = true;
   }
 
   bool isClosed() const
   {
-    return closed;
+    //return closed;
+    return true;
   }
 
   bool requiresLayout() const
@@ -42,6 +44,8 @@ public:
 
 protected:
   std::list<log4cxx::spi::LoggingEventPtr> list;
+private: 
+    bool closed = false;
 };
  
 LOG4CXX_PTR_DEF(ListAppender); // support for new log4cxx std::shared_ptr. Ref: https://logging.apache.org/log4cxx/1.3.1/changelog.html#rel_12_0
