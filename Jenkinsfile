@@ -2,13 +2,13 @@
 @Library('tailor-meta@0.2.3')_
 tailorTestPipeline(
   // Name of job that generated this test definition.
-  rosdistro_job: '/ci/rosdistro/master',
+  rosdistro_job: '/ci/rosdistro/release%2F25.2',
   // Distribution name
   rosdistro_name: 'ros1',
   // Release track to test branch against.
-  release_track: 'hotdog',
+  release_track: '25.2',
   // Release label to pull test images from.
-  release_label: 'hotdog',
+  release_label: '25.2-rc',
   // OS distributions to test.
   distributions: ['jammy', 'noble'],
   // Version of tailor_meta to build against
