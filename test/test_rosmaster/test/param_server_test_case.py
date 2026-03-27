@@ -96,7 +96,7 @@ class ParamServerTestCase(TestRosClient):
         paramNames = myState.keys()
         remoteParamNames = self.apiSuccess(master.getParamNames(callerId))
         # filter out the roslaunch params like run id and roslaunch/, which are always set
-        remoteParamNames = [p for p in remoteParamNames if not p in ['/run_id', '/rosdistro', '/rosversion']]
+        remoteParamNames = [p for p in remoteParamNames if not p in ['/run_id', '/rosdistro', '/rosversion', '/rosout_disable_topics_generation']]
         remoteParamNames = [p for p in remoteParamNames if not p.startswith('/roslaunch/')]
 
         assert not set(paramNames) ^ set(remoteParamNames), "parameter server keys do not match local: %s"%(set(paramNames)^set(remoteParamNames))
@@ -224,7 +224,7 @@ class ParamServerTestCase(TestRosClient):
 
     ## remove common keys that roslaunch places on param server
     def _filterDict(self, d):
-        for k in ['run_id', 'roslaunch', 'rosversion', 'rosdistro']:
+        for k in ['run_id', 'roslaunch', 'rosversion', 'rosdistro', 'rosout_disable_topics_generation']:
             if k in d:
                 del d[k]
         return d

@@ -45,7 +45,7 @@ import rostest
 from test_rospy.srv import *
 
 def test_param_filter(params):
-    return [p for p in params if not p.startswith('/roslaunch') and p not in ['/run_id', '/rosdistro', '/rosversion']]
+    return [p for p in params if not p.startswith('/roslaunch') and p not in ['/run_id', '/rosdistro', '/rosversion', '/rosout_disable_topics_generation']]
 
 ## Test the rospy.client parameter server API: 
 ##- get_param

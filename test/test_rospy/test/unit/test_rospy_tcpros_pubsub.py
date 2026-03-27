@@ -35,6 +35,7 @@ import os
 import sys
 import socket
 import struct
+import socket as _socket
 import unittest
 import time
 
@@ -42,9 +43,18 @@ class FakeSocket(object):
     def __init__(self):
         self.data = b''
         self.sockopt = None
+        # Use a real socketpair so that epoll/kqueue can monitor the fd.
+        # Using stdout (fd=1) fails with PermissionError when stdout is a
+        # regular file (e.g. in CI environments).
+        self._sock_pair = _socket.socketpair()
+    def __del__(self):
+        for s in self._sock_pair:
+            try:
+                s.close()
+            except Exception:
+                pass
     def fileno(self):
-        # fool select logic by giving it stdout fileno
-        return 1
+        return self._sock_pair[0].fileno()
     def setblocking(self, *args):
         pass
     def setsockopt(self, *args):
@@ -55,7 +65,7 @@ class FakeSocket(object):
     def sendall(self, d):
         self.data = self.data+d
     def close(self):
-        pass
+        pass  # socketpair lifetime is managed by __del__; do not close prematurely
     def getsockname(self):
         return (None, None)
 
@@ -184,7 +194,9 @@ class TestRospyTcprosPubsub(unittest.TestCase):
 
         # register '/foo-tch'
         tm = rospy.impl.registration.get_topic_manager()
-        impl = tm.acquire_impl(Registration.PUB, topic_name, data_class)
+        from rospy.topics import _TopicOptions
+        opts = _TopicOptions()
+        impl = tm.acquire_impl(Registration.PUB, topic_name, data_class, opts)
         self.assertTrue(impl is not None)
 
         # test with mismatched md5sum

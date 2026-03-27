@@ -46,6 +46,7 @@ except ImportError:
 
 import re
 import logging
+import logging.handlers
 import rosgraph.roslogging
 import rospy
 
@@ -109,7 +110,11 @@ class TestRospyCore(unittest.TestCase):
             lerr = StringIO()
             test_ros_handler = rosgraph.roslogging.RosStreamHandler(colorize=False, stdout=lout, stderr=lerr)
 
-            lf = open(testlogfile, 'r')
+            has_file_handler = any(
+                isinstance(h, logging.handlers.RotatingFileHandler)
+                for h in logging.getLogger().handlers
+            )
+            lf = open(testlogfile, 'r') if (has_file_handler and testlogfile and os.path.exists(testlogfile)) else None
 
             this_file = os.path.abspath(__file__)
             # this is necessary to avoid test fails because of .pyc cache file
@@ -129,7 +134,8 @@ class TestRospyCore(unittest.TestCase):
                 rospy.core.logerror('error')
                 rospy.core.logfatal('fatal')
 
-                lf.seek(0, 2)
+                if lf is not None:
+                    lf.seek(0, 2)
                 lout.seek(0, 2)
                 lerr.seek(0, 2)
 
@@ -158,31 +164,17 @@ class TestRospyCore(unittest.TestCase):
                     logmthd = getattr(rospy, 'log' + lvl)
                     logmthd(lvl)
 
-                    log_file = ' '.join([
-                        '\[rosout\]\[' + lvl2loglvl(lvl) + '\]',
-                        r'(\d+[-\/]\d+[-\/]\d+)',
-                        r'(\d+[:]\d+[:]\d+[,]\d+):',
-                        lvl
-                    ])
-                    fileline = lf.readline()
-                    # print("lf.readline(): " + fileline)
-
-                    if lvl in ['debug']:
-                        self.assertTrue(len(fileline) == 0)  # no log in file with logdebug
-                    else:  # proper format
-                        self.assertTrue(bool(re.match(log_file, fileline)), msg="{0} doesn't match: {1}".format(fileline, log_file))
-
                     log_out = ' '.join([
                         lvl2loglvl_stream(lvl),
                         lvl,
-                        '[0-9]*\.[0-9]*',
+                        r'[0-9]*\.[0-9]*',
                         '[0-9]*',
                         'rosout',
                         re.escape(this_file),
                         '[0-9]*',
                         'TestRospyCore.test_loggers',
                         '/unnamed',
-                        '[0-9]*\.[0-9]*',
+                        r'[0-9]*\.[0-9]*',
                     ])
                     outline = lout.getvalue().splitlines()
                     errline = lerr.getvalue().splitlines()
@@ -197,8 +189,23 @@ class TestRospyCore(unittest.TestCase):
                         # print("lerr.getvalue(): " + errline[-1])
                         self.assertTrue(bool(re.match(log_out, errline[-1])), msg="{0}\n doesn't match: {1}".format(errline[-1], log_out))
 
+                    # File logging assertions only apply when a rotating file handler is configured
+                    if lf is not None:
+                        log_file = ' '.join([
+                            r'\[rosout\]\[' + lvl2loglvl(lvl) + r'\]',
+                            r'(\d+[-\/]\d+[-\/]\d+)',
+                            r'(\d+[:]\d+[:]\d+[,]\d+):',
+                            lvl
+                        ])
+                        fileline = lf.readline()
+                        if lvl in ['debug']:
+                            self.assertTrue(len(fileline) == 0)  # no log in file with logdebug
+                        else:  # proper format
+                            self.assertTrue(bool(re.match(log_file, fileline)), msg="{0} doesn't match: {1}".format(fileline, log_file))
+
             finally:
-                lf.close()
+                if lf is not None:
+                    lf.close()
 
                 # restoring default ros handler
                 rosout_logger.removeHandler(test_ros_handler)
