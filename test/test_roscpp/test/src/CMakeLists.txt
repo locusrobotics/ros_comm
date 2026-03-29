@@ -305,6 +305,7 @@ if(TARGET tests)
     ${PROJECT_NAME}-stamped_topic_statistics_empty_timestamp
     ${PROJECT_NAME}-topic_statistic_frequency
     ${PROJECT_NAME}-multiple_latched_publishers
+    ${PROJECT_NAME}-init_no_sim_time_test
   )
 endif()
 
@@ -327,6 +328,7 @@ add_dependencies(${PROJECT_NAME}-publish_constantly ${${PROJECT_NAME}_EXPORTED_T
 add_dependencies(${PROJECT_NAME}-param_update_test ${${PROJECT_NAME}_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}-real_time_test ${${PROJECT_NAME}_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}-sim_time_test ${${PROJECT_NAME}_EXPORTED_TARGETS})
+add_dependencies(${PROJECT_NAME}-init_no_sim_time_test ${${PROJECT_NAME}_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}-service_adv ${${PROJECT_NAME}_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}-service_adv_unadv ${${PROJECT_NAME}_EXPORTED_TARGETS})
 add_dependencies(${PROJECT_NAME}-service_call ${${PROJECT_NAME}_EXPORTED_TARGETS})
