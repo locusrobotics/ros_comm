@@ -36,18 +36,22 @@ if(CATKIN_ENABLE_TESTING)
   catkin_add_gtest(test_bag ${PROJECT_BINARY_DIR}/test/test_bag.cpp)
   if(TARGET test_bag)
     target_link_libraries(test_bag ${catkin_LIBRARIES})
+    add_dependencies(test_bag download_data_test_indexed_1.2.bag)
   endif()
 
   configure_file(test/play_play.test.in 
                  ${PROJECT_BINARY_DIR}/test/play_play.test)
-  add_rostest(${PROJECT_BINARY_DIR}/test/play_play.test)
+  add_rostest(${PROJECT_BINARY_DIR}/test/play_play.test
+    DEPENDENCIES download_data_test_chatter_50hz.bag)
   configure_file(test/rosbag_play.test.in 
                  ${PROJECT_BINARY_DIR}/test/rosbag_play.test)
-  add_rostest(${PROJECT_BINARY_DIR}/test/rosbag_play.test)
+  add_rostest(${PROJECT_BINARY_DIR}/test/rosbag_play.test
+    DEPENDENCIES download_data_test_chatter_50hz.bag)
 
   add_rostest(test/latched_pub.test)
   configure_file(test/latched_sub.test.in ${PROJECT_BINARY_DIR}/test/latched_sub.test)
-  add_rostest(${PROJECT_BINARY_DIR}/test/latched_sub.test)
+  add_rostest(${PROJECT_BINARY_DIR}/test/latched_sub.test
+    DEPENDENCIES download_data_test_rosbag_latched_pub.bag)
   add_rostest(test/record_two_publishers.test)
   add_rostest(test/record_one_publisher_two_topics.test)
   add_rostest(test/record_sigint_cleanup.test)

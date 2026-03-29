@@ -81,7 +81,39 @@ catkin_download_test_data(download_data_test_unmigrated_gen1.bag http://download
 
 configure_file(test/migrate_test.py.in
   ${PROJECT_BINARY_DIR}/test/migrate_test.py)
-catkin_add_nosetests(${PROJECT_BINARY_DIR}/test/migrate_test.py)
+catkin_add_nosetests(${PROJECT_BINARY_DIR}/test/migrate_test.py
+  DEPENDENCIES
+    download_data_test_constants_gen1.bag
+    download_data_test_constants_gen2.bag
+    download_data_test_converged_gen1.bag
+    download_data_test_converged_gen2.bag
+    download_data_test_converged_gen3.bag
+    download_data_test_converged_gen4.bag
+    download_data_test_convergent_gen1.bag
+    download_data_test_convergent_gen2.bag
+    download_data_test_migrated_addsub_gen1.bag
+    download_data_test_migrated_explicit_gen1.bag
+    download_data_test_migrated_explicit_gen2.bag
+    download_data_test_migrated_explicit_gen3.bag
+    download_data_test_migrated_explicit_gen4.bag
+    download_data_test_migrated_implicit_gen1.bag
+    download_data_test_migrated_implicit_gen2.bag
+    download_data_test_migrated_implicit_gen3.bag
+    download_data_test_migrated_implicit_gen4.bag
+    download_data_test_migrated_mixed_gen1.bag
+    download_data_test_migrated_mixed_gen2.bag
+    download_data_test_migrated_mixed_gen3.bag
+    download_data_test_migrated_mixed_gen4.bag
+    download_data_test_partially_migrated_gen1.bag
+    download_data_test_partially_migrated_gen2.bag
+    download_data_test_partially_migrated_gen3.bag
+    download_data_test_partially_migrated_gen4.bag
+    download_data_test_renamed_gen1.bag
+    download_data_test_renamed_gen2.bag
+    download_data_test_renamed_gen3.bag
+    download_data_test_renamed_gen4.bag
+    download_data_test_subunmigrated_gen1.bag
+    download_data_test_unmigrated_gen1.bag)
 configure_file(test/random_record.xml.in
   ${PROJECT_BINARY_DIR}/test/random_record.xml)
 add_rostest(${PROJECT_BINARY_DIR}/test/random_record.xml)

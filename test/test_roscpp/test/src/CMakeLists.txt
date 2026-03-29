@@ -306,6 +306,7 @@ if(TARGET tests)
     ${PROJECT_NAME}-topic_statistic_frequency
     ${PROJECT_NAME}-multiple_latched_publishers
     ${PROJECT_NAME}-init_no_sim_time_test
+    ${PROJECT_NAME}-publisher_rate
   )
 endif()
 
