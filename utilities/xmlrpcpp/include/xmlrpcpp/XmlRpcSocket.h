@@ -35,6 +35,9 @@ namespace XmlRpc {
     //! Sets a stream (TCP) socket to perform non-blocking IO. Returns false on failure.
     static bool setNonBlocking(int socket);
 
+    //! Disable Nagle's algorithm for lower latency on small writes. Returns false on failure.
+    static bool setTcpNoDelay(int socket);
+
     //! Read text from the specified socket. Returns false on error.
     static bool nbRead(int socket, std::string& s, bool *eof);
 

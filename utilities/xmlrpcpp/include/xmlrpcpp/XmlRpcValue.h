@@ -72,6 +72,10 @@ namespace XmlRpc {
     //! Copy
     XmlRpcValue(XmlRpcValue const& rhs) : _type(TypeInvalid) { *this = rhs; }
 
+    //! Move constructor — steals resources from rhs, leaving it invalid
+    XmlRpcValue(XmlRpcValue&& rhs) noexcept : _type(rhs._type), _value(rhs._value)
+    { rhs._type = TypeInvalid; rhs._value.asBinary = 0; }
+
     //! Destructor (make virtual if you want to subclass)
     /*virtual*/ ~XmlRpcValue() { invalidate(); }
 
@@ -80,6 +84,7 @@ namespace XmlRpc {
 
     // Operators
     XmlRpcValue& operator=(XmlRpcValue const& rhs);
+    XmlRpcValue& operator=(XmlRpcValue&& rhs) noexcept;
     XmlRpcValue& operator=(bool const& rhs) { return operator=(XmlRpcValue(rhs)); }
     XmlRpcValue& operator=(int const& rhs) { return operator=(XmlRpcValue(rhs)); }
     XmlRpcValue& operator=(double const& rhs) { return operator=(XmlRpcValue(rhs)); }

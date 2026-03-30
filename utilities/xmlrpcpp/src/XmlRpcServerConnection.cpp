@@ -342,24 +342,28 @@ XmlRpcServerConnection::generateResponse(std::string const& resultXml)
   const char RESPONSE_2[] =
     "\r\n</param></params></methodResponse>\r\n";
 
-  std::string body = RESPONSE_1 + resultXml + RESPONSE_2;
-  std::string header = generateHeader(body);
+  std::string header = generateHeader(sizeof(RESPONSE_1) - 1 + resultXml.length() + sizeof(RESPONSE_2) - 1);
 
   // Avoid an overly large response
-  if ((header.length() + body.length()) > size_t(INT_MAX)) {
-    XmlRpcUtil::error("XmlRpcServerConnection::generateResponse: response length (%u) exceeds the maximum allowed size (%u).",
-                      _response.length(), INT_MAX);
-    _response = "";
+  if ((header.length() + sizeof(RESPONSE_1) - 1 + resultXml.length() + sizeof(RESPONSE_2) - 1) > size_t(INT_MAX)) {
+    XmlRpcUtil::error("XmlRpcServerConnection::generateResponse: response length exceeds the maximum allowed size (%u).",
+                      INT_MAX);
+    _response.clear();
   }
   else {
-    _response = header + body;
+    _response.clear();
+    _response.reserve(header.length() + sizeof(RESPONSE_1) - 1 + resultXml.length() + sizeof(RESPONSE_2) - 1);
+    _response.append(header);
+    _response.append(RESPONSE_1);
+    _response.append(resultXml);
+    _response.append(RESPONSE_2);
     XmlRpcUtil::log(5, "XmlRpcServerConnection::generateResponse:\n%s\n", _response.c_str());
   }
 }
 
 // Prepend http headers
 std::string
-XmlRpcServerConnection::generateHeader(std::string const& body)
+XmlRpcServerConnection::generateHeader(size_t contentLength)
 {
   std::string header = 
     "HTTP/1.1 200 OK\r\n"
@@ -371,9 +375,9 @@ XmlRpcServerConnection::generateHeader(std::string const& body)
 
   char buffLen[40];
 #ifdef _MSC_VER
-  sprintf_s(buffLen,40,"%d\r\n\r\n", (int)body.size());
+  sprintf_s(buffLen,40,"%d\r\n\r\n", (int)contentLength);
 #else
-  sprintf(buffLen,"%d\r\n\r\n", (int)body.size());
+  sprintf(buffLen,"%d\r\n\r\n", (int)contentLength);
 #endif
 
   return header + buffLen;
@@ -393,7 +397,7 @@ XmlRpcServerConnection::generateFaultResponse(std::string const& errorMsg, int e
   faultStruct[FAULTCODE] = errorCode;
   faultStruct[FAULTSTRING] = errorMsg;
   std::string body = RESPONSE_1 + faultStruct.toXml() + RESPONSE_2;
-  std::string header = generateHeader(body);
+  std::string header = generateHeader(body.size());
 
   _response = header + body;
 }

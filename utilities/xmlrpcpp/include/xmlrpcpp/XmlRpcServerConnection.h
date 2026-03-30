@@ -70,7 +70,7 @@ namespace XmlRpc {
     // Construct a response from the result XML.
     void generateResponse(std::string const& resultXml);
     void generateFaultResponse(std::string const& msg, int errorCode = -1);
-    std::string generateHeader(std::string const& body);
+    std::string generateHeader(size_t contentLength);
 
 
     // The XmlRpc server that accepted this connection

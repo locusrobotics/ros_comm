@@ -42,6 +42,7 @@ extern "C" {
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <netinet/in.h>
+# include <netinet/tcp.h>
 # include <netdb.h>
 # include <errno.h>
 # include <fcntl.h>
@@ -128,6 +129,14 @@ XmlRpcSocket::setNonBlocking(int fd)
 #else
   return (fcntl(fd, F_SETFL, O_NONBLOCK) == 0);
 #endif // _WINDOWS
+}
+
+
+bool
+XmlRpcSocket::setTcpNoDelay(int fd)
+{
+  int flag = 1;
+  return (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (const char *)&flag, sizeof(flag)) == 0);
 }
 
 
