@@ -565,7 +565,7 @@ namespace XmlRpc {
   {
     // Estimate output size to avoid repeated reallocations.
     // Each element is at least ~30 bytes of XML overhead.
-    int s = int(_value.asArray->size());
+    const size_t s = _value.asArray->size();
     std::string xml;
     xml.reserve(s * 100 + 64);
 
@@ -573,8 +573,8 @@ namespace XmlRpc {
     xml.append(ARRAY_TAG);
     xml.append(DATA_TAG);
 
-    for (int i=0; i<s; ++i)
-       xml.append(_value.asArray->at(i).toXml());
+    for (size_t i = 0; i < s; ++i)
+      xml.append(_value.asArray->at(i).toXml());
 
     xml.append(DATA_ETAG);
     xml.append(ARRAY_ETAG);
@@ -687,9 +687,9 @@ namespace XmlRpc {
         }
       case TypeArray:
         {
-          int s = int(_value.asArray->size());
+          const size_t s = _value.asArray->size();
           os << '{';
-          for (int i=0; i<s; ++i)
+          for (size_t i = 0; i < s; ++i)
           {
             if (i > 0) os << ',';
             _value.asArray->at(i).write(os);

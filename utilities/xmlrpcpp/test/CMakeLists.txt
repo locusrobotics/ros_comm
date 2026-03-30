@@ -132,7 +132,4 @@ endif()
 # Serialization micro-benchmark (not a test — manual run via rosrun)
 add_executable(xmlrpc_bench xmlrpc_bench.cpp)
 target_link_libraries(xmlrpc_bench xmlrpcpp)
-set_target_properties(xmlrpc_bench PROPERTIES
-  EXCLUDE_FROM_ALL FALSE
-  CXX_STANDARD 17)
-install(TARGETS xmlrpc_bench RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+set_target_properties(xmlrpc_bench PROPERTIES EXCLUDE_FROM_ALL TRUE)
