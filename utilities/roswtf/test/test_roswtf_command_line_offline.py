@@ -116,7 +116,7 @@ class TestRoswtfOffline(unittest.TestCase):
         # The test verifies there are no unexpected errors in offline mode.
         # Warnings are environment-specific (missing SSH libs, hostname resolution)
         # and should not cause the test to fail.
-        # The only acceptable error is the "rosdep not initialized" error.
+        # The only acceptable errors are the "rosdep not initialized" and "rosdep view is empty" errors.
         error_lines = [l for l in output.splitlines() if 'ERROR' in l]
         acceptable_errors = ('rosdep not initialized', 'rosdep view is empty')
         unexpected_errors = [l for l in error_lines if not any(e in l for e in acceptable_errors)]
