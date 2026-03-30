@@ -100,15 +100,6 @@ try:
             this_file = base + '.py'
 
         for i, loc in enumerate(['module', 'function', 'method']):
-            if loc == 'module':
-                function = '<module>'
-            elif loc == 'function':
-                function = 'logging_on_function'
-            elif loc == 'method':
-                function = 'LoggingOnClass.__init__'
-            else:
-                raise ValueError
-
             log_out = ' '.join([
                 'INFO',
                 'on ' + loc,
