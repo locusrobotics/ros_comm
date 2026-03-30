@@ -47,14 +47,8 @@ class FakeSocket(object):
         # Using stdout (fd=1) fails with PermissionError when stdout is a
         # regular file (e.g. in CI environments).
         self._sock_pair = _socket.socketpair()
-    def __del__(self):
-        for s in self._sock_pair:
-            try:
-                s.close()
-            except Exception:
-                pass
     def fileno(self):
-        return self._sock_pair[0].fileno()
+        return self._sock_pair[0].fileno() if self._sock_pair is not None else -1
     def setblocking(self, *args):
         pass
     def setsockopt(self, *args):
@@ -65,7 +59,15 @@ class FakeSocket(object):
     def sendall(self, d):
         self.data = self.data+d
     def close(self):
-        pass  # socketpair lifetime is managed by __del__; do not close prematurely
+        if self._sock_pair is not None:
+            for s in self._sock_pair:
+                try:
+                    s.close()
+                except OSError:
+                    pass
+            self._sock_pair = None
+    def __del__(self):
+        self.close()
     def getsockname(self):
         return (None, None)
 
@@ -245,5 +247,6 @@ class TestRospyTcprosPubsub(unittest.TestCase):
         fields = connection.protocol.get_header_fields()
         self.assertEqual(impl.resolved_name, fields['topic'])
         self.assertEqual('fuga', fields['hoge'])
-        self.assertEqual('baz', fields['foo'])        
+        self.assertEqual('baz', fields['foo'])
+        sock.close()
             
