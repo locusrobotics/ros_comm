@@ -59,6 +59,12 @@ class FakeSocket(object):
     def sendall(self, d):
         self.data = self.data+d
     def close(self):
+        # no-op: this FakeSocket is shared across multiple tch() calls. Rospy
+        # calls transport.close() when removing a connection, which would close
+        # the shared socketpair fd and make it invalid for subsequent epoll
+        # registrations. Real cleanup happens in __del__ when the object is GC'd.
+        pass
+    def __del__(self):
         if self._sock_pair is not None:
             for s in self._sock_pair:
                 try:
@@ -66,8 +72,6 @@ class FakeSocket(object):
                 except OSError:
                     pass
             self._sock_pair = None
-    def __del__(self):
-        self.close()
     def getsockname(self):
         return (None, None)
 
