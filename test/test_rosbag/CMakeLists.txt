@@ -20,14 +20,14 @@ catkin_package()
 if(CATKIN_ENABLE_TESTING)
   include_directories(${catkin_INCLUDE_DIRS} ${GTEST_INCLUDE_DIRS})
 
-  catkin_download_test_data(download_data_test_indexed_1.2.bag http://download.ros.org/data/rosbag/test_indexed_1.2.bag
-    FILENAME test/test_indexed_1.2.bag MD5 523cc0deb66269c84be4a7c605ff5eb3)
-  catkin_download_test_data(download_data_test_chatter_50hz.bag http://download.ros.org/data/rosbag/chatter_50hz.bag
-    FILENAME test/chatter_50hz.bag MD5 00844db3729b1b5f34e767dc691bd531)
-  catkin_download_test_data(download_data_test_future_version_2.1.bag http://download.ros.org/data/rosbag/test_future_version_2.1.bag
-    FILENAME test/test_future_version_2.1.bag MD5 ddcb5e8711b16514eb640330ed93c332)
-  catkin_download_test_data(download_data_test_rosbag_latched_pub.bag http://download.ros.org/data/rosbag/test_rosbag_latched_pub.bag
-    FILENAME test/test_rosbag_latched_pub.bag MD5 ed70b8cbb8a53220434aeb24bccf7342)
+  # Copy test bag fixtures from the source tree into the build directory so all
+  # tests can reference them via PROJECT_BINARY_DIR/test/ without network access.
+  file(COPY
+    test/test_indexed_1.2.bag
+    test/chatter_50hz.bag
+    test/test_future_version_2.1.bag
+    test/test_rosbag_latched_pub.bag
+    DESTINATION ${PROJECT_BINARY_DIR}/test/)
 
   catkin_add_nosetests(test/test_bag.py)
 

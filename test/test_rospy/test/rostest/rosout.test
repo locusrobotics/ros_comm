@@ -1,3 +1,5 @@
 <launch>
+  <!-- Ensure topics are generated in log messages for this test -->
+  <param name="rosout_disable_topics_generation" value="false"/>
   <test test-name="rosout" pkg="test_rospy" type="test_rosout.py" />
 </launch>

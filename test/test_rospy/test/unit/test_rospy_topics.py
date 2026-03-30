@@ -171,24 +171,33 @@ class TestRospyTopics(unittest.TestCase):
         self.assertEqual(co1.data[4:], buff.getvalue())
         self.assertEqual(None, impl.latch)
         
-        # Now enable latch
-        pub = Publisher(name, data_class, latch=True)
+        # Test latch: options are applied when the impl is first created.
+        # A second publisher to an existing topic does NOT retroactively enable latching.
+        pub_latch_check = Publisher(name, data_class, latch=True)
         impl = get_topic_manager().get_impl(Registration.PUB, rname)
-        # have to verify latching in pub impl
-        self.assertTrue(impl == pub.impl)
-        self.assertEqual(True, impl.is_latch)
+        self.assertTrue(impl == pub_latch_check.impl)
+        self.assertFalse(impl.is_latch)   # first publisher had latch=False; stays False
         self.assertEqual(None, impl.latch)
-        self.assertEqual(2, impl.ref_count)        
+        self.assertEqual(2, impl.ref_count)
+
+        # Test full latch behaviour using a freshly-created latched publisher
+        latch_name = 'foo_latch'
+        latch_rname = rospy.resolve_name(latch_name)
+        pub_latched = Publisher(latch_name, data_class, latch=True)
+        latch_impl = get_topic_manager().get_impl(Registration.PUB, latch_rname)
+        self.assertTrue(latch_impl == pub_latched.impl)
+        self.assertEqual(True, latch_impl.is_latch)
+        self.assertEqual(None, latch_impl.latch)
+        self.assertEqual(1, latch_impl.ref_count)
 
         co2 = ConnectionOverride('co2')
-        self.assertFalse(impl.has_connection('co2'))
-        impl.add_connection(co2)
-        for n in ['co1', 'co2']:
-            self.assertTrue(impl.has_connection(n))
-        self.assertTrue(impl.has_connections())        
+        self.assertFalse(latch_impl.has_connection('co2'))
+        latch_impl.add_connection(co2)
+        self.assertTrue(latch_impl.has_connection('co2'))
+        self.assertTrue(latch_impl.has_connections())
         v = Val('hello world-2')
-        impl.publish(v, connection_override=co2)
-        self.assertTrue(v == impl.latch)
+        latch_impl.publish(v, connection_override=co2)
+        self.assertTrue(v == latch_impl.latch)
 
         buff = StringIO()
         Val('hello world-2').serialize(buff)
@@ -197,29 +206,27 @@ class TestRospyTopics(unittest.TestCase):
 
         # test that latched value is sent to connections on connect
         co3 = ConnectionOverride('co3')
-        self.assertFalse(impl.has_connection('co3'))
-        impl.add_connection(co3)
-        for n in ['co1', 'co2', 'co3']:
-            self.assertTrue(impl.has_connection(n))
-        self.assertTrue(impl.has_connections())
-        self.assertEqual(co3.data[4:], buff.getvalue())        
-        
+        self.assertFalse(latch_impl.has_connection('co3'))
+        latch_impl.add_connection(co3)
+        self.assertTrue(latch_impl.has_connection('co2'))
+        self.assertTrue(latch_impl.has_connection('co3'))
+        self.assertTrue(latch_impl.has_connections())
+        self.assertEqual(co3.data[4:], buff.getvalue())
+
         # TODO: tcp_nodelay
         # TODO: suscribe listener
         self.assertTrue(impl.has_connection('co1'))
         impl.remove_connection(co1)
         self.assertFalse(impl.has_connection('co1'))
-        self.assertTrue(impl.has_connections())
-        
-        self.assertTrue(impl.has_connection('co3'))
-        impl.remove_connection(co3)        
-        self.assertFalse(impl.has_connection('co3'))
-        self.assertTrue(impl.has_connections())
-        
-        self.assertTrue(impl.has_connection('co2'))
-        impl.remove_connection(co2)        
-        self.assertFalse(impl.has_connection('co2'))
         self.assertFalse(impl.has_connections())
+
+        latch_impl.remove_connection(co3)
+        self.assertFalse(latch_impl.has_connection('co3'))
+        self.assertTrue(latch_impl.has_connections())
+
+        latch_impl.remove_connection(co2)
+        self.assertFalse(latch_impl.has_connection('co2'))
+        self.assertFalse(latch_impl.has_connections())
 
         # test publish() latch on a new Publisher object (this was encountered in testing, so I want a test case for it)
         pub = Publisher('bar', data_class, latch=True, queue_size=0)
@@ -373,7 +380,9 @@ class TestRospyTopics(unittest.TestCase):
         self.assertEqual(1, impl.ref_count)
         self.assertFalse(impl.closed)
         
-        # round 2, now start setting options and make sure underlying impl is reconfigured
+        # round 2: verify impl is shared and callbacks are registered. Options set by
+        # the first subscriber (no queue_size, default buff_size, no tcp_nodelay) are
+        # preserved — subsequent subscribers do not override them (first-wins semantics).
         name = 'foo'
         data_class = test_rospy.msg.Val
         queue_size = 1
@@ -390,17 +399,15 @@ class TestRospyTopics(unittest.TestCase):
         self.assertTrue(impl == impl2) # should be same instance
         self.assertEqual([(callback1, None)], impl.callbacks)
         self.assertEqual(rname, impl.resolved_name)
-        self.assertEqual(data_class, impl.data_class)                
-        self.assertEqual(queue_size, impl.queue_size)
-        self.assertEqual(buff_size, impl.buff_size)
-        self.assertTrue(impl.tcp_nodelay)
+        self.assertEqual(data_class, impl.data_class)
+        # Options from the first subscriber are preserved (first-wins)
+        self.assertEqual(None, impl.queue_size)
+        self.assertEqual(DEFAULT_BUFF_SIZE, impl.buff_size)
+        self.assertFalse(impl.tcp_nodelay)
         self.assertEqual(2, impl.ref_count)
         self.assertFalse(impl.closed)
 
-        # round 3, make sure that options continue to reconfigure
-        # underlying impl also test that tcp_nodelay is sticky. this
-        # is technically undefined, but this is how rospy chose to
-        # implement.
+        # round 3: additional subscriber; impl remains unchanged (first-wins)
         name = 'foo'
         data_class = test_rospy.msg.Val
         queue_size = 2
@@ -412,11 +419,24 @@ class TestRospyTopics(unittest.TestCase):
         impl2 = get_topic_manager().get_impl(Registration.SUB, rname)
         self.assertTrue(impl == impl2) # should be same instance
         self.assertEqual(set([(callback1, None), (callback2, None)]), set(impl.callbacks))
-        self.assertEqual(queue_size, impl.queue_size)
-        self.assertEqual(buff_size, impl.buff_size)
-        self.assertTrue(impl.tcp_nodelay)
+        # Options still reflect the first subscriber
+        self.assertEqual(None, impl.queue_size)
+        self.assertEqual(DEFAULT_BUFF_SIZE, impl.buff_size)
+        self.assertFalse(impl.tcp_nodelay)
         self.assertEqual(3, impl.ref_count)
         self.assertFalse(impl.closed)
+
+        # round 4: verify that options ARE applied when the subscriber creates the impl fresh
+        fresh_name = 'foo_fresh'
+        fresh_rname = rospy.resolve_name(fresh_name)
+        fresh_queue_size = 42
+        fresh_buff_size = DEFAULT_BUFF_SIZE * 2
+        sub_fresh = Subscriber(fresh_name, data_class, queue_size=fresh_queue_size,
+                               buff_size=fresh_buff_size, tcp_nodelay=True)
+        impl_fresh = get_topic_manager().get_impl(Registration.SUB, fresh_rname)
+        self.assertEqual(fresh_queue_size, impl_fresh.queue_size)
+        self.assertEqual(fresh_buff_size, impl_fresh.buff_size)
+        self.assertTrue(impl_fresh.tcp_nodelay)
 
     def test_Poller(self):
         # no real test as this goes down to kqueue/select, just make sure that it behaves

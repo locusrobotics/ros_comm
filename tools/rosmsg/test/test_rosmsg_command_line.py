@@ -166,14 +166,14 @@ class TestRosmsg(unittest.TestCase):
         output = Popen(['rosmsg', 'show', '--raw', type_], stdout=PIPE).communicate()[0].decode()
         self.assertEqual(text_raw, output.strip())
 
-        # test as search
+        # test as search - output may include matches from other packages (e.g. geographic_msgs, locus_msgs)
         type_ = t
         text_prefix = "[diagnostic_msgs/%s]:"%t
         text = os.linesep.join([text_prefix, text])
         text_raw = os.linesep.join([text_prefix, text_raw])
         output = Popen(['rosmsg', 'show', type_], stdout=PIPE).communicate()[0].decode()
-        self.assertEqual(text, output.strip())
+        self.assertIn(text, output.strip())
         output = Popen(['rosmsg', 'show', '-r',type_], stdout=PIPE, stderr=PIPE).communicate()
-        self.assertEqual(text_raw, output[0].decode().strip(), "Failed: %s"%(str(output)))
+        self.assertIn(text_raw, output[0].decode().strip(), "Failed: %s"%(str(output)))
         output = Popen(['rosmsg', 'show', '--raw', type_], stdout=PIPE).communicate()[0].decode()
-        self.assertEqual(text_raw, output.strip())
+        self.assertIn(text_raw, output.strip())

@@ -35,6 +35,7 @@ import os
 import sys
 import socket
 import struct
+import socket as _socket
 import unittest
 import time
 
@@ -42,9 +43,12 @@ class FakeSocket(object):
     def __init__(self):
         self.data = b''
         self.sockopt = None
+        # Use a real socketpair so that epoll/kqueue can monitor the fd.
+        # Using stdout (fd=1) fails with PermissionError when stdout is a
+        # regular file (e.g. in CI environments).
+        self._sock_pair = _socket.socketpair()
     def fileno(self):
-        # fool select logic by giving it stdout fileno
-        return 1
+        return self._sock_pair[0].fileno() if self._sock_pair is not None else -1
     def setblocking(self, *args):
         pass
     def setsockopt(self, *args):
@@ -55,7 +59,19 @@ class FakeSocket(object):
     def sendall(self, d):
         self.data = self.data+d
     def close(self):
+        # no-op: this FakeSocket is shared across multiple tch() calls. Rospy
+        # calls transport.close() when removing a connection, which would close
+        # the shared socketpair fd and make it invalid for subsequent epoll
+        # registrations. Real cleanup happens in __del__ when the object is GC'd.
         pass
+    def __del__(self):
+        if self._sock_pair is not None:
+            for s in self._sock_pair:
+                try:
+                    s.close()
+                except OSError:
+                    pass
+            self._sock_pair = None
     def getsockname(self):
         return (None, None)
 
@@ -184,7 +200,9 @@ class TestRospyTcprosPubsub(unittest.TestCase):
 
         # register '/foo-tch'
         tm = rospy.impl.registration.get_topic_manager()
-        impl = tm.acquire_impl(Registration.PUB, topic_name, data_class)
+        from rospy.topics import _TopicOptions
+        opts = _TopicOptions()
+        impl = tm.acquire_impl(Registration.PUB, topic_name, data_class, opts)
         self.assertTrue(impl is not None)
 
         # test with mismatched md5sum
@@ -233,5 +251,6 @@ class TestRospyTcprosPubsub(unittest.TestCase):
         fields = connection.protocol.get_header_fields()
         self.assertEqual(impl.resolved_name, fields['topic'])
         self.assertEqual('fuga', fields['hoge'])
-        self.assertEqual('baz', fields['foo'])        
+        self.assertEqual('baz', fields['foo'])
+        sock.close()
             
