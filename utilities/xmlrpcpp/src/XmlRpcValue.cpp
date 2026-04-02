@@ -322,6 +322,7 @@ namespace XmlRpc {
   std::string XmlRpcValue::boolToXml() const
   {
     std::string xml;
+    // Fixed output is "<value><boolean>1</boolean></value>" = 35 chars; round up to 64.
     xml.reserve(64);
     xml.append(VALUE_TAG);
     xml.append(BOOLEAN_TAG);
@@ -564,7 +565,8 @@ namespace XmlRpc {
   std::string XmlRpcValue::arrayToXml() const
   {
     // Estimate output size to avoid repeated reallocations.
-    // Each element is at least ~30 bytes of XML overhead.
+    // 64 bytes covers the fixed array wrapper tags (<value><array><data>...</data></array></value>).
+    // 100 bytes per element is a heuristic covering typical scalar values plus their <value>...</value> tags.
     const size_t s = _value.asArray->size();
     std::string xml;
     xml.reserve(s * 100 + 64);
@@ -610,7 +612,9 @@ namespace XmlRpc {
   // as it is needed rather than glomming up one big string.
   std::string XmlRpcValue::structToXml() const
   {
-    // Estimate output size: ~80 bytes per member + key length
+    // Estimate output size: 64 bytes covers the fixed struct wrapper tags (<value><struct>...</struct></value>).
+    // 120 bytes per member accounts for the <member><name>key</name><value>val</value></member> envelope
+    // (~46 bytes of fixed XML) plus a typical key name and scalar value.
     std::string xml;
     xml.reserve(_value.asStruct->size() * 120 + 64);
 

@@ -346,7 +346,7 @@ XmlRpcServerConnection::generateResponse(std::string const& resultXml)
   // Avoid an overly large response
   const size_t contentLength = sizeof(RESPONSE_1) - 1 + resultXml.length() + sizeof(RESPONSE_2) - 1;
   if (contentLength > size_t(INT_MAX)) {
-    XmlRpcUtil::error("XmlRpcServerConnection::generateResponse: response length exceeds the maximum allowed size (%u).",
+    XmlRpcUtil::error("XmlRpcServerConnection::generateResponse: content length exceeds the maximum allowed size (%u).",
                       INT_MAX);
     _response.clear();
     return;
