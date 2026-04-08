@@ -42,6 +42,7 @@ extern "C" {
 # include <sys/types.h>
 # include <sys/socket.h>
 # include <netinet/in.h>
+# include <netinet/tcp.h>
 # include <netdb.h>
 # include <errno.h>
 # include <fcntl.h>
@@ -128,6 +129,26 @@ XmlRpcSocket::setNonBlocking(int fd)
 #else
   return (fcntl(fd, F_SETFL, O_NONBLOCK) == 0);
 #endif // _WINDOWS
+}
+
+
+/*
+On Linux, the loopback interface bypasses the full network stack — packets never go through a NIC, there's no physical transmission delay, and the kernel delivers data directly to the receive buffer. Nagle's algorithm still technically runs (the kernel doesn't special-case it for loopback), but its entire purpose is to avoid sending many small packets when the network RTT is significant. On loopback, RTT is ~50µs or less, so:
+
+ - Nagle's 200ms wait never fires — the ACK from the receiver arrives almost instantly, which releases any buffered data immediately anyway
+ - The delayed ACK timer (40ms) is the only real risk, but again the kernel typically ACKs so fast on loopback that it rarely accumulates
+
+In practice, benchmarks consistently show TCP_NODELAY has no measurable effect on loopback throughput or latency. The Linux kernel also has some loopback-specific shortcuts that make the distinction even less relevant.
+
+The one edge case where it can matter on loopback is if we have a particularly loaded system where the receiver process isn't scheduled promptly — then delayed ACKs could theoretically stack up. But that's the same condition where the rest of the system would also be struggling.
+
+In any case, this is a safe addition.
+*/
+bool
+XmlRpcSocket::setTcpNoDelay(int fd)
+{
+  int flag = 1;
+  return (setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (const char *)&flag, sizeof(flag)) == 0);
 }
 
 

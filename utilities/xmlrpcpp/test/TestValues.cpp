@@ -654,6 +654,24 @@ TEST(XmlRpc, testStruct) {
   EXPECT_EQ(struct1.toXml(), ::testing::PrintToString(struct1));
 }
 
+// Verify that accessing a struct key via operator[] without assigning a value
+// creates a default-invalid entry that is silently skipped by structToXml(),
+// preventing malformed XML output.
+TEST(XmlRpc, testStructToXmlSkipsInvalidMembers) {
+  XmlRpcValue s;
+  s["valid"] = 42;
+
+  // Access "ghost" without assigning — inserts a default-invalid entry.
+  (void)s["ghost"];
+  EXPECT_EQ(2, s.size());  // both keys are present in the map...
+
+  const std::string xml = s.toXml();
+
+  // ...but only "valid" should appear in the serialized output.
+  EXPECT_NE(std::string::npos, xml.find("valid"));
+  EXPECT_EQ(std::string::npos, xml.find("ghost"));
+}
+
 TEST(XmlRpc, base64) {
   char data[] = {1, 2};
   const XmlRpcValue bin(data, 2);

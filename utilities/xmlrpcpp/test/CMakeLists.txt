@@ -128,3 +128,8 @@ catkin_add_gtest(TestXml TestXml.cpp)
 if(TARGET TestXml)
   target_link_libraries(TestXml xmlrpcpp)
 endif()
+
+# Serialization micro-benchmark (not a test — manual run via rosrun)
+add_executable(xmlrpc_bench xmlrpc_bench.cpp)
+target_link_libraries(xmlrpc_bench xmlrpcpp)
+set_target_properties(xmlrpc_bench PROPERTIES EXCLUDE_FROM_ALL TRUE)

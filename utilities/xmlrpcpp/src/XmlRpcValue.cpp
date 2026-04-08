@@ -155,6 +155,19 @@ namespace XmlRpc {
     return *this;
   }
 
+  XmlRpcValue& XmlRpcValue::operator=(XmlRpcValue&& rhs) noexcept
+  {
+    if (this != &rhs)
+    {
+      invalidate();
+      _type = rhs._type;
+      _value = rhs._value;
+      rhs._type = TypeInvalid;
+      rhs._value.asBinary = 0;
+    }
+    return *this;
+  }
+
 
   // Predicate for tm equality
   static bool tmEq(struct tm const& t1, struct tm const& t2) {
@@ -308,11 +321,14 @@ namespace XmlRpc {
 
   std::string XmlRpcValue::boolToXml() const
   {
-    std::string xml = VALUE_TAG;
-    xml += BOOLEAN_TAG;
-    xml += (_value.asBool ? "1" : "0");
-    xml += BOOLEAN_ETAG;
-    xml += VALUE_ETAG;
+    std::string xml;
+    // Fixed output is "<value><boolean>1</boolean></value>" = 35 chars; round up to 64.
+    xml.reserve(64);
+    xml.append(VALUE_TAG);
+    xml.append(BOOLEAN_TAG);
+    xml.append(_value.asBool ? "1" : "0");
+    xml.append(BOOLEAN_ETAG);
+    xml.append(VALUE_ETAG);
     return xml;
   }
 
@@ -532,8 +548,11 @@ namespace XmlRpc {
     _type = TypeArray;
     _value.asArray = new ValueArray;
     XmlRpcValue v;
-    while (v.fromXml(valueXml, offset))
-      _value.asArray->push_back(v);       // copy...
+    while (v.fromXml(valueXml, offset)) {
+      _value.asArray->push_back(std::move(v));
+      v._type = TypeInvalid;  // reset for next iteration (already moved)
+      v._value.asBinary = 0;
+    }
 
     // Skip the trailing </data>
     (void) XmlRpcUtil::nextTagIs(DATA_ETAG, valueXml, offset);
@@ -545,17 +564,23 @@ namespace XmlRpc {
   // array as it is needed rather than glomming up one big string.
   std::string XmlRpcValue::arrayToXml() const
   {
-    std::string xml = VALUE_TAG;
-    xml += ARRAY_TAG;
-    xml += DATA_TAG;
+    // Estimate output size to avoid repeated reallocations.
+    // 64 bytes covers the fixed array wrapper tags (<value><array><data>...</data></array></value>).
+    // 100 bytes per element is a heuristic covering typical scalar values plus their <value>...</value> tags.
+    const size_t s = _value.asArray->size();
+    std::string xml;
+    xml.reserve(s * 100 + 64);
 
-    int s = int(_value.asArray->size());
-    for (int i=0; i<s; ++i)
-       xml += _value.asArray->at(i).toXml();
+    xml.append(VALUE_TAG);
+    xml.append(ARRAY_TAG);
+    xml.append(DATA_TAG);
 
-    xml += DATA_ETAG;
-    xml += ARRAY_ETAG;
-    xml += VALUE_ETAG;
+    for (size_t i = 0; i < s; ++i)
+      xml.append(_value.asArray->at(i).toXml());
+
+    xml.append(DATA_ETAG);
+    xml.append(ARRAY_ETAG);
+    xml.append(VALUE_ETAG);
     return xml;
   }
 
@@ -568,15 +593,14 @@ namespace XmlRpc {
 
     while (XmlRpcUtil::nextTagIs(MEMBER_TAG, valueXml, offset)) {
       // name
-      const std::string name = XmlRpcUtil::nextTagData(NAME_TAG, valueXml, offset);
+      std::string name = XmlRpcUtil::nextTagData(NAME_TAG, valueXml, offset);
       // value
       XmlRpcValue val(valueXml, offset);
       if ( ! val.valid()) {
         invalidate();
         return false;
       }
-      const std::pair<const std::string, XmlRpcValue> p(name, val);
-      _value.asStruct->insert(p);
+      _value.asStruct->emplace(std::move(name), std::move(val));
 
       (void) XmlRpcUtil::nextTagIs(MEMBER_ETAG, valueXml, offset);
     }
@@ -588,21 +612,31 @@ namespace XmlRpc {
   // as it is needed rather than glomming up one big string.
   std::string XmlRpcValue::structToXml() const
   {
-    std::string xml = VALUE_TAG;
-    xml += STRUCT_TAG;
+    // Estimate output size: 64 bytes covers the fixed struct wrapper tags (<value><struct>...</struct></value>).
+    // 120 bytes per member accounts for the <member><name>key</name><value>val</value></member> envelope
+    // (~46 bytes of fixed XML) plus a typical key name and scalar value.
+    std::string xml;
+    xml.reserve(_value.asStruct->size() * 120 + 64);
+
+    xml.append(VALUE_TAG);
+    xml.append(STRUCT_TAG);
 
     ValueStruct::const_iterator it;
     for (it=_value.asStruct->begin(); it!=_value.asStruct->end(); ++it) {
-      xml += MEMBER_TAG;
-      xml += NAME_TAG;
-      xml += XmlRpcUtil::xmlEncode(it->first);
-      xml += NAME_ETAG;
-      xml += it->second.toXml();
-      xml += MEMBER_ETAG;
+      // Skip members with invalid (unset) values — these are artefacts of
+      // operator[] creating default entries for non-existent keys.
+      if ( ! it->second.valid())
+        continue;
+      xml.append(MEMBER_TAG);
+      xml.append(NAME_TAG);
+      xml.append(XmlRpcUtil::xmlEncode(it->first));
+      xml.append(NAME_ETAG);
+      xml.append(it->second.toXml());
+      xml.append(MEMBER_ETAG);
     }
 
-    xml += STRUCT_ETAG;
-    xml += VALUE_ETAG;
+    xml.append(STRUCT_ETAG);
+    xml.append(VALUE_ETAG);
     return xml;
   }
 
@@ -657,9 +691,9 @@ namespace XmlRpc {
         }
       case TypeArray:
         {
-          int s = int(_value.asArray->size());
+          const size_t s = _value.asArray->size();
           os << '{';
-          for (int i=0; i<s; ++i)
+          for (size_t i = 0; i < s; ++i)
           {
             if (i > 0) os << ',';
             _value.asArray->at(i).write(os);

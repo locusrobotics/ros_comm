@@ -342,24 +342,29 @@ XmlRpcServerConnection::generateResponse(std::string const& resultXml)
   const char RESPONSE_2[] =
     "\r\n</param></params></methodResponse>\r\n";
 
-  std::string body = RESPONSE_1 + resultXml + RESPONSE_2;
-  std::string header = generateHeader(body);
-
+  // Validate contentLength before passing to generateHeader(), which casts it to int.
   // Avoid an overly large response
-  if ((header.length() + body.length()) > size_t(INT_MAX)) {
-    XmlRpcUtil::error("XmlRpcServerConnection::generateResponse: response length (%u) exceeds the maximum allowed size (%u).",
-                      _response.length(), INT_MAX);
-    _response = "";
+  const size_t contentLength = sizeof(RESPONSE_1) - 1 + resultXml.length() + sizeof(RESPONSE_2) - 1;
+  if (contentLength > size_t(INT_MAX)) {
+    XmlRpcUtil::error("XmlRpcServerConnection::generateResponse: content length exceeds the maximum allowed size (%u).",
+                      INT_MAX);
+    _response.clear();
+    return;
   }
-  else {
-    _response = header + body;
-    XmlRpcUtil::log(5, "XmlRpcServerConnection::generateResponse:\n%s\n", _response.c_str());
-  }
+
+  std::string header = generateHeader(contentLength);
+  _response.clear();
+  _response.reserve(header.length() + contentLength);
+  _response.append(header);
+  _response.append(RESPONSE_1);
+  _response.append(resultXml);
+  _response.append(RESPONSE_2);
+  XmlRpcUtil::log(5, "XmlRpcServerConnection::generateResponse:\n%s\n", _response.c_str());
 }
 
 // Prepend http headers
 std::string
-XmlRpcServerConnection::generateHeader(std::string const& body)
+XmlRpcServerConnection::generateHeader(size_t contentLength)
 {
   std::string header = 
     "HTTP/1.1 200 OK\r\n"
@@ -370,11 +375,7 @@ XmlRpcServerConnection::generateHeader(std::string const& body)
     "Content-length: ";
 
   char buffLen[40];
-#ifdef _MSC_VER
-  sprintf_s(buffLen,40,"%d\r\n\r\n", (int)body.size());
-#else
-  sprintf(buffLen,"%d\r\n\r\n", (int)body.size());
-#endif
+  std::snprintf(buffLen, sizeof(buffLen), "%zu\r\n\r\n", contentLength);
 
   return header + buffLen;
 }
@@ -393,8 +394,14 @@ XmlRpcServerConnection::generateFaultResponse(std::string const& errorMsg, int e
   faultStruct[FAULTCODE] = errorCode;
   faultStruct[FAULTSTRING] = errorMsg;
   std::string body = RESPONSE_1 + faultStruct.toXml() + RESPONSE_2;
-  std::string header = generateHeader(body);
 
-  _response = header + body;
+  if (body.size() > size_t(INT_MAX)) {
+    XmlRpcUtil::error("XmlRpcServerConnection::generateFaultResponse: response length exceeds the maximum allowed size (%u).",
+                      INT_MAX);
+    _response.clear();
+    return;
+  }
+
+  _response = generateHeader(body.size()) + body;
 }
 

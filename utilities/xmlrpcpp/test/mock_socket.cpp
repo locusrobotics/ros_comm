@@ -118,6 +118,11 @@ void MockSocketTest::Expect_setReuseAddr(int fd, bool ret) {
   setReuseAddr_ret = ret;
 }
 
+// setTcpNoDelay is best-effort and not test-gated; always succeeds in mock
+bool XmlRpcSocket::setTcpNoDelay(int /*fd*/) {
+  return true;
+}
+
 bool bind_ret = true;
 int bind_fd = 0;
 int bind_port = 0;

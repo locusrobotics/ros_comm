@@ -278,6 +278,8 @@ XmlRpcClient::doConnect()
     return false;
   }
 
+  XmlRpcSocket::setTcpNoDelay(fd);
+
   if ( ! XmlRpcSocket::connect(fd, _host, _port))
   {
     this->close();
