@@ -33,14 +33,12 @@
 #ifndef ROSMASTER_THREAD_POOL_H
 #define ROSMASTER_THREAD_POOL_H
 
-#include <atomic>
 #include <condition_variable>
 #include <functional>
 #include <mutex>
 #include <set>
 #include <string>
 #include <thread>
-#include <tuple>
 #include <vector>
 
 namespace rosmaster
@@ -73,7 +71,6 @@ private:
   };
 
   void workerLoop();
-  bool getNextTask(Task& out);
   bool getNextTaskLocked(Task& out);  // caller must hold task_mutex_
   bool hasRunnableTask() const;       // caller must hold task_mutex_
   void removeMarker(const std::string& marker);
@@ -83,7 +80,8 @@ private:
   std::condition_variable task_cv_;
   std::vector<Task> tasks_;
   std::set<std::string> active_markers_;
-  std::atomic<bool> stopping_{false};
+  bool stopping_{false};    // protected by task_mutex_
+  bool accepting_{true};    // rejects new tasks when false; protected by task_mutex_
 };
 
 }  // namespace rosmaster

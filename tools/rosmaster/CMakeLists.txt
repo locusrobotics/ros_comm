@@ -37,7 +37,7 @@ target_link_libraries(${PROJECT_NAME}_lib
   ${catkin_LIBRARIES}
   Threads::Threads
 )
-set_target_properties(${PROJECT_NAME}_lib PROPERTIES OUTPUT_NAME ${PROJECT_NAME}_cpp)
+
 
 #############
 ## Install ##

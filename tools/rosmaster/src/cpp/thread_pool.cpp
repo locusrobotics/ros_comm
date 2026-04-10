@@ -53,21 +53,15 @@ MarkedThreadPool::~MarkedThreadPool()
 
 void MarkedThreadPool::queueTask(const std::string& marker, TaskFunc task)
 {
-  if (stopping_)
-  {
-    return;
-  }
   {
     std::lock_guard<std::mutex> lock(task_mutex_);
+    if (!accepting_)
+    {
+      return;
+    }
     tasks_.push_back({marker, std::move(task)});
   }
   task_cv_.notify_one();
-}
-
-bool MarkedThreadPool::getNextTask(Task& out)
-{
-  std::lock_guard<std::mutex> lock(task_mutex_);
-  return getNextTaskLocked(out);
 }
 
 bool MarkedThreadPool::getNextTaskLocked(Task& out)
@@ -115,20 +109,22 @@ void MarkedThreadPool::removeMarker(const std::string& marker)
 
 void MarkedThreadPool::workerLoop()
 {
-  while (!stopping_)
+  while (true)
   {
     Task task;
+    bool got_task = false;
     {
       std::unique_lock<std::mutex> lock(task_mutex_);
       task_cv_.wait(lock, [this] {
         return stopping_ || hasRunnableTask();
       });
+      if (stopping_)
+      {
+        break;
+      }
+      got_task = getNextTaskLocked(task);
     }
-    if (stopping_)
-    {
-      break;
-    }
-    if (getNextTask(task))
+    if (got_task)
     {
       try
       {
@@ -149,9 +145,15 @@ void MarkedThreadPool::workerLoop()
 
 void MarkedThreadPool::joinAll(bool wait_for_tasks)
 {
+  // Reject new tasks immediately
+  {
+    std::lock_guard<std::mutex> lock(task_mutex_);
+    accepting_ = false;
+  }
+
   if (wait_for_tasks)
   {
-    // Spin until task queue is empty
+    // Drain queued tasks (no new tasks can arrive since accepting_ is false)
     while (true)
     {
       {
@@ -161,11 +163,14 @@ void MarkedThreadPool::joinAll(bool wait_for_tasks)
           break;
         }
       }
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
   }
 
-  stopping_ = true;
+  {
+    std::lock_guard<std::mutex> lock(task_mutex_);
+    stopping_ = true;
+  }
   task_cv_.notify_all();
 
   for (auto& t : threads_)

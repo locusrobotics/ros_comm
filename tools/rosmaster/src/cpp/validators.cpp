@@ -79,13 +79,8 @@ ValidatorFunc nonEmptyStr(const std::string& param_name)
 
 ValidatorFunc nonEmpty(const std::string& param_name)
 {
-  return [param_name](const std::string& param, const std::string& /*context*/) -> std::string {
-    if (param.empty())
-    {
-      throw ParameterInvalid("ERROR: parameter [" + param_name + "] must be specified and non-empty");
-    }
-    return param;
-  };
+  // Delegates to nonEmptyStr; both exist for parity with Python rosmaster validators.
+  return nonEmptyStr(param_name);
 }
 
 ValidatorFunc isApi(const std::string& param_name)
