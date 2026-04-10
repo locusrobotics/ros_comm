@@ -5,6 +5,7 @@ d = generate_distutils_setup(
     packages=['roslaunch'],
     package_dir={'': 'src'},
     scripts=['scripts/roscore',
+             'scripts/roscore_cpp',
              'scripts/roslaunch',
              'scripts/roslaunch-complete',
              'scripts/roslaunch-deps',

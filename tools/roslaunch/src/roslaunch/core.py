@@ -254,7 +254,8 @@ class Master(object):
     """
     __slots__ = ['type', 'auto', 'uri']
     ROSMASTER = 'rosmaster'
-    
+    ROSMASTER_CPP = 'rosmaster_cpp'
+
     # deprecated
     ZENMASTER = 'zenmaster'        
 
