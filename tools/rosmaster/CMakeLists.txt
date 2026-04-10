@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   xmlrpcpp
 )
 find_package(Threads REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 catkin_package(
   INCLUDE_DIRS include
@@ -31,10 +32,12 @@ include_directories(SYSTEM
 add_library(${PROJECT_NAME}_lib
   src/cpp/names.cpp
   src/cpp/thread_pool.cpp
-  src/cpp/validators.cpp
   src/cpp/registrations.cpp
   src/cpp/param_server.cpp
   src/cpp/utilities.cpp
+  src/cpp/validators.cpp
+  src/cpp/master_handler.cpp
+  src/cpp/master.cpp
 )
 target_link_libraries(${PROJECT_NAME}_lib
   ${catkin_LIBRARIES}
@@ -42,13 +45,22 @@ target_link_libraries(${PROJECT_NAME}_lib
 )
 
 
+add_executable(rosmaster_cpp src/cpp/main.cpp)
+target_link_libraries(rosmaster_cpp
+  ${PROJECT_NAME}_lib
+  ${catkin_LIBRARIES}
+  Threads::Threads
+  yaml-cpp
+)
+
 #############
 ## Install ##
 #############
 
-install(TARGETS ${PROJECT_NAME}_lib
+install(TARGETS ${PROJECT_NAME}_lib rosmaster_cpp
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
 install(DIRECTORY include/${PROJECT_NAME}/
