@@ -99,6 +99,18 @@ def create_master_process(run_id, type_, ros_root, port, num_workers=NUM_WORKERS
             args += ['-t', str(timeout)]
         if master_logger_level:
             args += ['--master-logger-level', str(master_logger_level)]
+    elif type_ == Master.ROSMASTER_CPP:
+        package = 'rosmaster'
+        # Resolve full path to the C++ binary via rospkg
+        import roslib.packages
+        matches = roslib.packages.find_node(package, type_)
+        if not matches:
+            raise RLException("Cannot locate C++ master binary [%s] in package [%s]" % (type_, package))
+        args = [matches[0], '--core', '-p', str(port), '-w', str(num_workers)]
+        if timeout is not None:
+            args += ['-t', str(timeout)]
+        if master_logger_level:
+            args += ['--master-logger-level', str(master_logger_level)]
     else:
         raise RLException("unknown master typ_: %s"%type_)
 
