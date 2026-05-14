@@ -45,7 +45,7 @@ std::string validNameResolve(const std::string& param_name, const std::string& p
   {
     throw ParameterInvalid("ERROR: parameter [" + param_name + "] must be a non-empty string");
   }
-  if (param_value.find(':') != std::string::npos || param_value.find(' ') != std::string::npos)
+  if (param_value.find_first_of(": ") != std::string::npos)
   {
     throw ParameterInvalid("ERROR: parameter [" + param_name + "] contains illegal chars");
   }
@@ -59,7 +59,7 @@ std::string validNameUnresolved(const std::string& param_name, const std::string
   {
     throw ParameterInvalid("ERROR: parameter [" + param_name + "] must be a non-empty string");
   }
-  if (param_value.find(':') != std::string::npos || param_value.find(' ') != std::string::npos)
+  if (param_value.find_first_of(": ") != std::string::npos)
   {
     throw ParameterInvalid("ERROR: parameter [" + param_name + "] contains illegal chars");
   }

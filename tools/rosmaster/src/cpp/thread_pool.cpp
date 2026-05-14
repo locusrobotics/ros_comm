@@ -40,6 +40,7 @@ namespace rosmaster
 
 MarkedThreadPool::MarkedThreadPool(int num_threads)
 {
+  threads_.reserve(num_threads);
   for (int i = 0; i < num_threads; ++i)
   {
     threads_.emplace_back(&MarkedThreadPool::workerLoop, this);
@@ -68,12 +69,14 @@ bool MarkedThreadPool::getNextTaskLocked(Task& out)
 {
   for (auto it = tasks_.begin(); it != tasks_.end(); ++it)
   {
+    // Prevent running tasks with the same non-empty marker concurrently
     if (it->marker.empty() || active_markers_.find(it->marker) == active_markers_.end())
     {
       out = std::move(*it);
-      tasks_.erase(it);
+      it = tasks_.erase(it);
       if (!out.marker.empty())
       {
+        // Flag this marker as being active
         active_markers_.insert(out.marker);
       }
       return true;
