@@ -88,7 +88,61 @@ def _is_use_tcp_keepalive():
         m = rospy.core.xmlrpcapi(rosgraph.get_master_uri())
         code, msg, val = m.getParam(rospy.names.get_caller_id(), _PARAM_TCP_KEEPALIVE)
         _use_tcp_keepalive = val if code == 1 else True
-        return _use_tcp_keepalive 
+        return _use_tcp_keepalive
+
+_PARAM_TCP_RECONNECT_MAX_BACKOFF = '/tcp_reconnect_max_backoff_sec'
+_PARAM_TCP_RECONNECT_CONNECT_TIMEOUT = '/tcp_reconnect_connect_timeout_sec'
+
+_reconnect_config = None
+_reconnect_config_lock = threading.Lock()
+
+def _get_reconnect_config():
+    """
+    Get reconnect backoff configuration from ROS parameters or defaults.
+
+    ROS Parameters (all optional):
+    - /tcp_reconnect_max_backoff_sec: maximum wait between reconnect attempts (default 30.0)
+    - /tcp_reconnect_connect_timeout_sec: timeout for each connection attempt (default 30.0)
+
+    Connection attempt time always counts against the sleep budget.
+    """
+    global _reconnect_config
+    if _reconnect_config is not None:
+        return _reconnect_config
+
+    with _reconnect_config_lock:
+        if _reconnect_config is not None:
+            return _reconnect_config
+
+        config = {
+            'max_backoff': 30.0,
+            'connect_timeout': 30.0,
+        }
+
+        try:
+            # in order to prevent circular dependencies, this does not use the
+            # builtin libraries for interacting with the parameter server
+            m = rospy.core.xmlrpcapi(rosgraph.get_master_uri())
+
+            code, msg, val = m.getParam(rospy.names.get_caller_id(), _PARAM_TCP_RECONNECT_MAX_BACKOFF)
+            if code == 1:
+                try:
+                    config['max_backoff'] = float(val)
+                except (ValueError, TypeError):
+                    pass
+
+            code, msg, val = m.getParam(rospy.names.get_caller_id(), _PARAM_TCP_RECONNECT_CONNECT_TIMEOUT)
+            if code == 1:
+                try:
+                    config['connect_timeout'] = float(val)
+                except (ValueError, TypeError):
+                    pass
+        except Exception:
+            # If parameter server is unavailable, use defaults
+            pass
+
+        _reconnect_config = config
+        return _reconnect_config
 
 def recv_buff(sock, b, buff_size):
     """
@@ -448,7 +502,12 @@ class TCPROSTransport(Transport):
         self.endpoint_id = 'unknown'
         self.callerid_pub = 'unknown'
         self.dest_address = None # for reconnection
-        
+
+        # Configurable reconnect backoff parameters (initialized from ROS parameters or defaults)
+        reconnect_cfg = _get_reconnect_config()
+        self.reconnect_max_backoff_sec = reconnect_cfg['max_backoff']  # maximum wait between reconnect attempts
+        self.reconnect_connect_timeout_sec = reconnect_cfg['connect_timeout']  # timeout for each connection attempt
+
         if python3 == 0: # Python 2.x
             self.read_buff = StringIO()
             self.write_buff = StringIO()
@@ -774,21 +833,28 @@ class TCPROSTransport(Transport):
 
         interval = 0.5 # seconds
         while self.socket is None and not self.done and not rospy.is_shutdown():
+            connect_start = time.time()
             try:
                 # set a timeout so that we can continue polling for
-                # exit.  30. is a bit high, but I'm concerned about
-                # embedded platforms.  To do this properly, we'd have
-                # to move to non-blocking routines.
-                self.connect(self.dest_address[0], self.dest_address[1], self.endpoint_id, timeout=30.)
+                # exit. Use configurable timeout (default 30s).
+                # To do this properly, we'd have to move to non-blocking routines.
+                self.connect(self.dest_address[0], self.dest_address[1], self.endpoint_id, timeout=self.reconnect_connect_timeout_sec)
             except TransportInitError:
                 self.socket = None
-                
-            if self.socket is None:
-                if interval < 30.:
-                    # exponential backoff (maximum 32 seconds)
-                    interval = interval * 2
+            connect_elapsed = time.time() - connect_start
 
-                time.sleep(interval)
+            if self.socket is None:
+                if interval < self.reconnect_max_backoff_sec:
+                    # exponential backoff (capped at configurable max)
+                    interval = interval * 2
+                    if interval > self.reconnect_max_backoff_sec:
+                        interval = self.reconnect_max_backoff_sec
+
+                # Connection attempt time always counts against sleep budget
+                sleep_time = max(0.0, interval - connect_elapsed)
+
+                if sleep_time > 0:
+                    time.sleep(sleep_time)
 
     def _reset_socket_for_reconnect(self):
         """Best-effort socket teardown while keeping transport alive for reconnect."""
