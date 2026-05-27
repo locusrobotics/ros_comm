@@ -790,6 +790,20 @@ class TCPROSTransport(Transport):
 
                 time.sleep(interval)
 
+    def _reset_socket_for_reconnect(self):
+        """Best-effort socket teardown while keeping transport alive for reconnect."""
+        try:
+            if self.socket is not None:
+                try:
+                    self.socket.shutdown(socket.SHUT_RDWR)
+                except:
+                    pass
+                finally:
+                    self.socket.close()
+        except:
+            pass
+        self.socket = None
+
     def receive_loop(self, msgs_callback):
         """
         Receive messages until shutdown
@@ -805,20 +819,25 @@ class TCPROSTransport(Transport):
                         msgs = self.receive_once()
                         if not self.done and not is_shutdown():
                             msgs_callback(msgs, self)
+                    else:
+                        self._reconnect()
 
                 except TransportTerminated as e:
                     logdebug("[%s] failed to receive incoming message : %s" % (self.name, str(e)))
                     rospydebug("[%s] failed to receive incoming message: %s" % (self.name, traceback.format_exc()))
-                    break
+                    # Treat hard transport termination the same as other transient
+                    # transport failures so subscribers can auto-reconnect.
+                    self._reset_socket_for_reconnect()
+                    continue
 
                 except TransportException as e:
-                    # A transport exception means the connection has been closed from the other side.
-                    # Clean up our side.
-                    self.close()
+                    # Set socket to None so we reconnect.
+                    self._reset_socket_for_reconnect()
+                    continue
 
                 except DeserializationError as e:
                     #TODO: how should we handle reconnect in this case?
-                    
+
                     logerr("[%s] error deserializing incoming request: %s"%(self.name, str(e)))
                     rospyerr("[%s] error deserializing incoming request: %s"%(self.name, traceback.format_exc()))
                 except:
