@@ -765,30 +765,45 @@ class TCPROSTransport(Transport):
             raise TransportException("receive_once[%s]: unexpected error %s"%(self.name, str(e)))
         return retval
         
-    def _reconnect(self):
-        # This reconnection logic is very hacky right now.  I need to
-        # rewrite the I/O core so that this is handled more centrally.
+    def _reconnect(self, max_attempts=4):
+        # Attempt to reconnect to the stored dest_address up to max_attempts
+        # times with exponential backoff. Returns True if reconnected, False
+        # if all attempts failed. This bounds the retry window so that a
+        # permanently-gone publisher does not stall the receive_loop indefinitely.
 
         if self.dest_address is None:
             raise ROSInitException("internal error with reconnection state: address not stored")
 
         interval = 0.5 # seconds
-        while self.socket is None and not self.done and not rospy.is_shutdown():
+        for attempt in range(max_attempts):
+            if self.done or rospy.is_shutdown():
+                return False
+            # Ensure any half-open socket is closed before retrying
+            if self.socket is not None:
+                try:
+                    self.socket.shutdown(socket.SHUT_RDWR)
+                except Exception:
+                    pass
+                try:
+                    self.socket.close()
+                except Exception:
+                    pass
+                self.socket = None
             try:
-                # set a timeout so that we can continue polling for
-                # exit.  30. is a bit high, but I'm concerned about
-                # embedded platforms.  To do this properly, we'd have
-                # to move to non-blocking routines.
                 self.connect(self.dest_address[0], self.dest_address[1], self.endpoint_id, timeout=30.)
             except TransportInitError:
                 self.socket = None
-                
-            if self.socket is None:
+            if self.socket is not None:
+                # Reset the read buffer so stale bytes from the old connection
+                # are not fed to the deserializer.
+                self.read_buff.seek(0)
+                self.read_buff.truncate(0)
+                return True
+            if attempt < max_attempts - 1:
                 if interval < 30.:
-                    # exponential backoff (maximum 32 seconds)
                     interval = interval * 2
-
                 time.sleep(interval)
+        return False
 
     def receive_loop(self, msgs_callback):
         """
@@ -809,7 +824,14 @@ class TCPROSTransport(Transport):
                 except TransportTerminated as e:
                     logdebug("[%s] failed to receive incoming message : %s" % (self.name, str(e)))
                     rospydebug("[%s] failed to receive incoming message: %s" % (self.name, traceback.format_exc()))
-                    break
+                    if self.dest_address is not None and not self.done and not is_shutdown():
+                        if not self._reconnect():
+                            # All reconnect attempts exhausted; exit loop so
+                            # the transport is closed and the upper layer can
+                            # re-subscribe via the ROS master.
+                            break
+                    else:
+                        break
 
                 except TransportException as e:
                     # A transport exception means the connection has been closed from the other side.
