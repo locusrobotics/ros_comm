@@ -32,6 +32,9 @@ add_library(${PROJECT_NAME}_lib
   src/cpp/names.cpp
   src/cpp/thread_pool.cpp
   src/cpp/validators.cpp
+  src/cpp/registrations.cpp
+  src/cpp/param_server.cpp
+  src/cpp/utilities.cpp
 )
 target_link_libraries(${PROJECT_NAME}_lib
   ${catkin_LIBRARIES}

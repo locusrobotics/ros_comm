@@ -31,34 +31,18 @@
 // POSSIBILITY OF SUCH DAMAGE.
 
 #include "rosmaster/names.h"
+#include "rosmaster/utilities.h"
 
 #include <algorithm>
 #include <regex>
 #include <sstream>
 #include <vector>
 
+
 namespace rosmaster
 {
 namespace names
 {
-
-namespace
-{
-std::vector<std::string> splitName(const std::string& name, char sep)
-{
-  std::vector<std::string> parts;
-  std::istringstream stream(name);
-  std::string part;
-  while (std::getline(stream, part, sep))
-  {
-    if (!part.empty())
-    {
-      parts.push_back(part);
-    }
-  }
-  return parts;
-}
-}  // anonymous namespace
 
 std::string getNamespace(const std::string& name)
 {
@@ -106,7 +90,7 @@ std::string canonicalizeName(const std::string& name)
   {
     return name;
   }
-  auto parts = splitName(name, SEP);
+  auto parts = splitString(name, SEP);
   std::string result;
   if (name[0] == SEP)
   {
