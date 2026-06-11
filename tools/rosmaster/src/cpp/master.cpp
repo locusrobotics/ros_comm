@@ -113,7 +113,7 @@ void Master::stop()
   }
 }
 
-std::string Master::uri() const
+const std::string& Master::uri() const
 {
   return uri_;
 }

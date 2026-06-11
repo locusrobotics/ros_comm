@@ -45,41 +45,79 @@ namespace rosmaster
 
 class ROSMasterHandler;
 
-/// Default master port
+/// Default TCP port for the ROS master XML-RPC server.
 constexpr int DEFAULT_MASTER_PORT = 11311;
 
-/// High-level master server wrapper.
-/// Creates an XmlRpcServer, registers the master API, and manages the server lifecycle.
+/**
+ * @brief High-level ROS master server wrapper.
+ *
+ * Owns and manages the XML-RPC server and master request handler lifecycle,
+ * including startup, shutdown, and periodic request processing.
+ */
 class Master
 {
 public:
+  /**
+   * @brief Construct a master instance.
+   * @param port TCP port to bind the XML-RPC server to.
+   * @param num_workers Number of worker threads used for asynchronous tasks.
+   */
   explicit Master(int port = DEFAULT_MASTER_PORT, int num_workers = 3);
+
+  /**
+   * @brief Destroy the master instance.
+   */
   ~Master();
 
-  /// Start the master. Blocks until server is ready.
+  /**
+   * @brief Start the master server.
+   *
+   * Initializes the XML-RPC server and handler, then blocks until the server
+   * is ready to accept requests.
+   */
   void start();
 
-  /// Check if the master is still running
+  /**
+   * @brief Check whether the master is currently running.
+   * @return True if the server is running, false otherwise.
+   */
   bool ok() const;
 
-  /// Stop the master
+  /**
+   * @brief Stop the master server and release resources.
+   */
   void stop();
 
-  /// Get the master's XML-RPC URI
-  std::string uri() const;
+  /**
+   * @brief Get the master's XML-RPC URI.
+   * @return Fully qualified XML-RPC URI for this master instance.
+   */
+  const std::string& uri() const;
 
-  /// Process requests (call in a loop from main thread)
+  /**
+   * @brief Process pending XML-RPC requests once.
+   *
+   * Intended to be called repeatedly from the main loop.
+   * @param timeout_ms Maximum time in milliseconds to wait for work.
+   */
   void spinOnce(double timeout_ms = 100.0);
 
-  /// Interrupt the current spinOnce so the main loop can re-check conditions
+  /**
+   * @brief Interrupt a currently blocked spinOnce call.
+   *
+   * Useful for waking the main loop so it can re-check shutdown or other
+   * control conditions.
+   */
   void interrupt();
 
 private:
   int port_;
   int num_workers_;
+
   std::string uri_;
 
   std::unique_ptr<XmlRpc::XmlRpcServer> server_;
+
   std::unique_ptr<ROSMasterHandler> handler_;
 };
 

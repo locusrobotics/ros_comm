@@ -56,14 +56,18 @@ namespace
 
 LogLevel g_log_level = LogLevel::WARN;
 
-/// Lightweight XmlRpcServerMethod that delegates to a std::function
+/**
+ * @class MasterMethod
+ * @brief Lightweight XmlRpcServerMethod that delegates to a std::function
+ */
 class MasterMethod : public XmlRpc::XmlRpcServerMethod
 {
 public:
   using Handler = std::function<void(XmlRpc::XmlRpcValue&, XmlRpc::XmlRpcValue&)>;
 
   MasterMethod(const std::string& name, Handler handler, XmlRpc::XmlRpcServer* server)
-    : XmlRpcServerMethod(name, server), handler_(std::move(handler))
+    : XmlRpcServerMethod(name, server),
+      handler_(std::move(handler))
   {
   }
 
@@ -101,8 +105,11 @@ void setLogLevel(LogLevel level)
 
 // --- Static helpers ---
 
-void ROSMasterHandler::setResponse(XmlRpc::XmlRpcValue& result, int code, const std::string& msg,
-                                    const XmlRpc::XmlRpcValue& val)
+void ROSMasterHandler::setResponse(
+  XmlRpc::XmlRpcValue& result,
+  int code,
+  const std::string& msg,
+  const XmlRpc::XmlRpcValue& val)
 {
   result.setSize(3);
   result[0] = code;
@@ -110,8 +117,11 @@ void ROSMasterHandler::setResponse(XmlRpc::XmlRpcValue& result, int code, const 
   result[2] = val;
 }
 
-bool ROSMasterHandler::parseUri(const std::string& uri, std::string& host, int& port,
-                                 std::string& path)
+bool ROSMasterHandler::parseUri(
+  const std::string& uri,
+  std::string& host,
+  int& port,
+  std::string& path)
 {
   if (uri.substr(0, 7) != "http://")
   {
@@ -138,8 +148,11 @@ bool ROSMasterHandler::parseUri(const std::string& uri, std::string& host, int& 
   return !host.empty() && port > 0;
 }
 
-bool ROSMasterHandler::callNode(const std::string& uri, const std::string& method,
-                                 XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
+bool ROSMasterHandler::callNode(
+  const std::string& uri,
+  const std::string& method,
+  XmlRpc::XmlRpcValue& params,
+  XmlRpc::XmlRpcValue& result)
 {
   std::string host, path;
   int port = 0;
@@ -158,8 +171,11 @@ bool ROSMasterHandler::callNode(const std::string& uri, const std::string& metho
   }
 }
 
-bool ROSMasterHandler::validateCallerId(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result,
-                                         int expected_args, const XmlRpc::XmlRpcValue& error_val)
+bool ROSMasterHandler::validateCallerId(
+  XmlRpc::XmlRpcValue& params,
+  XmlRpc::XmlRpcValue& result,
+  int expected_args,
+  const XmlRpc::XmlRpcValue& error_val)
 {
   if (params.size() < 1)
   {
@@ -543,8 +559,7 @@ void ROSMasterHandler::handleSubscribeParam(XmlRpc::XmlRpcValue& params,
   }
 }
 
-void ROSMasterHandler::handleUnsubscribeParam(XmlRpc::XmlRpcValue& params,
-                                                XmlRpc::XmlRpcValue& result)
+void ROSMasterHandler::handleUnsubscribeParam(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
 {
   if (!validateCallerId(params, result, 3, XmlRpc::XmlRpcValue(0)))
   {
@@ -595,8 +610,7 @@ void ROSMasterHandler::handleHasParam(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRp
   }
 }
 
-void ROSMasterHandler::handleGetParamNames(XmlRpc::XmlRpcValue& params,
-                                             XmlRpc::XmlRpcValue& result)
+void ROSMasterHandler::handleGetParamNames(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
 {
   if (!validateCallerId(params, result, 1, XmlRpc::XmlRpcValue()))
   {
@@ -615,8 +629,7 @@ void ROSMasterHandler::handleGetParamNames(XmlRpc::XmlRpcValue& params,
 
 // --- Service methods ---
 
-void ROSMasterHandler::handleRegisterService(XmlRpc::XmlRpcValue& params,
-                                               XmlRpc::XmlRpcValue& result)
+void ROSMasterHandler::handleRegisterService(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
 {
   if (!validateCallerId(params, result, 4, XmlRpc::XmlRpcValue(0)))
   {
@@ -648,8 +661,7 @@ void ROSMasterHandler::handleRegisterService(XmlRpc::XmlRpcValue& params,
   }
 }
 
-void ROSMasterHandler::handleLookupService(XmlRpc::XmlRpcValue& params,
-                                             XmlRpc::XmlRpcValue& result)
+void ROSMasterHandler::handleLookupService(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
 {
   if (!validateCallerId(params, result, 2, XmlRpc::XmlRpcValue("")))
   {
@@ -683,8 +695,7 @@ void ROSMasterHandler::handleLookupService(XmlRpc::XmlRpcValue& params,
   }
 }
 
-void ROSMasterHandler::handleUnregisterService(XmlRpc::XmlRpcValue& params,
-                                                 XmlRpc::XmlRpcValue& result)
+void ROSMasterHandler::handleUnregisterService(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
 {
   if (!validateCallerId(params, result, 3, XmlRpc::XmlRpcValue(0)))
   {
@@ -716,8 +727,7 @@ void ROSMasterHandler::handleUnregisterService(XmlRpc::XmlRpcValue& params,
 
 // --- Pub/Sub methods ---
 
-void ROSMasterHandler::handleRegisterSubscriber(XmlRpc::XmlRpcValue& params,
-                                                  XmlRpc::XmlRpcValue& result)
+void ROSMasterHandler::handleRegisterSubscriber(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
 {
   XmlRpc::XmlRpcValue empty_array;
   empty_array.setSize(0);
@@ -762,8 +772,7 @@ void ROSMasterHandler::handleRegisterSubscriber(XmlRpc::XmlRpcValue& params,
   }
 }
 
-void ROSMasterHandler::handleUnregisterSubscriber(XmlRpc::XmlRpcValue& params,
-                                                    XmlRpc::XmlRpcValue& result)
+void ROSMasterHandler::handleUnregisterSubscriber(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
 {
   if (!validateCallerId(params, result, 3, XmlRpc::XmlRpcValue(0)))
   {
@@ -793,8 +802,7 @@ void ROSMasterHandler::handleUnregisterSubscriber(XmlRpc::XmlRpcValue& params,
   }
 }
 
-void ROSMasterHandler::handleRegisterPublisher(XmlRpc::XmlRpcValue& params,
-                                                 XmlRpc::XmlRpcValue& result)
+void ROSMasterHandler::handleRegisterPublisher(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
 {
   XmlRpc::XmlRpcValue empty_array;
   empty_array.setSize(0);
@@ -844,8 +852,7 @@ void ROSMasterHandler::handleRegisterPublisher(XmlRpc::XmlRpcValue& params,
   }
 }
 
-void ROSMasterHandler::handleUnregisterPublisher(XmlRpc::XmlRpcValue& params,
-                                                   XmlRpc::XmlRpcValue& result)
+void ROSMasterHandler::handleUnregisterPublisher(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
 {
   if (!validateCallerId(params, result, 3, XmlRpc::XmlRpcValue(0)))
   {
@@ -918,8 +925,7 @@ void ROSMasterHandler::handleLookupNode(XmlRpc::XmlRpcValue& params, XmlRpc::Xml
   }
 }
 
-void ROSMasterHandler::handleGetPublishedTopics(XmlRpc::XmlRpcValue& params,
-                                                  XmlRpc::XmlRpcValue& result)
+void ROSMasterHandler::handleGetPublishedTopics(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
 {
   XmlRpc::XmlRpcValue empty_array;
   empty_array.setSize(0);
@@ -973,8 +979,7 @@ void ROSMasterHandler::handleGetPublishedTopics(XmlRpc::XmlRpcValue& params,
   }
 }
 
-void ROSMasterHandler::handleGetTopicTypes(XmlRpc::XmlRpcValue& params,
-                                             XmlRpc::XmlRpcValue& result)
+void ROSMasterHandler::handleGetTopicTypes(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
 {
   XmlRpc::XmlRpcValue empty_array;
   empty_array.setSize(0);
@@ -1003,8 +1008,7 @@ void ROSMasterHandler::handleGetTopicTypes(XmlRpc::XmlRpcValue& params,
   setResponse(result, 1, "current system state", types_val);
 }
 
-void ROSMasterHandler::handleGetSystemState(XmlRpc::XmlRpcValue& params,
-                                              XmlRpc::XmlRpcValue& result)
+void ROSMasterHandler::handleGetSystemState(XmlRpc::XmlRpcValue& params, XmlRpc::XmlRpcValue& result)
 {
   XmlRpc::XmlRpcValue empty_state;
   empty_state.setSize(3);

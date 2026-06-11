@@ -30,20 +30,19 @@ include_directories(SYSTEM
 )
 
 add_library(${PROJECT_NAME}_lib
+  src/cpp/master.cpp
+  src/cpp/master_handler.cpp
   src/cpp/names.cpp
-  src/cpp/thread_pool.cpp
-  src/cpp/registrations.cpp
   src/cpp/param_server.cpp
+  src/cpp/registrations.cpp
+  src/cpp/thread_pool.cpp
   src/cpp/utilities.cpp
   src/cpp/validators.cpp
-  src/cpp/master_handler.cpp
-  src/cpp/master.cpp
 )
 target_link_libraries(${PROJECT_NAME}_lib
   ${catkin_LIBRARIES}
   Threads::Threads
 )
-
 
 add_executable(rosmaster_cpp src/cpp/main.cpp)
 target_link_libraries(rosmaster_cpp
