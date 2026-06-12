@@ -38,7 +38,9 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include <cctype>
 #include <csignal>
+#include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <string>
@@ -48,14 +50,17 @@ namespace
 volatile std::sig_atomic_t g_shutdown_requested = 0;
 rosmaster::Master* g_master = nullptr;
 
+void safe_tolower(std::string& str)
+{
+  for (auto& c : str)
+  {
+    c = static_cast<char>(std::tolower(static_cast<unsigned char>(c)));
+  }
+}
+
 void signalHandler(int /*signal*/)
 {
   g_shutdown_requested = 1;
-  // Wake the server out of its poll() so the main loop can exit promptly
-  if (g_master)
-  {
-    g_master->interrupt();
-  }
 }
 
 void printUsage(const char* prog)
@@ -90,11 +95,7 @@ bool readLogLevelFromConfig(rosmaster::LogLevel& level)
     }
 
     std::string level_str = rosmaster_logger["level"].as<std::string>();
-    // Normalize to lowercase
-    for (auto& c : level_str)
-    {
-      c = std::tolower(c);
-    }
+    safe_tolower(level_str);
 
     if (level_str == "debug")
       level = rosmaster::LogLevel::DEBUG;
@@ -176,6 +177,8 @@ int main(int argc, char** argv)
     else if (arg == "--master-logger-level" && i + 1 < argc)
     {
       std::string level_str = argv[++i];
+      safe_tolower(level_str);
+
       if (level_str == "debug")
         rosmaster::setLogLevel(rosmaster::LogLevel::DEBUG);
       else if (level_str == "info")
@@ -184,8 +187,10 @@ int main(int argc, char** argv)
         rosmaster::setLogLevel(rosmaster::LogLevel::WARN);
       else if (level_str == "error")
         rosmaster::setLogLevel(rosmaster::LogLevel::ERROR);
-      else if (level_str == "fatal")
+      else if (level_str == "critical" || level_str == "fatal")
         rosmaster::setLogLevel(rosmaster::LogLevel::FATAL);
+       else
+         std::cerr << "[WARN] [rosmaster]: --master-logger-level received unknown option '" << level_str << "'\n";
     }
     else if (arg == "-h" || arg == "--help")
     {

@@ -36,12 +36,66 @@
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
+#include <stdexcept>
 #include <sstream>
 
+#include <arpa/inet.h>
+#include <ifaddrs.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #include <unistd.h>
 
 namespace rosmaster
 {
+
+namespace
+{
+
+/**
+ * @brief Find a non-loopback local IPv4 address, mirroring rosgraph.network.get_local_address().
+ *
+ * Enumerates network interfaces via getifaddrs() and returns the first IPv4 address that is
+ * not on the loopback interface (127.x.x.x). Falls back to "127.0.0.1" if no such address
+ * exists (e.g. on a machine with only a loopback interface).
+ *
+ * @return Non-loopback IPv4 address string, or "127.0.0.1" as a last resort.
+ */
+std::string getLocalAddress()
+{
+  std::string fallback = "127.0.0.1";
+
+  struct ifaddrs* ifaddr = nullptr;
+  if (getifaddrs(&ifaddr) != 0 || ifaddr == nullptr)
+  {
+    return fallback;
+  }
+
+  std::string result;
+  for (struct ifaddrs* ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next)
+  {
+    if (ifa->ifa_addr == nullptr || ifa->ifa_addr->sa_family != AF_INET)
+    {
+      continue;
+    }
+    char buf[INET_ADDRSTRLEN] = {0};
+    auto* sin = reinterpret_cast<struct sockaddr_in*>(ifa->ifa_addr);
+    inet_ntop(AF_INET, &sin->sin_addr, buf, sizeof(buf));
+
+    // Skip loopback addresses (127.x.x.x)
+    if (std::strncmp(buf, "127.", 4) == 0)
+    {
+      continue;
+    }
+
+    result = buf;
+    break;
+  }
+
+  freeifaddrs(ifaddr);
+  return result.empty() ? fallback : result;
+}
+
+}  // anonymous namespace
 
 Master::Master(int port, int num_workers) : port_(port), num_workers_(num_workers)
 {
@@ -65,16 +119,10 @@ void Master::start()
 
   handler_ = std::make_unique<ROSMasterHandler>(server_.get(), num_workers_);
 
-  // Determine URI
-  char hostname[256];
-  if (gethostname(hostname, sizeof(hostname)) != 0)
-  {
-    strcpy(hostname, "localhost");
-  }
-
-  // Check ROS_IP / ROS_HOSTNAME environment variables
-  const char* ros_ip = std::getenv("ROS_IP");
+  // Determine URI: mirror rosgraph.network.get_host_name() logic.
+  // Priority: ROS_HOSTNAME > ROS_IP > gethostname() > non-loopback interface address.
   const char* ros_hostname = std::getenv("ROS_HOSTNAME");
+  const char* ros_ip = std::getenv("ROS_IP");
 
   std::string host;
   if (ros_hostname && ros_hostname[0])
@@ -87,7 +135,17 @@ void Master::start()
   }
   else
   {
-    host = hostname;
+    char hostname_buf[256] = {0};
+    if (gethostname(hostname_buf, sizeof(hostname_buf)) == 0)
+    {
+      host = hostname_buf;
+    }
+    // If gethostname() failed, returned empty, "localhost", or a loopback address,
+    // fall back to a non-loopback local interface address (matching Python behaviour).
+    if (host.empty() || host == "localhost" || host.substr(0, 4) == "127.")
+    {
+      host = getLocalAddress();
+    }
   }
 
   uri_ = "http://" + host + ":" + std::to_string(actual_port) + "/";
