@@ -61,6 +61,11 @@ void safe_tolower(std::string& str)
 void signalHandler(int /*signal*/)
 {
   g_shutdown_requested = 1;
+  // Wake the server out of its poll() so the main loop can exit promptly
+  if (g_master)
+  {
+    g_master->interrupt();
+  }
 }
 
 void printUsage(const char* prog)
