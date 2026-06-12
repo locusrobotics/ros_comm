@@ -180,7 +180,7 @@ void Master::spinOnce(double timeout_ms)
 {
   if (server_)
   {
-    server_->work(timeout_ms);
+    server_->work(timeout_ms / 1000.0);
   }
 }
 
