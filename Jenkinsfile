@@ -1,18 +1,18 @@
 #!/usr/bin/env groovy
-@Library('tailor-meta@0.2.14')_
+@Library('tailor-meta@0.1.27')_
 tailorTestPipeline(
   // Name of job that generated this test definition.
-  rosdistro_job: '/ci/rosdistro/release%2F25.2',
+  rosdistro_job: '/ci/rosdistro/release%2F25.1',
   // Distribution name
   rosdistro_name: 'ros1',
   // Release track to test branch against.
-  release_track: '25.2',
+  release_track: '25.1',
   // Release label to pull test images from.
-  release_label: '25.2-rc',
+  release_label: '25.1-rc',
   // OS distributions to test.
-  distributions: ['jammy', 'noble'],
+  distributions: ['jammy'],
   // Version of tailor_meta to build against
-  tailor_meta: '0.2.14',
+  tailor_meta: '0.1.27',
   // Master or release branch associated with this track
   source_branch: 'locus-noetic-devel',
   // Docker registry where test image is stored
