@@ -44,21 +44,25 @@ import subprocess
 class TopicCount(unittest.TestCase):
 
   def test_topic_count(self):
-    # Wait while the recorder creates a bag for us to examine
-    time.sleep(10.0)
+    bag_path = '/tmp/test_rosbag_record_one_publisher_two_topics.bag'
+    deadline = time.time() + 30.0
 
-    # Check the topic count returned by `rosbag info`
-    # We could probably do this through the rosbag Python API...
-    cmd = ['rosbag', 'info', 
-           '/tmp/test_rosbag_record_one_publisher_two_topics.bag',
-           '-y', '-k', 'topics']
-    p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    out,err = p.communicate()
     topic_count = 0
-    for l in out.decode().split('\n'):
-        f = l.strip().split(': ')
-        if len(f) == 2 and f[0] == '- topic':
-            topic_count += 1
+    while time.time() < deadline:
+      time.sleep(1.0)
+      cmd = ['rosbag', 'info', bag_path, '-y', '-k', 'topics']
+      p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      out, err = p.communicate()
+      if p.returncode != 0:
+        continue
+      count = sum(
+        1 for l in out.decode().split('\n')
+        if len(l.strip().split(': ')) == 2 and l.strip().split(': ')[0] == '- topic'
+      )
+      if count >= 2:
+        topic_count = count
+        break
+      topic_count = count
 
     self.assertEqual(topic_count, 2)
 
