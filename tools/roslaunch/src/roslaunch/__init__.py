@@ -204,6 +204,10 @@ def _get_optparse():
                       default=DEFAULT_TIMEOUT_SIGTERM, type=float,
                       help="the SIGTERM timeout used when killing nodes if SIGINT does not stop the node (in seconds).",
                       metavar="SIGTERM_TIMEOUT")
+    parser.add_option("--master-type",
+                      dest="master_type", default=None,
+                      choices=[Master.ROSMASTER, Master.ROSMASTER_CPP],
+                      help="override master type ('rosmaster' or 'rosmaster_cpp' for the C++ master)")
 
     return parser
     
@@ -343,7 +347,8 @@ def main(argv=sys.argv):
                     show_summary=not options.no_summary,
                     force_required=options.force_required,
                     sigint_timeout=options.sigint_timeout,
-                    sigterm_timeout=options.sigterm_timeout)
+                    sigterm_timeout=options.sigterm_timeout,
+                    master_type=options.master_type)
             p.start()
             p.spin()
 

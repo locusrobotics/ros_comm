@@ -34,6 +34,7 @@
 import os
 import sys
 import unittest
+import unittest.mock
     
 import rospkg
 import roslib.packages
@@ -87,8 +88,44 @@ class TestNodeprocess(unittest.TestCase):
         self.assertRaises(RLException, create_master_process, run_id, type, ros_root, port, sigterm_timeout=0)
         
         # TODO: have to think more as to the correct environment for the master process
-        
-        
+
+    def test_create_master_process_cpp(self):
+        from roslaunch.core import Master, RLException
+        from roslaunch.nodeprocess import create_master_process, LocalProcess
+
+        ros_root = '/ros/root'
+        port = 1234
+        run_id = 'foo'
+
+        # When the binary cannot be found, RLException should be raised
+        with unittest.mock.patch('roslib.packages.find_node', return_value=[]) as mock_find:
+            self.assertRaises(
+                RLException,
+                create_master_process, run_id, Master.ROSMASTER_CPP, ros_root, port
+            )
+            mock_find.assert_called_once_with('rosmaster', Master.ROSMASTER_CPP)
+
+        fake_binary = '/opt/locusrobotics/hotdog/dev/ros1/lib/rosmaster_cpp/rosmaster_cpp'
+        with unittest.mock.patch('roslib.packages.find_node', return_value=[fake_binary]):
+            p = create_master_process(run_id, Master.ROSMASTER_CPP, ros_root, port)
+            self.assertIsInstance(p, LocalProcess)
+            self.assertEqual(p.args[0], fake_binary)
+            self.assertIn('--core', p.args)
+            idx = p.args.index('-p')
+            self.assertEqual(p.args[idx + 1], str(port))
+            self.assertEqual(p.package, 'rosmaster')
+
+        # timeout and master_logger_level args are forwarded
+        with unittest.mock.patch('roslib.packages.find_node', return_value=[fake_binary]):
+            p = create_master_process(run_id, Master.ROSMASTER_CPP, ros_root, port, timeout=5.0)
+            self.assertIn('-t', p.args)
+            self.assertIn('5.0', p.args)
+
+            p = create_master_process(run_id, Master.ROSMASTER_CPP, ros_root, port,
+                                      master_logger_level='debug')
+            self.assertIn('--master-logger-level', p.args)
+            self.assertIn('debug', p.args)
+
     def test_create_node_process(self):
         from roslaunch.core import Node, Machine, RLException
         from roslaunch.node_args import NodeParamsException

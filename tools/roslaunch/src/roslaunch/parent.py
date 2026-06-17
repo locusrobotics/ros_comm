@@ -75,7 +75,8 @@ class ROSLaunchParent(object):
 
     def __init__(self, run_id, roslaunch_files, is_core=False, port=None, local_only=False, process_listeners=None,
             verbose=False, force_screen=False, force_log=False, is_rostest=False, roslaunch_strs=None, num_workers=NUM_WORKERS, timeout=None, master_logger_level=False, show_summary=True, force_required=False,
-            sigint_timeout=DEFAULT_TIMEOUT_SIGINT, sigterm_timeout=DEFAULT_TIMEOUT_SIGTERM):
+            sigint_timeout=DEFAULT_TIMEOUT_SIGINT, sigterm_timeout=DEFAULT_TIMEOUT_SIGTERM,
+            master_type=None):
         """
         @param run_id: UUID of roslaunch session
         @type  run_id: str
@@ -146,6 +147,7 @@ class ROSLaunchParent(object):
         self.force_screen = force_screen
         self.force_log = force_log
         self.force_required = force_required
+        self.master_type = master_type
         
         # flag to prevent multiple shutdown attempts
         self._shutting_down = False
@@ -155,6 +157,9 @@ class ROSLaunchParent(object):
     def _load_config(self):
         self.config = roslaunch.config.load_config_default(self.roslaunch_files, self.port,
                 roslaunch_strs=self.roslaunch_strs, verbose=self.verbose)
+
+        if self.master_type:
+            self.config.master.type = self.master_type
 
         # #2370 (I really want to move this logic outside of parent)
         if self.force_screen:

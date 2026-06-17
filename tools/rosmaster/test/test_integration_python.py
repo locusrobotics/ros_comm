@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Software License Agreement (BSD License)
 #
-# Copyright (c) 2008, Willow Garage, Inc.
+# Copyright (c) 2025, Locus Robotics
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -14,7 +14,7 @@
 #    copyright notice, this list of conditions and the following
 #    disclaimer in the documentation and/or other materials provided
 #    with the distribution.
-#  * Neither the name of Willow Garage, Inc. nor the names of its
+#  * Neither the name of Locus Robotics nor the names of its
 #    contributors may be used to endorse or promote products derived
 #    from this software without specific prior written permission.
 #
@@ -30,41 +30,69 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
-#
 
-import roslib
-roslib.load_manifest('rosbag')
+"""Integration tests that exercise the Python rosmaster via XML-RPC."""
 
-import unittest
-import rostest
+import os
+import socket
 import sys
-import time
-import subprocess
+import unittest
 
-class TopicCount(unittest.TestCase):
+# Ensure the test directory is on sys.path so master_integration can be found
+# regardless of the working directory (e.g., when run by nose in CI).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-  def test_topic_count(self):
-    bag_path = '/tmp/test_rosbag_record_one_publisher_two_topics.bag'
-    deadline = time.time() + 30.0
+from master_integration import (
+    CoreAPIMixin,
+    MasterProcess,
+    ParamServerMixin,
+    RegistrationsMixin,
+    find_free_port,
+    find_python_master,
+)
 
-    topic_count = 0
-    while time.time() < deadline:
-      time.sleep(1.0)
-      cmd = ['rosbag', 'info', bag_path, '-y', '-k', 'topics']
-      p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-      out, err = p.communicate()
-      if p.returncode != 0:
-        continue
-      count = sum(
-        1 for l in out.decode().split('\n')
-        if len(l.strip().split(': ')) == 2 and l.strip().split(': ')[0] == '- topic'
-      )
-      if count >= 2:
-        topic_count = count
-        break
-      topic_count = count
+_master = None
+_saved_timeout = None
 
-    self.assertEqual(topic_count, 2)
+
+def setup_module():
+    global _master, _saved_timeout
+    _saved_timeout = socket.getdefaulttimeout()
+    socket.setdefaulttimeout(5.0)
+    _master = MasterProcess(find_python_master(), find_free_port())
+
+
+def teardown_module():
+    global _master, _saved_timeout
+    if _master:
+        _master.stop()
+        _master = None
+    socket.setdefaulttimeout(_saved_timeout)
+
+
+# Aliases for unittest compatibility (e.g. when running via `python -m unittest`)
+setUpModule = setup_module
+tearDownModule = teardown_module
+
+
+class _Base(unittest.TestCase):
+    def setUp(self):
+        self.proxy = _master.proxy
+        self.master_port = _master.port
+        self.master_uri = _master.uri
+
+
+class TestPythonCoreAPI(_Base, CoreAPIMixin):
+    pass
+
+
+class TestPythonParamServer(_Base, ParamServerMixin):
+    pass
+
+
+class TestPythonRegistrations(_Base, RegistrationsMixin):
+    pass
+
 
 if __name__ == '__main__':
-  rostest.unitrun('test_rosbag', 'topic_count', TopicCount, sys.argv)
+    unittest.main()
