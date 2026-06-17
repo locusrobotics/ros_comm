@@ -60,7 +60,7 @@ import xmlrpc.client
 
 def find_free_port():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind(('', 0))
+        s.bind(('localhost', 0))
         return s.getsockname()[1]
 
 
@@ -211,7 +211,7 @@ def run_registration_benchmarks(binary, num_registrations, iterations=5):
 
     Simulates a multimaster_fkie sync burst: many registerPublisher,
     registerSubscriber, and registerService calls in rapid succession.
-    Returns dict of operation -> list of (total_ms, ops_per_sec).
+    Returns dict of operation -> list of elapsed milliseconds (floats).
     """
     results = {
         'registerPublisher': [],

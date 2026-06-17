@@ -60,7 +60,7 @@ import xmlrpc.client
 def find_free_port():
     """Bind to port 0 and let the OS assign a free port."""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind(('', 0))
+        s.bind(('localhost', 0))
         return s.getsockname()[1]
 
 
@@ -183,6 +183,7 @@ class ParamServerMixin:
         self.assertTrue(val)
         self.proxy.setParam('/test', key, False)
         code, _, val = self.proxy.getParam('/test', key)
+        self.assertEqual(code, 1)
         self.assertFalse(val)
 
     def test_set_get_list(self):
@@ -302,6 +303,7 @@ class ParamServerMixin:
 
         self.proxy.setParam('/test', key, 'now_a_string')
         code, _, val = self.proxy.getParam('/test', key)
+        self.assertEqual(code, 1)
         self.assertEqual(val, 'now_a_string')
 
     def test_param_overwrite_dict_with_scalar(self):
@@ -310,6 +312,7 @@ class ParamServerMixin:
         self.proxy.setParam('/test', key, {'a': 1, 'b': 2})
         self.proxy.setParam('/test', key, 99)
         code, _, val = self.proxy.getParam('/test', key)
+        self.assertEqual(code, 1)
         self.assertEqual(val, 99)
 
     # -- subscribe / unsubscribe --------------------------------------------

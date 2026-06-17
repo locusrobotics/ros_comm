@@ -55,6 +55,7 @@ socket.setdefaulttimeout(5.0)
 
 _master = None
 _skip_reason = None
+_saved_timeout = None
 
 try:
     _cpp_binary = find_cpp_master()
@@ -63,18 +64,27 @@ except RuntimeError as e:
     _skip_reason = str(e)
 
 
-def setUpModule():
-    global _master
+def setup_module():
+    global _master, _saved_timeout
     if _cpp_binary is None:
         raise unittest.SkipTest(_skip_reason)
+    _saved_timeout = socket.getdefaulttimeout()
+    socket.setdefaulttimeout(5.0)
     _master = MasterProcess(_cpp_binary, find_free_port())
 
 
-def tearDownModule():
-    global _master
+def teardown_module():
+    global _master, _saved_timeout
     if _master:
         _master.stop()
         _master = None
+    if _saved_timeout is not None:
+        socket.setdefaulttimeout(_saved_timeout)
+
+
+# Aliases for unittest compatibility (e.g. when running via `python -m unittest`)
+setUpModule = setup_module
+tearDownModule = teardown_module
 
 
 class _Base(unittest.TestCase):

@@ -51,21 +51,28 @@ from master_integration import (
     find_python_master,
 )
 
-socket.setdefaulttimeout(5.0)
-
 _master = None
+_saved_timeout = None
 
 
-def setUpModule():
-    global _master
+def setup_module():
+    global _master, _saved_timeout
+    _saved_timeout = socket.getdefaulttimeout()
+    socket.setdefaulttimeout(5.0)
     _master = MasterProcess(find_python_master(), find_free_port())
 
 
-def tearDownModule():
-    global _master
+def teardown_module():
+    global _master, _saved_timeout
     if _master:
         _master.stop()
         _master = None
+    socket.setdefaulttimeout(_saved_timeout)
+
+
+# Aliases for unittest compatibility (e.g. when running via `python -m unittest`)
+setUpModule = setup_module
+tearDownModule = teardown_module
 
 
 class _Base(unittest.TestCase):
