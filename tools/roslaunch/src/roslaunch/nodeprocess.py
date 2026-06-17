@@ -101,7 +101,7 @@ def create_master_process(run_id, type_, ros_root, port, num_workers=NUM_WORKERS
             args += ['--master-logger-level', str(master_logger_level)]
     elif type_ == Master.ROSMASTER_CPP:
         package = 'rosmaster'
-        # Resolve full path to the C++ binary via rospkg
+        # Resolve full path to the C++ binary via roslib.packages.find_node
         import roslib.packages
         matches = roslib.packages.find_node(package, type_)
         if not matches:
