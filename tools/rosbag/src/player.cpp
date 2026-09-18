@@ -44,6 +44,7 @@
 
 #include "std_msgs/Bool.h"
 #include "rosgraph_msgs/Clock.h"
+#include <tf2_msgs/TFMessage.h>
 
 #include <ctime>
 #include <set>
@@ -61,6 +62,11 @@ bool isLatching(const ConnectionInfo* c)
 {
     ros::M_string::const_iterator header_iter = c->header->find("latching");
     return (header_iter != c->header->end() && header_iter->second == "1");
+}
+
+bool isLatchedTFMessage(const ConnectionInfo* c)
+{
+    return isLatching(c) && c->md5sum == ros::message_traits::MD5Sum<tf2_msgs::TFMessage>::value();
 }
 
 ros::AdvertiseOptions createAdvertiseOptions(const ConnectionInfo* c, uint32_t queue_size, const std::string& prefix) {
@@ -281,10 +287,7 @@ void Player::publish() {
             }
 
             if (last_message != latch_view.end()) {
-                const auto publisher = publishers_.find(callerid + topic);
-                ROS_ASSERT(publisher != publishers_.end());
-
-                publisher->second.publish(*last_message);
+                publishLatchedMessage(topic, callerid, *last_message);
             }
         }
     } else if (options_.wait_for_subscribers) {
@@ -484,11 +487,12 @@ void Player::waitForSubscribers() const
     bool all_topics_subscribed = false;
     std::cout << "Waiting for subscribers." << std::endl;
     while (!all_topics_subscribed) {
-        all_topics_subscribed = std::all_of(
-            std::begin(publishers_), std::end(publishers_),
-            [](const PublisherMap::value_type& pub) {
-                return pub.second.getNumSubscribers() > 0;
-            });
+        auto has_subscribers = [](const PublisherMap::value_type& pub) {
+            return pub.second.getNumSubscribers() > 0;
+        };
+        all_topics_subscribed =
+            std::all_of(std::begin(publishers_), std::end(publishers_), has_subscribers) &&
+            std::all_of(std::begin(tf_static_publishers_), std::end(tf_static_publishers_), has_subscribers);
         ros::WallDuration(0.1).sleep();
     }
     std::cout << "Finished waiting for subscribers." << std::endl;
@@ -496,6 +500,21 @@ void Player::waitForSubscribers() const
 
 void Player::advertise(const ConnectionInfo* c)
 {
+    // Special handling for latched TF messages (/tf_static)
+    if (isLatchedTFMessage(c))
+    {
+        // One shared, latched publisher per topic: all recorded publishers' messages get
+        // merged into it by publishAggregatedTfStatic() rather than replayed individually.
+        if (tf_static_publishers_.find(c->topic) == tf_static_publishers_.end())
+        {
+            ros::AdvertiseOptions opts = createAdvertiseOptions(c, options_.queue_size, options_.prefix);
+            opts.latch = true;
+            tf_static_publishers_.insert(tf_static_publishers_.begin(),
+                pair<string, ros::Publisher>(c->topic, node_handle_.advertise(opts)));
+        }
+        return;
+    }
+
     ros::M_string::const_iterator header_iter = c->header->find("callerid");
     std::string callerid = (header_iter != c->header->end() ? header_iter->second : string(""));
 
@@ -512,6 +531,40 @@ void Player::advertise(const ConnectionInfo* c)
     }
 }
 
+void Player::publishLatchedMessage(const std::string& topic, const std::string& callerid, MessageInstance const& m)
+{
+    // If the requested message publication was for a latched TF publisher (/tf_static), thwn we need to publish the
+    // aggregated topic
+    PublisherMap::iterator tf_pub_iter = tf_static_publishers_.find(topic);
+    if (tf_pub_iter != tf_static_publishers_.end())
+    {
+        boost::shared_ptr<tf2_msgs::TFMessage const> tf_msg = m.instantiate<tf2_msgs::TFMessage>();
+        ROS_ASSERT(tf_msg);
+        publishAggregatedTfStatic(topic, callerid, *tf_msg);
+        return;
+    }
+
+    PublisherMap::iterator pub_iter = publishers_.find(callerid + topic);
+    ROS_ASSERT(pub_iter != publishers_.end());
+    pub_iter->second.publish(m);
+}
+
+void Player::publishAggregatedTfStatic(const std::string& topic, const std::string& callerid, const tf2_msgs::TFMessage& msg)
+{
+    // Update the latest message for this topic/caller ID (publisher) pair
+    tf_static_latch_state_[topic][callerid] = msg;
+
+    // Now build the aggregated latched TF (/tf_static) message with the transforms from all publishers
+    tf2_msgs::TFMessage aggregate;
+    for (const auto& entry : tf_static_latch_state_[topic])
+    {
+        const tf2_msgs::TFMessage& contribution = entry.second;
+        aggregate.transforms.insert(aggregate.transforms.end(), contribution.transforms.begin(), contribution.transforms.end());
+    }
+
+    tf_static_publishers_[topic].publish(aggregate);
+}
+
 void Player::doPublish(MessageInstance const& m) {
     string const& topic   = m.getTopic();
     ros::Time const& time = m.getTime();
@@ -523,18 +576,13 @@ void Player::doPublish(MessageInstance const& m) {
     time_publisher_.setHorizon(time);
     time_publisher_.setWCHorizon(horizon);
 
-    string callerid_topic = callerid + topic;
-
-    map<string, ros::Publisher>::iterator pub_iter = publishers_.find(callerid_topic);
-    ROS_ASSERT(pub_iter != publishers_.end());
-
     // Update subscribers.
     ros::spinOnce();
 
     // If immediate specified, play immediately
     if (options_.at_once) {
         time_publisher_.stepClock();
-        pub_iter->second.publish(m);
+        publishLatchedMessage(topic, callerid, m);
         printTime();
         return;
     }
@@ -548,7 +596,7 @@ void Player::doPublish(MessageInstance const& m) {
       time_translator_.shift(ros::Duration(shift.sec, shift.nsec));
       horizon += shift;
       time_publisher_.setWCHorizon(horizon);
-      (pub_iter->second).publish(m);
+      publishLatchedMessage(topic, callerid, m);
       printTime();
       return;
     }
@@ -605,7 +653,7 @@ void Player::doPublish(MessageInstance const& m) {
                     horizon += shift;
                     time_publisher_.setWCHorizon(horizon);
             
-                    (pub_iter->second).publish(m);
+                    publishLatchedMessage(topic, callerid, m);
 
                     printTime();
                     return;
@@ -649,7 +697,7 @@ void Player::doPublish(MessageInstance const& m) {
         ros::spinOnce();
     }
 
-    pub_iter->second.publish(m);
+    publishLatchedMessage(topic, callerid, m);
 }
 
 

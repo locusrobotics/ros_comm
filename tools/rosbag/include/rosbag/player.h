@@ -50,6 +50,7 @@
 #include <ros/ros.h>
 #include <ros/time.h>
 #include <std_srvs/SetBool.h>
+#include <tf2_msgs/TFMessage.h>
 
 #include "rosbag/bag.h"
 
@@ -187,6 +188,16 @@ private:
 
     void doPublish(rosbag::MessageInstance const& m);
 
+    //! Publish the latched message for a single (topic, callerid), routing latched tf2_msgs/TFMessage topics
+    //! (/tf_static) through the aggregated publisher
+    void publishLatchedMessage(const std::string& topic, const std::string& callerid, rosbag::MessageInstance const& m);
+
+    //! Merge a publisher's latest tf2_msgs/TFMessage into the aggregate for its topic, and (re-)publish the merged
+    //! result as the one latched message on that topic.
+    //!
+    //! For more detail, see RST-16743.
+    void publishAggregatedTfStatic(const std::string& topic, const std::string& callerid, const tf2_msgs::TFMessage& msg);
+
     void doKeepAlive();
 
     void printTime();
@@ -198,7 +209,8 @@ private:
     void waitForSubscribers() const;
 
 private:
-    typedef std::map<std::string, ros::Publisher> PublisherMap;
+    using PublisherMap = std::map<std::string, ros::Publisher>;
+    using CallerToTFMap = std::map<std::string, tf2_msgs::TFMessage>;
 
     PlayerOptions options_;
 
@@ -226,6 +238,10 @@ private:
 
     std::vector<boost::shared_ptr<Bag> >  bags_;
     PublisherMap publishers_;
+    PublisherMap tf_static_publishers_;
+
+    using CallerToTFMap = std::map<std::string, tf2_msgs::TFMessage>;
+    std::map<std::string, CallerToTFMap> tf_static_latch_state_;  // Key: topic name
 
     // Terminal
     bool    terminal_modified_;
