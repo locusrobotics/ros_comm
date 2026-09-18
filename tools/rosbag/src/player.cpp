@@ -66,7 +66,8 @@ bool isLatching(const ConnectionInfo* c)
 
 bool isLatchedTFMessage(const ConnectionInfo* c)
 {
-    return isLatching(c) && c->md5sum == ros::message_traits::MD5Sum<tf2_msgs::TFMessage>::value();
+    return isLatching(c) && c->topic == "/tf_static" &&
+      c->md5sum == ros::message_traits::MD5Sum<tf2_msgs::TFMessage>::value();
 }
 
 ros::AdvertiseOptions createAdvertiseOptions(const ConnectionInfo* c, uint32_t queue_size, const std::string& prefix) {
@@ -500,7 +501,7 @@ void Player::waitForSubscribers() const
 
 void Player::advertise(const ConnectionInfo* c)
 {
-    // Special handling for latched TF messages (/tf_static)
+    // Special handling for latched /tf_static messages
     if (isLatchedTFMessage(c))
     {
         // One shared, latched publisher per topic: all recorded publishers' messages get
@@ -533,7 +534,7 @@ void Player::advertise(const ConnectionInfo* c)
 
 void Player::publishLatchedMessage(const std::string& topic, const std::string& callerid, MessageInstance const& m)
 {
-    // If the requested message publication was for a latched TF publisher (/tf_static), thwn we need to publish the
+    // If the requested message publication was for a latched /tf_static publisher, then we need to publish the
     // aggregated topic
     PublisherMap::iterator tf_pub_iter = tf_static_publishers_.find(topic);
     if (tf_pub_iter != tf_static_publishers_.end())
@@ -554,7 +555,7 @@ void Player::publishAggregatedTfStatic(const std::string& topic, const std::stri
     // Update the latest message for this topic/caller ID (publisher) pair
     tf_static_latch_state_[topic][callerid] = msg;
 
-    // Now build the aggregated latched TF (/tf_static) message with the transforms from all publishers
+    // Now build the aggregated latched /tf_static message with the transforms from all publishers
     tf2_msgs::TFMessage aggregate;
     for (const auto& entry : tf_static_latch_state_[topic])
     {
