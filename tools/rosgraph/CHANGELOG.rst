@@ -7,91 +7,6 @@ Changelog for package rosgraph
 * Fixed ROSCONSOLE_FORMAT with microseconds (`#2370 <https://github.com/ros/ros_comm/issues/2370>`_)
 * Contributors: Martin Pecka
 
-1.16.0 (2023-02-15)
--------------------
-* Fix determining supported kernel version for HTTP 1.1 (`#2202 <https://github.com/ros/ros_comm/issues/2202>`_)
-* Contributors: Martin Pecka
-
-1.15.15 (2022-11-23)
---------------------
-* Move @jacobperron from maintainer to author (`#2302 <https://github.com/ros/ros_comm/issues/2302>`_)
-* Contributors: Shane Loretz
-
-1.15.14 (2022-01-06)
---------------------
-
-1.15.13 (2021-09-22)
---------------------
-
-1.15.12 (2021-09-21)
---------------------
-* Fix memory leak in rosgraph for kernel < 4.16 and Python 3 (`#2165 <https://github.com/ros/ros_comm/issues/2165>`_)
-* Contributors: Alexis Schad
-
-1.15.11 (2021-04-06)
---------------------
-
-1.15.10 (2021-03-18)
---------------------
-* Fix HTTP for kernel < 4.16 (`#2132 <https://github.com/ros/ros_comm/issues/2132>`_)
-* Contributors: Jesse Ikawa
-
-1.15.9 (2020-10-16)
--------------------
-* Update maintainers (`#2075 <https://github.com/ros/ros_comm/issues/2075>`_)
-* Fix spelling (`#2066 <https://github.com/ros/ros_comm/issues/2066>`_)
-* Contributors: Shane Loretz, tomoya
-
-1.15.8 (2020-07-23)
--------------------
-
-1.15.7 (2020-05-28)
--------------------
-
-1.15.6 (2020-05-21)
--------------------
-
-1.15.5 (2020-05-15)
--------------------
-
-1.15.4 (2020-03-19)
--------------------
-
-1.15.3 (2020-02-28)
--------------------
-
-1.15.2 (2020-02-25)
--------------------
-* add timestamp formatting for rosconsole (`#1892 <https://github.com/ros/ros_comm/issues/1892>`_)
-
-1.15.1 (2020-02-24)
--------------------
-* use setuptools instead of distutils (`#1870 <https://github.com/ros/ros_comm/issues/1870>`_)
-
-1.15.0 (2020-02-21)
--------------------
-
-1.14.4 (2020-02-20)
--------------------
-* add default ROS_MASTER_URI (`#1666 <https://github.com/ros/ros_comm/issues/1666>`_)
-* fix test which fails on Noetic (`#1891 <https://github.com/ros/ros_comm/issues/1891>`_)
-* bump CMake minimum version to avoid CMP0048 warning (`#1869 <https://github.com/ros/ros_comm/issues/1869>`_)
-* [Windows] Python 3 compatibility (`#1819 <https://github.com/ros/ros_comm/issues/1819>`_)
-* fix escape sequences in regular expressions (`#1837 <https://github.com/ros/ros_comm/issues/1837>`_)
-* fix RospyLogger findCaller arguments in Python 3.8 (`#1838 <https://github.com/ros/ros_comm/issues/1838>`_)
-* [Windows] make test code to be more portable (`#1726 <https://github.com/ros/ros_comm/issues/1726>`_)
-* fix Coverity forward null (`#1787 <https://github.com/ros/ros_comm/issues/1787>`_)
-* make log config from rosgraph optional (`#1797 <https://github.com/ros/ros_comm/issues/1797>`_)
-* use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/ros/ros_comm/issues/1792>`_)
-* add is_legal_remap() to rosgraph to make remap-detection more precise (`#1683 <https://github.com/ros/ros_comm/issues/1683>`_)
-* more Python 3 compatibility (`#1783 <https://github.com/ros/ros_comm/issues/1783>`_)
-* more Python 3 compatibility (`#1782 <https://github.com/ros/ros_comm/issues/1782>`_)
-* switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (`#1688 <https://github.com/ros/ros_comm/issues/1688>`_)
-* use urlparse for parsing the port, whick makes ipv6 possible (`#1698 <https://github.com/ros/ros_comm/issues/1698>`_)
-* fix paths (and regex for paths) comparison issues (`#1592 <https://github.com/ros/ros_comm/issues/1592>`_)
-* fix various test problems (`#1601 <https://github.com/ros/ros_comm/issues/1601>`_)
-* fix typos: awhile -> a while (`#1534 <https://github.com/ros/ros_comm/issues/1534>`_)
-
 1.16.0 (2022-02-23)
 -------------------
 * RST-3950: Add timeout to handshake (#30)
@@ -197,7 +112,88 @@ Changelog for package rosgraph
   * duplicate talker.py test node since rospy doesn't install the file
   * modify test to pass when rospy.get_name isn't available without a dependency declared on it
 * Fixed typos: awhile -> a while (#1534)
-* Contributors: Adrian Brzozowski, Christopher Wecht, Daniel Ingram, Daniel Wang, Dirk Thomas, Gary Servin, Hansruedi Patzen, Jacob Perron, James Xu, Jesse Ikawa, Martijn Buijs, Michael Johnson, Sean Yen, Shane Loretz, Tamaki Nishino, Tobias Pfeiffer, tomoya
+* Fix determining supported kernel version for HTTP 1.1 (`#2202 <https://github.com/ros/ros_comm/issues/2202>`_)
+* Contributors: Adrian Brzozowski, Christopher Wecht, Daniel Ingram, Daniel Wang, Dirk Thomas, Gary Servin, Hansruedi Patzen, Jacob Perron, James Xu, Jesse Ikawa, Martijn Buijs, Martin Pecka, Michael Johnson, Sean Yen, Shane Loretz, Tamaki Nishino, Tobias Pfeiffer, tomoya
+
+1.15.15 (2022-11-23)
+--------------------
+* Move @jacobperron from maintainer to author (`#2302 <https://github.com/ros/ros_comm/issues/2302>`_)
+* Contributors: Shane Loretz
+
+1.15.14 (2022-01-06)
+--------------------
+
+1.15.13 (2021-09-22)
+--------------------
+
+1.15.12 (2021-09-21)
+--------------------
+* Fix memory leak in rosgraph for kernel < 4.16 and Python 3 (`#2165 <https://github.com/ros/ros_comm/issues/2165>`_)
+* Contributors: Alexis Schad
+
+1.15.11 (2021-04-06)
+--------------------
+
+1.15.10 (2021-03-18)
+--------------------
+* Fix HTTP for kernel < 4.16 (`#2132 <https://github.com/ros/ros_comm/issues/2132>`_)
+* Contributors: Jesse Ikawa
+
+1.15.9 (2020-10-16)
+-------------------
+* Update maintainers (`#2075 <https://github.com/ros/ros_comm/issues/2075>`_)
+* Fix spelling (`#2066 <https://github.com/ros/ros_comm/issues/2066>`_)
+* Contributors: Shane Loretz, tomoya
+
+1.15.8 (2020-07-23)
+-------------------
+
+1.15.7 (2020-05-28)
+-------------------
+
+1.15.6 (2020-05-21)
+-------------------
+
+1.15.5 (2020-05-15)
+-------------------
+
+1.15.4 (2020-03-19)
+-------------------
+
+1.15.3 (2020-02-28)
+-------------------
+
+1.15.2 (2020-02-25)
+-------------------
+* add timestamp formatting for rosconsole (`#1892 <https://github.com/ros/ros_comm/issues/1892>`_)
+
+1.15.1 (2020-02-24)
+-------------------
+* use setuptools instead of distutils (`#1870 <https://github.com/ros/ros_comm/issues/1870>`_)
+
+1.15.0 (2020-02-21)
+-------------------
+
+1.14.4 (2020-02-20)
+-------------------
+* add default ROS_MASTER_URI (`#1666 <https://github.com/ros/ros_comm/issues/1666>`_)
+* fix test which fails on Noetic (`#1891 <https://github.com/ros/ros_comm/issues/1891>`_)
+* bump CMake minimum version to avoid CMP0048 warning (`#1869 <https://github.com/ros/ros_comm/issues/1869>`_)
+* [Windows] Python 3 compatibility (`#1819 <https://github.com/ros/ros_comm/issues/1819>`_)
+* fix escape sequences in regular expressions (`#1837 <https://github.com/ros/ros_comm/issues/1837>`_)
+* fix RospyLogger findCaller arguments in Python 3.8 (`#1838 <https://github.com/ros/ros_comm/issues/1838>`_)
+* [Windows] make test code to be more portable (`#1726 <https://github.com/ros/ros_comm/issues/1726>`_)
+* fix Coverity forward null (`#1787 <https://github.com/ros/ros_comm/issues/1787>`_)
+* make log config from rosgraph optional (`#1797 <https://github.com/ros/ros_comm/issues/1797>`_)
+* use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/ros/ros_comm/issues/1792>`_)
+* add is_legal_remap() to rosgraph to make remap-detection more precise (`#1683 <https://github.com/ros/ros_comm/issues/1683>`_)
+* more Python 3 compatibility (`#1783 <https://github.com/ros/ros_comm/issues/1783>`_)
+* more Python 3 compatibility (`#1782 <https://github.com/ros/ros_comm/issues/1782>`_)
+* switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (`#1688 <https://github.com/ros/ros_comm/issues/1688>`_)
+* use urlparse for parsing the port, whick makes ipv6 possible (`#1698 <https://github.com/ros/ros_comm/issues/1698>`_)
+* fix paths (and regex for paths) comparison issues (`#1592 <https://github.com/ros/ros_comm/issues/1592>`_)
+* fix various test problems (`#1601 <https://github.com/ros/ros_comm/issues/1601>`_)
+* fix typos: awhile -> a while (`#1534 <https://github.com/ros/ros_comm/issues/1534>`_)
 
 1.18.0 (2023-02-22)
 -------------------
