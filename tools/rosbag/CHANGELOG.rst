@@ -11,106 +11,6 @@ Changelog for package rosbag
 * Enable building with boost 1.83.0 (`#2354 <https://github.com/ros/ros_comm/issues/2354>`_)
 * Contributors: Blake Anderson, Hugal31, Yannik Nager, Zijun Xu, daizhirui
 
-1.16.0 (2023-02-15)
--------------------
-* add missing repeat_latched initialization (`#2314 <https://github.com/ros/ros_comm/issues/2314>`_)
-* Contributors: Robin Vanhove
-
-1.15.15 (2022-11-23)
---------------------
-* Move @jacobperron from maintainer to author (`#2302 <https://github.com/ros/ros_comm/issues/2302>`_)
-* Fix rosbag reindex not seeking to truncated position after broken chunk (`#2286 <https://github.com/ros/ros_comm/issues/2286>`_)
-* Contributors: Emerson Knapp, Shane Loretz
-
-1.15.14 (2022-01-06)
---------------------
-
-1.15.13 (2021-09-22)
---------------------
-
-1.15.12 (2021-09-21)
---------------------
-
-1.15.11 (2021-04-06)
---------------------
-* Handle SIGINT in rosbag play (`#2150 <https://github.com/ros/ros_comm/issues/2150>`_)
-* Catch all exceptions in record thread (`#2151 <https://github.com/ros/ros_comm/issues/2151>`_)
-* raw_input does not exist in python 3 (`#2143 <https://github.com/ros/ros_comm/issues/2143>`_)
-* Contributors: Martin Pecka, Sebastian Scherer, pseyfert
-
-1.15.10 (2021-03-18)
---------------------
-* Add missing Boost (`#2108 <https://github.com/ros/ros_comm/issues/2108>`_)
-* Start player in paused state (`#2086 <https://github.com/ros/ros_comm/issues/2086>`_)
-* Contributors: Francisco Vina, Timo Röhling
-
-1.15.9 (2020-10-16)
--------------------
-* Update maintainers (`#2075 <https://github.com/ros/ros_comm/issues/2075>`_)
-* Fix spelling (`#2066 <https://github.com/ros/ros_comm/issues/2066>`_)
-* Gracefully stop recording upon SIGTERM and SIGINT (`#2038 <https://github.com/ros/ros_comm/issues/2038>`_)
-* Fix compatibility issue with boost 1.73 and above (`#2023 <https://github.com/ros/ros_comm/issues/2023>`_)
-* Use heapq.merge instead of custom merge sort code (`#2017 <https://github.com/ros/ros_comm/issues/2017>`_)
-* Contributors: Devin Bonnie, Florian Friesdorf, Sean Yen, Shane Loretz, tomoya
-
-1.15.8 (2020-07-23)
--------------------
-
-1.15.7 (2020-05-28)
--------------------
-
-1.15.6 (2020-05-21)
--------------------
-
-1.15.5 (2020-05-15)
--------------------
-* add option to repeat latched messages at the start of bag splits (`#1850 <https://github.com/ros/ros_comm/issues/1850>`_)
-* fix bag migration failures caused by typo in connection_header assignment (`#1952 <https://github.com/ros/ros_comm/issues/1952>`_)
-
-1.15.4 (2020-03-19)
--------------------
-* restrict boost dependencies to components used (`#1871 <https://github.com/ros/ros_comm/issues/1871>`_)
-
-1.15.3 (2020-02-28)
--------------------
-* remove Boost version check since Noetic only targets platforms with 1.67+ (`#1903 <https://github.com/ros/ros_comm/issues/1903>`_)
-
-1.15.2 (2020-02-25)
--------------------
-
-1.15.1 (2020-02-24)
--------------------
-* use setuptools instead of distutils (`#1870 <https://github.com/ros/ros_comm/issues/1870>`_)
-
-1.15.0 (2020-02-21)
--------------------
-
-1.14.4 (2020-02-20)
--------------------
-* bump CMake minimum version to avoid CMP0048 warning (`#1869 <https://github.com/ros/ros_comm/issues/1869>`_)
-* add quotes around file name so they can be click selected in terminal (`#1813 <https://github.com/ros/ros_comm/issues/1813>`_)
-* catch exceptions by const ref (`#1874 <https://github.com/ros/ros_comm/issues/1874>`_)
-* read GPG passphrase from an environment variable (`#1856 <https://github.com/ros/ros_comm/issues/1856>`_)
-* fix missing import of roslib (`#1818 <https://github.com/ros/ros_comm/issues/1818>`_)
-* fix regression from pycrypodome switchover (`#1814 <https://github.com/ros/ros_comm/issues/1814>`_)
-* use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/ros/ros_comm/issues/1792>`_)
-* add pycryptodome as default (`#1609 <https://github.com/ros/ros_comm/issues/1609>`_)
-* encrypted rosbag fixes for Python 3 (`#1777 <https://github.com/ros/ros_comm/issues/1777>`_)
-* fix bug in bag migration (`#1786 <https://github.com/ros/ros_comm/issues/1786>`_)
-* keep latched topics latched (`#1708 <https://github.com/ros/ros_comm/issues/1708>`_)
-* wrap the rosbag filter eval in a lambda (`#1712 <https://github.com/ros/ros_comm/issues/1712>`_)
-* record: fix signed int overflow (`#1741 <https://github.com/ros/ros_comm/issues/1741>`_)
-* switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (`#1688 <https://github.com/ros/ros_comm/issues/1688>`_)
-* pickleable rosbag exceptions (`#1210 <https://github.com/ros/ros_comm/issues/1210>`_ revisited). (`#1652 <https://github.com/ros/ros_comm/issues/1652>`_)
-* fix topic message count for rosbag indexed v1.2 (`#1648 <https://github.com/ros/ros_comm/issues/1648>`_)
-* fix wrong error handling in migration (`#1639 <https://github.com/ros/ros_comm/issues/1639>`_)
-* modernization: replaced BOOST_FOREACH with range-based for-loops, used algorithm where appropriated (`#1641 <https://github.com/ros/ros_comm/issues/1641>`_)
-* fix IOError during Python file operation (`#1617 <https://github.com/ros/ros_comm/issues/1617>`_)
-* add Windows.h usage explicitly (`#44 <https://github.com/ros/ros_comm/issues/44>`_) (`#1616 <https://github.com/ros/ros_comm/issues/1616>`_)
-* fix waitForSubscribers hanging with simtime (`#1543 <https://github.com/ros/ros_comm/issues/1543>`_)
-* publish last message from latch topics when start time > 0 (`#1537 <https://github.com/ros/ros_comm/issues/1537>`_)
-* add a new option to publish when a bag write begin (`#1527 <https://github.com/ros/ros_comm/issues/1527>`_)
-
 1.16.0 (2022-02-23)
 -------------------
 * Fixing latched record updating (#28)
@@ -281,7 +181,103 @@ Changelog for package rosbag
 * Add a new option to publish when a bag write begin (#1527)
   * Add a new option to publish when a bag write begin
   * Add the option in rosbag_main to use rosbag record
-* Contributors: Alexander Reimann, AnthonyBirot, Christopher Wecht, Dallin Briggs, Daniel Wang, Devin Bonnie, Dirk Thomas, Enrique Fernández Perdomo, Eric Tappan, Florian Friesdorf, Francisco Vina, Gary Servin, Jacob Perron, James Xu, Lucas Walter, Martijn Buijs, Martin Pecka, Maxime St-Pierre, Mikael Arguedas, Mike Purvis, Natesh Narain, Olivier Mangin, Sean Yen, Sebastian Scherer, Shane Loretz, Thomas, Timo Röhling, Tom Moore, kmiku7, pseyfert, tomoya
+* add missing repeat_latched initialization (`#2314 <https://github.com/ros/ros_comm/issues/2314>`_)
+* Contributors: Alexander Reimann, AnthonyBirot, Christopher Wecht, Dallin Briggs, Daniel Wang, Devin Bonnie, Dirk Thomas, Enrique Fernández Perdomo, Eric Tappan, Florian Friesdorf, Francisco Vina, Gary Servin, Jacob Perron, James Xu, kmiku7, Lucas Walter, Martijn Buijs, Martin Pecka, Maxime St-Pierre, Mikael Arguedas, Mike Purvis, Natesh Narain, Olivier Mangin, pseyfert, Robin Vanhove, Sean Yen, Sebastian Scherer, Shane Loretz, Thomas, Timo Röhling, Tom Moore, tomoya
+
+1.15.15 (2022-11-23)
+--------------------
+* Move @jacobperron from maintainer to author (`#2302 <https://github.com/ros/ros_comm/issues/2302>`_)
+* Fix rosbag reindex not seeking to truncated position after broken chunk (`#2286 <https://github.com/ros/ros_comm/issues/2286>`_)
+* Contributors: Emerson Knapp, Shane Loretz
+
+1.15.14 (2022-01-06)
+--------------------
+
+1.15.13 (2021-09-22)
+--------------------
+
+1.15.12 (2021-09-21)
+--------------------
+
+1.15.11 (2021-04-06)
+--------------------
+* Handle SIGINT in rosbag play (`#2150 <https://github.com/ros/ros_comm/issues/2150>`_)
+* Catch all exceptions in record thread (`#2151 <https://github.com/ros/ros_comm/issues/2151>`_)
+* raw_input does not exist in python 3 (`#2143 <https://github.com/ros/ros_comm/issues/2143>`_)
+* Contributors: Martin Pecka, Sebastian Scherer, pseyfert
+
+1.15.10 (2021-03-18)
+--------------------
+* Add missing Boost (`#2108 <https://github.com/ros/ros_comm/issues/2108>`_)
+* Start player in paused state (`#2086 <https://github.com/ros/ros_comm/issues/2086>`_)
+* Contributors: Francisco Vina, Timo Röhling
+
+1.15.9 (2020-10-16)
+-------------------
+* Update maintainers (`#2075 <https://github.com/ros/ros_comm/issues/2075>`_)
+* Fix spelling (`#2066 <https://github.com/ros/ros_comm/issues/2066>`_)
+* Gracefully stop recording upon SIGTERM and SIGINT (`#2038 <https://github.com/ros/ros_comm/issues/2038>`_)
+* Fix compatibility issue with boost 1.73 and above (`#2023 <https://github.com/ros/ros_comm/issues/2023>`_)
+* Use heapq.merge instead of custom merge sort code (`#2017 <https://github.com/ros/ros_comm/issues/2017>`_)
+* Contributors: Devin Bonnie, Florian Friesdorf, Sean Yen, Shane Loretz, tomoya
+
+1.15.8 (2020-07-23)
+-------------------
+
+1.15.7 (2020-05-28)
+-------------------
+
+1.15.6 (2020-05-21)
+-------------------
+
+1.15.5 (2020-05-15)
+-------------------
+* add option to repeat latched messages at the start of bag splits (`#1850 <https://github.com/ros/ros_comm/issues/1850>`_)
+* fix bag migration failures caused by typo in connection_header assignment (`#1952 <https://github.com/ros/ros_comm/issues/1952>`_)
+
+1.15.4 (2020-03-19)
+-------------------
+* restrict boost dependencies to components used (`#1871 <https://github.com/ros/ros_comm/issues/1871>`_)
+
+1.15.3 (2020-02-28)
+-------------------
+* remove Boost version check since Noetic only targets platforms with 1.67+ (`#1903 <https://github.com/ros/ros_comm/issues/1903>`_)
+
+1.15.2 (2020-02-25)
+-------------------
+
+1.15.1 (2020-02-24)
+-------------------
+* use setuptools instead of distutils (`#1870 <https://github.com/ros/ros_comm/issues/1870>`_)
+
+1.15.0 (2020-02-21)
+-------------------
+
+1.14.4 (2020-02-20)
+-------------------
+* bump CMake minimum version to avoid CMP0048 warning (`#1869 <https://github.com/ros/ros_comm/issues/1869>`_)
+* add quotes around file name so they can be click selected in terminal (`#1813 <https://github.com/ros/ros_comm/issues/1813>`_)
+* catch exceptions by const ref (`#1874 <https://github.com/ros/ros_comm/issues/1874>`_)
+* read GPG passphrase from an environment variable (`#1856 <https://github.com/ros/ros_comm/issues/1856>`_)
+* fix missing import of roslib (`#1818 <https://github.com/ros/ros_comm/issues/1818>`_)
+* fix regression from pycrypodome switchover (`#1814 <https://github.com/ros/ros_comm/issues/1814>`_)
+* use condition attributes to specify Python 2 and 3 dependencies (`#1792 <https://github.com/ros/ros_comm/issues/1792>`_)
+* add pycryptodome as default (`#1609 <https://github.com/ros/ros_comm/issues/1609>`_)
+* encrypted rosbag fixes for Python 3 (`#1777 <https://github.com/ros/ros_comm/issues/1777>`_)
+* fix bug in bag migration (`#1786 <https://github.com/ros/ros_comm/issues/1786>`_)
+* keep latched topics latched (`#1708 <https://github.com/ros/ros_comm/issues/1708>`_)
+* wrap the rosbag filter eval in a lambda (`#1712 <https://github.com/ros/ros_comm/issues/1712>`_)
+* record: fix signed int overflow (`#1741 <https://github.com/ros/ros_comm/issues/1741>`_)
+* switch to yaml.safe_load(_all) to prevent YAMLLoadWarning (`#1688 <https://github.com/ros/ros_comm/issues/1688>`_)
+* pickleable rosbag exceptions (`#1210 <https://github.com/ros/ros_comm/issues/1210>`_ revisited). (`#1652 <https://github.com/ros/ros_comm/issues/1652>`_)
+* fix topic message count for rosbag indexed v1.2 (`#1648 <https://github.com/ros/ros_comm/issues/1648>`_)
+* fix wrong error handling in migration (`#1639 <https://github.com/ros/ros_comm/issues/1639>`_)
+* modernization: replaced BOOST_FOREACH with range-based for-loops, used algorithm where appropriated (`#1641 <https://github.com/ros/ros_comm/issues/1641>`_)
+* fix IOError during Python file operation (`#1617 <https://github.com/ros/ros_comm/issues/1617>`_)
+* add Windows.h usage explicitly (`#44 <https://github.com/ros/ros_comm/issues/44>`_) (`#1616 <https://github.com/ros/ros_comm/issues/1616>`_)
+* fix waitForSubscribers hanging with simtime (`#1543 <https://github.com/ros/ros_comm/issues/1543>`_)
+* publish last message from latch topics when start time > 0 (`#1537 <https://github.com/ros/ros_comm/issues/1537>`_)
+* add a new option to publish when a bag write begin (`#1527 <https://github.com/ros/ros_comm/issues/1527>`_)
 
 1.18.0 (2023-02-22)
 -------------------
