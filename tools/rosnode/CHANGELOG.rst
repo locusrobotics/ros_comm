@@ -7,9 +7,6 @@ Changelog for package rosnode
 * Enable rosrun & roslaunch to find rosnode script (`#2262 <https://github.com/ros/ros_comm/issues/2262>`_)
 * Contributors: G.A. vd. Hoorn
 
-1.16.0 (2023-02-15)
--------------------
-
 1.15.15 (2022-11-23)
 --------------------
 * Move @jacobperron from maintainer to author (`#2302 <https://github.com/ros/ros_comm/issues/2302>`_)

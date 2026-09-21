@@ -8,9 +8,6 @@ Changelog for package roslaunch
 * Remove Python 2 on Windows workaround (`#2364 <https://github.com/ros/ros_comm/issues/2364>`_)
 * Contributors: Griffin Tabor, Shingo Kitagawa
 
-1.16.0 (2023-02-15)
--------------------
-
 1.15.15 (2022-11-23)
 --------------------
 * Move @jacobperron from maintainer to author (`#2302 <https://github.com/ros/ros_comm/issues/2302>`_)

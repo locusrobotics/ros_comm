@@ -9,9 +9,6 @@ Changelog for package roscpp
 * Fix crash during shutdown when explicitly calling ros::start but not ros::shutdown (`#2355 <https://github.com/ros/ros_comm/issues/2355>`_)
 * Contributors: David Gossow, Martin Pecka, Robert Haschke
 
-1.16.0 (2023-02-15)
--------------------
-
 1.15.15 (2022-11-23)
 --------------------
 * Move @jacobperron from maintainer to author (`#2302 <https://github.com/ros/ros_comm/issues/2302>`_)
