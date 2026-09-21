@@ -236,6 +236,30 @@ Changelog for package rosnode
 * show connection info on rosnode info (#1497)
 * Contributors: Akif Hacinecipoglu, Dirk Thomas, Gary Servin, Jacob Perron, Mateusz Sadowski, Maxime St-Pierre, Shane Loretz, Victor Lamoine, mabaue, tomoya
 
+Forthcoming
+-----------
+* Fix changelogs (#63)
+* Fixes for Python 3.12
+  With fixes by Jochen Sprickerhof.
+  Taken from
+  https://salsa.debian.org/science-team/ros-ros-comm/-/blob/b74ca5c2c868a084ab36e46d68f7775518ac4c58/debian/patches/0016-Fixes-for-Python-3.12.patch
+  (cherry picked from commit 42cd22e509907d1e89765f8d1a27cbb201321d28)
+* rosnode: Fix unclosed socket in rosnode_ping command (#2381)
+  (cherry picked from commit 38b95ba9b8c5c4d958ffd1f7221db5dbdd7c7605)
+* Make rosnode info show topic types of unconnected subscribers (#2366)
+  (cherry picked from commit 9517659ea665296c4ec31664ed0d4b53c4b33802)
+* 1.17.0
+* rosnode: allow rosrun & roslaunch to find script (#2262)
+  By installing the script in the "package bin destination" as well as letting setup.py install it in the global 'bin' directory.
+  This is similar to what rosservice et al., which do work with roslaunch and rosrun.
+* 1.16.0
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* Contributors: G.A. vd. Hoorn, Gary Servin, Jacob Perron, Matthias Klose, Michael Carroll, Ricardo Marques, Sanoronas, Shane Loretz
+
 1.23.0 (2025-02-04)
 -------------------
 

@@ -361,6 +361,47 @@ Changelog for package rostest
 * Directly run python script if run test through cmake (#24) (#1583)
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Kai Hermann, Levko Ivanchuk, Mateus Amarante, Mikael Arguedas, Shane Loretz, Yuki Furuta, beetleskin, tomoya
 
+Forthcoming
+-----------
+* Fix changelogs (#63)
+* Fixes for Python 3.12
+  With fixes by Jochen Sprickerhof.
+  Taken from
+  https://salsa.debian.org/science-team/ros-ros-comm/-/blob/b74ca5c2c868a084ab36e46d68f7775518ac4c58/debian/patches/0016-Fixes-for-Python-3.12.patch
+  (cherry picked from commit 42cd22e509907d1e89765f8d1a27cbb201321d28)
+* 1.17.0
+* rostest: add subscribetest (#2184)
+  * rostest: add subscribetest
+  This PR adds `subscribetest` node to check if the specified topics are subscribed.
+  The usage is almost the same as `publishtest`:
+  ```
+  <test test-name="subscribetest_test" pkg="rostest" type="subscribetest" time-limit="7.0" retry="3">
+  <rosparam>
+  topics:
+  - name: /chatter
+  timeout: 2.
+  - name: /subscribed_topic
+  timeout: 2.
+  negative: true
+  </rosparam>
+  </test>
+  ```
+  * install nodes/subscribetest
+* fix typo t_start -> self.t_start (#2183)
+  fix typo local t_start is not defined here, need to use self.t_start
+* Fix rostest target names when build dir is inside source dir (#2361)
+  It's a common approach to build cmake projects in a `build` folder in the project root.
+  It's just that `rosbuild`/`catkin` does not do it, so the changed name never mattered.
+  When you try the target name includes another `build\_` string and there is *exactly one* package in the whole ecosystem that relies on this not happening:
+  https://github.com/ros/ros_comm/blob/845f74602c7464e08ef5ac6fd9e26c97d0fe42c9/test/test_rosbag/bag_migration_tests/CMakeLists.txt#L87-L103
+* 1.16.0
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* Contributors: Gary Servin, Jacob Perron, Kei Okada, Matthias Klose, Michael Carroll, Michael Görner, Shane Loretz
+
 1.23.0 (2025-02-04)
 -------------------
 

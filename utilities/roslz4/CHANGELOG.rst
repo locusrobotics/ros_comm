@@ -244,6 +244,23 @@ Changelog for package roslz4
   * declare const for source_cnt
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Jeremie Deray, Johnson Shih, Sean Yen, Shane Loretz, Tobias Fischer, tomoya
 
+Forthcoming
+-----------
+* Fix changelogs (#63)
+* add missing python dependency
+  this is implicitly pulled-in through the test depends on rosunit,
+  but fails with https://github.com/ros-infrastructure/bloom/pull/649
+  which disables test dependencies.
+  (cherry picked from commit f25066d16b6e50ea8d593323954a3015ca720f1a)
+* 1.17.0
+* 1.16.0
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* Contributors: Gary Servin, Jacob Perron, Michael Carroll, Shane Loretz, v4hn
+
 1.23.0 (2025-02-04)
 -------------------
 

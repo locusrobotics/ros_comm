@@ -93,6 +93,17 @@ Changelog for package test_rostest
   * modify test to pass when rospy.get_name isn't available without a dependency declared on it
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, Shane Loretz
 
+Forthcoming
+-----------
+* 1.17.0
+* 1.16.0
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* Contributors: Jacob Perron, Michael Carroll, Shane Loretz
+
 1.23.0 (2025-02-04)
 -------------------
 

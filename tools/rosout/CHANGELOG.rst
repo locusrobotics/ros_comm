@@ -214,6 +214,18 @@ Changelog for package rosout
   * trailing operators
 * Contributors: Daniel Wang, Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Shane Loretz, Yong Li, tomoya
 
+Forthcoming
+-----------
+* Fix changelogs (#63)
+* 1.17.0
+* 1.16.0
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* Contributors: Gary Servin, Jacob Perron, Michael Carroll, Shane Loretz
+
 1.23.0 (2025-02-04)
 -------------------
 

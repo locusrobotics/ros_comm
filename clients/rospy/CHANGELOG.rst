@@ -1217,6 +1217,58 @@ Changelog for package rospy
   ```
 * Contributors: Brutus The Tschiepel, Christopher Wecht, Dirk Thomas, Gary Servin, Hans Gaiser, Jacob Perron, Markus Grimm, Martijn Buijs, Martin Pecka, Maxime St-Pierre, Miaofei Mei, Michael Johnson, Paul Bovbel, Paweł Lorek, Sean Yen, Shane Loretz, Steve Nogar, Tom Moore, Victor Lamoine, Yong Li, Yuchen Ying, abencz, cclauss, henryzhang0506, larslue, mikolajz, salihmarangoz, tomoya, 金梦磊
 
+Forthcoming
+-----------
+* Fix changelogs (#63)
+* wait_for_topic support topic remapping (#2159)
+  Co-authored-by: SEAN.LU <SAEN.LU@deltaww.com>
+  (cherry picked from commit 5c789a76bf560a7a68db7fbe31c60f85fd582e17)
+* support `rosbag play --loop` in `rospy.Timer` (#2257)
+  I fail to understand why this issue still exists after all these years.
+  Without the patch the Timer thread just dies on rosbag loop *with no way of detecting and restarting it* easily.
+  Instead the patch changes the behavior to assume it slept enough and calls the callback.
+  If application logic requires resets, this can be detected from the TimerEvent passed to the callback.
+  (cherry picked from commit b6f078e19f2611bab5b4a616f12a12c24545c0d0)
+* Add bool return to _base_logger, log* functions (#2335)
+  Add a bool return to expose whether log succeeded for:
+  - _base_logger
+  - log* functions (log*, log*_throttle, log*_once, etc...)
+  Provides the user a trigger for actions which may be sensitive to logging (i.e. creating a 'static' positioned diagnostic display)
+  (cherry picked from commit 4e6aec40a53535d6387dfccabe17cb6e20c7147a)
+* 1.17.0
+* Address DeprecationWarning (#2191)
+* Expose is_shutdown_requested in rospy namespace. (#2267)
+  Just like the C++ `ros::isShuttingDown()`, this can be useful in certain
+  cases where shutdown needs to be checked before all shutdown handlers
+  finished.
+  The difference to `is_shutdown()` is already clearly described in the
+  docstring of `is_shutdown_requested()`.
+* Fix error "s is not defined" (reopening #2320 again) (#2328)
+  * Fix error "s is not defined" (reopening  Refs #2320 again)
+  * Update clients/rospy/src/rospy/topics.py with suggestion
+  Co-authored-by: Martin Pecka <peci1@seznam.cz>
+  ---------
+  Co-authored-by: Martin Pecka <peci1@seznam.cz>
+* 1.16.0
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* Add a workaround for a race condition while closing the socket (#2212) (#2233)
+  Co-authored-by: Daniele Calisi <calisi@magazino.eu>
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* [rospy] add current_real docstring in timer.py (#2178)
+  * add current_reald doc in timer.py
+  * fix docstring in timer.py
+  Co-authored-by: Jacob Perron <jacob@openrobotics.org>
+  Co-authored-by: Jacob Perron <jacob@openrobotics.org>
+* Do not set self.transport unless persistent in ServiceProxy (#2171)
+  Co-authored-by: Kevin Chang <kevin.chang@aeolusdev.com>
+* Fix #2123:  Do not raise exception if socket is busy in TCPROSTransport (#2131)
+  Make behavior consistent with the C++ implementation.
+  Co-authored-by: 229143434@qq.com <zxcvbnm123-*@>
+* Contributors: Gary Servin, Guglielmo Gemignani, Jacob Perron, Kevin Chang, Michael Carroll, Michael Grupp, Michael Görner, Owen Claxton, Shane Loretz, Shingo Kitagawa, madmage, sean85914, vineet131, 金梦磊
+
 1.23.0 (2025-02-04)
 -------------------
 

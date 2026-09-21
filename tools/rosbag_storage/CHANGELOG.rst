@@ -364,6 +364,21 @@ Changelog for package rosbag_storage
   * declare const for source_cnt
 * Contributors: Christopher Wecht, Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Jeremie Deray, Johnson Shih, Mikael Arguedas, Sean Yen, Shane Loretz, Ted Kern, dodsonmg, elektrokokke, ipa-fez, jalkino
 
+Forthcoming
+-----------
+* Fix changelogs (#63)
+* 1.17.0
+* Fix segfault with default-constructed rosbag::ChunkedFile::swap (#2363)
+  Closes #2362.
+* 1.16.0
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* Add missing include (#2248)
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* Contributors: Gary Servin, Hugal31, Jacob Perron, Jochen Sprickerhof, Michael Carroll, Shane Loretz
+
 1.23.0 (2025-02-04)
 -------------------
 

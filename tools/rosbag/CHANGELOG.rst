@@ -632,6 +632,54 @@ Changelog for package rosbag
   * Add the option in rosbag_main to use rosbag record
 * Contributors: Alexander Reimann, AnthonyBirot, Carlos Mendes, Christopher Wecht, Dallin Briggs, Daniel Wang, Devin Bonnie, Dirk Thomas, Enrique Fernández Perdomo, Eric Tappan, Florian Friesdorf, Francisco Vina, Gary Servin, Jacob Perron, James Xu, Lucas Walter, Martijn Buijs, Martin Pecka, Maxime St-Pierre, Mikael Arguedas, Mike Purvis, Natesh Narain, Olivier Mangin, Sean Yen, Sebastian Scherer, Shane Loretz, Thomas, Timo Röhling, Tom Moore, kmiku7, pseyfert, tomoya
 
+Forthcoming
+-----------
+* Fix remaining duplicate 1.16.0 changelog entries (#64)
+  rosbag, rosgraph, and rosservice each had two "1.16.0" sections with
+  real (non-empty) content, left over from a previous changelog merge
+  between locus-noetic-devel and upstream noetic-devel. A prior fix
+  (#63) only removed empty duplicate sections and skipped these three.
+  Merge the bullet points and contributor lists of both sections into a
+  single 1.16.0 entry to eliminate the
+  catkin_pkg.changelog.DuplicateVersionsException while preserving all
+  changelog history.
+  Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+* RST-16743 Special handling for tf_static messages from multiple publishers (#62)
+  * Special handling for tf_static messages from multiple publishers
+* Update header for Boost 1.83
+  (cherry picked from commit d876c952db9fb474c6c06decda6a8663bb50abb9)
+* Sort connection indices (#2089)
+  (cherry picked from commit 562ebc3809533bb8d47f8211490bf21c60807db4)
+* Ensure latched messages are updated on every split (#2261)
+  * Ensure latched messages are updated on every split
+  * Add note regarding map::insert function behavior
+  ---------
+  Co-authored-by: Gal Gorjup <gal.gorjup@airnamics.com>
+  (cherry picked from commit 93b45d35ff4f84e8c6398750c2c4b8b3242729cb)
+* Fixing string deprecation warning in noble (#39)
+* Fixes to build on ubuntu 24 (#38)
+  * Supress deprecated headers for boost
+  * Supress more depracated headers
+  * Treat external dependencies as SYSTEM ones
+* 1.17.0
+* Exposed record snapshot feature for command line. (#2254)
+* rosbag_main.py: fix calling uncallable signal handler object (#2235) (#2236)
+  Co-authored-by: Yannik Nager <yannik@sunflower-labs.com>
+* add --min-space option to the python cli of rosbag record (#2298)
+* Fix latched topic not latched in splitted rosbags (#2351)
+* apply patch to fix build with boost 1.83.0 (#2354)
+* 1.16.0
+* add missing repeat_latched initialization (#2314)
+  Co-authored-by: Robin Vanhove <rov@robopec.com>
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* rosbag reindex bugfix - seek to truncated position after broken chunk (#2286)
+  The truncate operation left the current `f.tell()` read head at the pre-truncated position, so the chunk infos that are written on closing the file started writing at this pre-truncated position, leaving dangling broken chunk data in between the last good chunk and the first file-end chunkinfo.
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* Contributors: 1r0b1n0, Blake Anderson, Emerson Knapp, Gal Gorjup, Gary Servin, Hugal31, Jacob Perron, Jochen Sprickerhof, Marko Durkovic, Michael Carroll, Shane Loretz, Tom Moore, Yannik Nager, Zijun Xu, daizhirui
+
 1.23.0 (2025-02-04)
 -------------------
 * Copy latched messages once per split with connection header (#37)

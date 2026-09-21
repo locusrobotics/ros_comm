@@ -234,6 +234,27 @@ Changelog for package test_rosbag
 * duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
 * Contributors: Christopher Wecht, Devin Bonnie, Dirk Thomas, Gary Servin, Jacob Perron, Mikael Arguedas, Shane Loretz, Tom Moore, beetleskin, tomoya
 
+Forthcoming
+-----------
+* RST-13777 roscore cpp: master [26.1.0] (#59)
+* RST-13777 Fixing ros_comm tests (#54)
+  * Fixing ros_comm tests
+* Fixes for Python 3.12
+  With fixes by Jochen Sprickerhof.
+  Taken from
+  https://salsa.debian.org/science-team/ros-ros-comm/-/blob/b74ca5c2c868a084ab36e46d68f7775518ac4c58/debian/patches/0016-Fixes-for-Python-3.12.patch
+  (cherry picked from commit 42cd22e509907d1e89765f8d1a27cbb201321d28)
+* 1.17.0
+* 1.16.0
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* rosbag reindex bugfix - seek to truncated position after broken chunk (#2286)
+  The truncate operation left the current `f.tell()` read head at the pre-truncated position, so the chunk infos that are written on closing the file started writing at this pre-truncated position, leaving dangling broken chunk data in between the last good chunk and the first file-end chunkinfo.
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* Contributors: Emerson Knapp, Jacob Perron, Matthias Klose, Michael Carroll, Shane Loretz, Tom Moore
+
 1.23.0 (2025-02-04)
 -------------------
 

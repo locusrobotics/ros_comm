@@ -420,6 +420,36 @@ Changelog for package topic_tools
 * topic_tools/mux: add ~latch option (#1489)
 * Contributors: Aaron Miller, Christopher Wecht, Dirk Thomas, Enrique Fernandez Perdomo, Gary Servin, Jacob Perron, Martijn Buijs, Martin Günther, Sean Yen, Shane Loretz, Yuki Furuta, beetleskin
 
+Forthcoming
+-----------
+* Fix changelogs (#63)
+* Fixes for Python 3.12
+  With fixes by Jochen Sprickerhof.
+  Taken from
+  https://salsa.debian.org/science-team/ros-ros-comm/-/blob/b74ca5c2c868a084ab36e46d68f7775518ac4c58/debian/patches/0016-Fixes-for-Python-3.12.patch
+  (cherry picked from commit 42cd22e509907d1e89765f8d1a27cbb201321d28)
+* Update topic_tools relay_field to Python 3 (#2253)
+  * Update topic_tools relay_field to Python 3
+  Implementing "unicode" to "bytes" fix described in https://github.com/ros/ros_comm/issues/2167.
+  * Remove outdated future import
+  (cherry picked from commit 1a2ed47ef8db5dba513514b78ff4835fb74cdc3e)
+* Fix error C3861: 'usleep': identifier not found on Windows (#2383)
+  * Fix error C3861: 'usleep': identifier not found on Windows
+  * Fixup
+  (cherry picked from commit 80a5f3e17363f3a6a8419f71b5a0b53cde83672d)
+* 1.17.0
+* [topic_tools/mux] add wait_publisher_initialization option in mux (#2305)
+  * [topic_tools] add wait_publisher_initialization option in mux
+  * add wait_publisher_second param
+* 1.16.0
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* Set TCP_NODELAY. (#2293)
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* Contributors: Gary Servin, Jacob Perron, Matthias Klose, Michael Carroll, Rik Baehnemann, RyanDMott, Shane Loretz, Shingo Kitagawa, Tobias Fischer
+
 1.23.0 (2025-02-04)
 -------------------
 

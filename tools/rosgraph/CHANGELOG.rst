@@ -417,6 +417,40 @@ Changelog for package rosgraph
 * Fixed typos: awhile -> a while (#1534)
 * Contributors: Adrian Brzozowski, Christopher Wecht, Daniel Ingram, Daniel Wang, Dirk Thomas, Gary Servin, Hansruedi Patzen, Jacob Perron, James Xu, Jesse Ikawa, Martijn Buijs, Michael Johnson, Sean Yen, Shane Loretz, Tamaki Nishino, Tobias Pfeiffer, tomoya
 
+Forthcoming
+-----------
+* Fix remaining duplicate 1.16.0 changelog entries (#64)
+  rosbag, rosgraph, and rosservice each had two "1.16.0" sections with
+  real (non-empty) content, left over from a previous changelog merge
+  between locus-noetic-devel and upstream noetic-devel. A prior fix
+  (#63) only removed empty duplicate sections and skipped these three.
+  Merge the bullet points and contributor lists of both sections into a
+  single 1.16.0 entry to eliminate the
+  catkin_pkg.changelog.DuplicateVersionsException while preserving all
+  changelog history.
+  Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+* RST-13777 Fixing ros_comm tests (#54)
+  * Fixing ros_comm tests
+* Fixes for Python 3.12
+  With fixes by Jochen Sprickerhof.
+  Taken from
+  https://salsa.debian.org/science-team/ros-ros-comm/-/blob/b74ca5c2c868a084ab36e46d68f7775518ac4c58/debian/patches/0016-Fixes-for-Python-3.12.patch
+  (cherry picked from commit 42cd22e509907d1e89765f8d1a27cbb201321d28)
+* rosgraph: update code from Python 3.11
+  (cherry picked from commit 8ab2ef914e745f56d92ff14811e5d92c6cc7d498)
+* Use atomic bool instead of volatile (#46)
+* 1.17.0
+* Fixed ROSCONSOLE_FORMAT with microseconds (#2370)
+* 1.16.0
+* Fix determining supported kernel version for HTTP 1.1 (#2202)
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* Fix memory leak in rosgraph for kernel < 4.16 and Python 3 (#2165)
+* Contributors: Aaditya Ravindran, Alexis Schad, Gary Servin, Jacob Perron, Jochen Sprickerhof, Martin Pecka, Matthias Klose, Michael Carroll, Shane Loretz, Tom Moore
+
 1.23.0 (2025-02-04)
 -------------------
 

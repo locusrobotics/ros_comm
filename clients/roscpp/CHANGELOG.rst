@@ -1016,6 +1016,128 @@ Changelog for package roscpp
   * declare const for source_cnt
 * Contributors: Adel Fakih, Alex Moriarty, Arkady Shapkin, Arusekk, Barry Xu, C. Andy Martin, Chen Lihui, Christopher Wecht, Daniel Wang, Dino Hüllmann, Dirk Thomas, Felix Ruess, Gabriel Arjones, Gary Servin, Hans-Joachim Krauch, Igor Semenov, Ivor Wanders, Jacob Perron, James Xu, Jeremie Deray, Johannes Meyer, Johnson Shih, Kunal Tyagi, Maarten de Vries, Martin Pecka, Michael Carroll, Michael Johnson, Mikael Arguedas, Mike Purvis, Sean Yen, Shane Loretz, Tahsincan Köse, Victor Lamoine, Zbyněk Winkler, astere-cpr, dodsonmg, foodtooth, randoms, tomoya, wentz89
 
+Forthcoming
+-----------
+* Fix changelogs (#63)
+* adding boost/bind/bind.hpp includes to files missing them
+  (cherry picked from commit 409c664a25faf4f3effaea849d989096bc2b0e0e)
+* Fix "roscpp multithreaded spinners eat up CPU when callbacks take too long" (#2377)
+  * * Fix a busy-wait loop in subscription queue.
+  * Better fix for slow callbacks CPU throttling.
+  * More versatile callback queue test.
+  * Finished cherry-pick merge to melodic-devel.
+  * libros: moved define
+  * roscpp: implementet #1608 without ABI/API breaks
+  * /test_roscpp: fake_message is in a header now...
+  * test_roscpp: fixed sign-compare warning
+  * stabilized test
+  * CallbackQueue: use SteadyTime instead of WallTime to get independent of system-time changes
+  * style only
+  * Update clients/roscpp/include/ros/callback_queue.h
+  Co-authored-by: Johannes Meyer <johannes@intermodalics.eu>
+  Co-authored-by: Martin Pecka <peci1@seznam.cz>
+  Co-authored-by: CTU base <robot@ctu-base>
+  Co-authored-by: Martin Pecka <peckama2@fel.cvut.cz>
+  Co-authored-by: Christopher Wecht <christopher.wechtstudent.kit.edu>
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+  Co-authored-by: Johannes Meyer <johannes@intermodalics.eu>
+  * Fix subscription busy wait melodic (#2014)
+  * roscpp: simplify implementation of CallbackQueue::callOne()
+  Replace duplicate wait_for() call in CallbackQueue::callOne() with a loop and a call to wait_until().
+  * roscpp: return TryAgain from CallbackQueue::callOne(timeout) immediately if timeout.isZero()
+  ... and if none of the other result conditions holds (i.e. the queue is Empty or Disabled).
+  Co-authored-by: Johannes Meyer <johannes@intermodalics.eu>
+  ---------
+  Co-authored-by: Christopher Wecht <cwecht@users.noreply.github.com>
+  Co-authored-by: Martin Pecka <peci1@seznam.cz>
+  Co-authored-by: CTU base <robot@ctu-base>
+  Co-authored-by: Martin Pecka <peckama2@fel.cvut.cz>
+  Co-authored-by: Dirk Thomas <dirk-thomas@users.noreply.github.com>
+  (cherry picked from commit 114a14228c2c8afda8dafd320f4b25e5a770e69d)
+* Use atomic bool instead of volatile (#46)
+* Fix occasional crash during shutdown when explicitly calling ros::start but not ros::shutdown (#2355)
+  * Fix occasional crash during shutdown
+  * add link to PR
+  * comment
+  * fix implementation
+  * add missing hasError = true;
+  * also call deInit
+  * only deInit once
+  * only deinit once
+  * yet more fixes
+  * add another test for init only
+  * revert
+  * preserve legacy behavior
+  * add gtest wrapper
+  * minimize code changes
+  * add test
+  * reduce changes even more
+  * add comment
+  * comment
+  (cherry picked from commit 845f74602c7464e08ef5ac6fd9e26c97d0fe42c9)
+* use recursive mutex to fix dead lock (#2209)
+  (cherry picked from commit 63c9bbb5c2480a232530cfa13308a22d727f20b8)
+* 1.17.0
+* Update: #include <boost/bind.hpp> -> <boost/bind/bind.hpp> for boost 1.73 (#2348)
+  * Update: #include <boost/bind.hpp> -> <boost/bind/bind.hpp> for boost 1.73
+  Since boost 1.73, i.e. on Ubuntu 22.04, the old header issues a deprecation warning:
+  ```
+  /usr/include/boost/bind.hpp:36:1: note: ‘#pragma message:
+  The practice of declaring the Bind placeholders (_1, _2, ...) in the global namespace is deprecated.
+  Please use <boost/bind/bind.hpp> + using namespace boost::placeholders,
+  or define BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.’
+  ```
+  While the new header <boost/bind/bind.hpp> is available for a long time (on 18.04 already)
+  and the source has been updated to use boost::placeholders in #2023, the header was not yet updated.
+  * For backwards compatibility: pull placeholders into global namespace
+* Added init_options::NoSimTime to forcefully disable subscribing to /clock (#2342)
+  * Added init_options::NoSimTime to forcefully disable subscribing to /clock.
+  * Fix enum value
+  * Added test for init_options::NoSimTime
+  * Fixed test
+* Fix occasional crash during shutdown when explicitly calling ros::start but not ros::shutdown (#2355)
+  * Fix occasional crash during shutdown
+  * add link to PR
+  * comment
+  * fix implementation
+  * add missing hasError = true;
+  * also call deInit
+  * only deInit once
+  * only deinit once
+  * yet more fixes
+  * add another test for init only
+  * revert
+  * preserve legacy behavior
+  * add gtest wrapper
+  * minimize code changes
+  * add test
+  * reduce changes even more
+  * add comment
+  * comment
+* 1.16.0
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* 1.15.14
+* use recursive mutex to fix dead lock (#2209)
+* 1.15.13
+* Revert "Fix warning related to Boost bind placeholders declared in global namespace. (#2169)" (#2187)
+  This reverts commit 32942993e3f9afc8248be7b1f5944344fa2b4e30.
+* 1.15.12
+* Fix warning related to Boost bind placeholders declared in global namespace. (#2169)
+  * clients/roscpp/include/ros: publisher.h: Fix warning related to Boost bind placeholders declared in global namespace.
+  This commit fixes the following:
+  Warning: The practice of declaring the Bind placeholders (_1, _2, ...)
+  in the global namespace is deprecated. Please use <boost/bind/bind.hpp> +
+  using namespace boost::placeholders, or define
+  BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
+  * clients/roscpp/include/ros: node_handle.h: Fix warning related to Boost bind placeholders declared in global namespace.
+  This commit fixes the following:
+  Warning: The practice of declaring the Bind placeholders (_1, _2, ...)
+  in the global namespace is deprecated. Please use <boost/bind/bind.hpp> +
+  using namespace boost::placeholders, or define
+  BOOST_BIND_GLOBAL_PLACEHOLDERS to retain the current behavior.
+* Contributors: Aaditya Ravindran, Chen Lihui, David Gossow, Elvis Dowson, Gary Servin, Jacob Perron, Johannes Meyer, Lucas Walter, Martin Pecka, Michael Carroll, Robert Haschke, Shane Loretz
+
 1.23.0 (2025-02-04)
 -------------------
 

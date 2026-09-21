@@ -236,6 +236,29 @@ Changelog for package rosservice
 * Update wiki.ros.org URLs (#1536)
 * Contributors: Christopher Wecht, Dirk Thomas, Gary Servin, Jacob Perron, Martijn Buijs, Shane Loretz, Victor Lamoine, mistoll
 
+Forthcoming
+-----------
+* Fix remaining duplicate 1.16.0 changelog entries (#64)
+  rosbag, rosgraph, and rosservice each had two "1.16.0" sections with
+  real (non-empty) content, left over from a previous changelog merge
+  between locus-noetic-devel and upstream noetic-devel. A prior fix
+  (#63) only removed empty duplicate sections and skipped these three.
+  Merge the bullet points and contributor lists of both sections into a
+  single 1.16.0 entry to eliminate the
+  catkin_pkg.changelog.DuplicateVersionsException while preserving all
+  changelog history.
+  Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>
+* 1.17.0
+* Fixed uninitialized Time usage in rosservice call (#2369)
+* 1.16.0
+* --noarr and --nostr option in rosservice call (#2307)
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* Contributors: Gary Servin, Jacob Perron, Martin Pecka, Michael Carroll, Shane Loretz, Shingo Kitagawa
+
 1.23.0 (2025-02-04)
 -------------------
 

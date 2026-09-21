@@ -451,6 +451,78 @@ Changelog for package xmlrpcpp
   * declare const for source_cnt
 * Contributors: Alex Moriarty, Christopher Wecht, Dirk Thomas, Gary Servin, Hanno Böck, Jacob Perron, James Xu, Jason Wang, Johannes Meyer, Johnson Shih, Martin Pecka, Mikael Arguedas, Sean Yen, Shane Loretz, Sid Faber, randoms, tomoya
 
+Forthcoming
+-----------
+* Fix changelogs (#63)
+* RST-13777 roscore cpp: master [26.1.0] (#59)
+* RST-13777 Optimising xmlrpcpp (#52)
+  * Optimizing xmlrpcpp
+* Revert "Maintain constness of accessed XmlRpcValue struct (#2315)" (#2391)
+  This reverts commit ff77aa2464654cb235fddb26386645c7404c1a5f.
+  https://github.com/ros/ros_comm/issues/2390
+  The new behavior is reasonable, but users reported it broke their
+  builds.
+  (cherry picked from commit 767cb7903912be2911f697458bf49d2c8a3b4c42)
+* Disable XmlRpcServer::enoughFreeFDs
+  The file descriptor hard limit was bumped resulting in each ROS node
+  allocating 8GB:
+  https://lists.debian.org/debian-devel/2024/06/msg00041.html
+  (cherry picked from commit 327c21ab2c9b2c0b3c2886cb7448e62c7c35fbc4)
+* fix char signedness issue for test_base64 on ARM and RISC-V (#2205)
+  Closes: #1912
+  (cherry picked from commit b9bdd3f71c85f88b2353e161e96a8e5ebba221b5)
+* Log errors in XmlRpcpp (#2277)
+  (cherry picked from commit 5fe0bc49ccee05c1b8a7a8129c9bbf4b3ec4fdca)
+* Maintain constness of accessed XmlRpcValue struct (#2315)
+  Return value should not change constness of this pointer!
+  (cherry picked from commit ff77aa2464654cb235fddb26386645c7404c1a5f)
+* Improve polling for available file descriptors (#2365)
+  - Remove 8MB of memory for each socket created
+  - Reduce available file descriptor polling to minimum necessary
+  - roughly a 1000 times faster
+  - old duration: 34'571'539 ns
+  - new duration: 34'464 ns
+  Co-authored-by: Richard Schubert <richard.schubert@vay.io>
+  (cherry picked from commit 4755096d2675fadc61d91d029543739d45b029ac)
+* 1.17.0
+* Fix printing XmlRpcValue with GTest (#2224)
+  * Fix printing XmlRpcValue with GTest
+  * Added tests for XmlRpc::PrintTo()
+  * Make PrintTo inline
+* Fix EINTR handling in XmlRpcDispatch::work (#2278)
+  * Fix EINTR handling in XmlRpcDispatch::work
+  * Document the XmlRpcDispatch::work behavior we receiving EINTR
+* 1.16.0
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* 1.15.14
+* keep the persistent connection only if rosmaster supports http1.1 (#2208)
+  * keep the persistent connection only if rosmaster supports http1.1
+  * Revert "keep the persistent connection only if rosmaster supports http1.1"
+  This reverts commit 2cb7602e5be5d5f12659b6e9a9d0fd4f966d96af.
+  * fix without breaking ABI
+  * Update comment
+  Co-authored-by: Jacob Perron <jacob@openrobotics.org>
+* 1.15.13
+* 1.15.12
+* Noetic: Fix XMLRPC endless loop (#2185)
+  * Fix oversize string test.
+  It claims to be "well-formed", but the closing tag was wrong.
+  Fix that here.
+  * Add defensive checks for offset being NULL.
+  * Add unit tests for XML tag utility functions.
+  This includes parseTag, findTag, nextTagIs, and getNextTag.
+  * Add implementation of nextTagData.
+  * Switch structFromXml to using nextTagData.
+* [xmlrpcpp] Fix build when gtest is not available (#2177)
+  When gtest is not available, the target test_socket is not
+  created by catkin_add_gtest (it provides a warning that gtest
+  was not found and does not add the test). Trying to set the
+  target properties then leads to a configuration error. Making
+  this block conditional on the existence of the target fixes
+  the configuration error.
+* Contributors: Alex Fan, Chen Lihui, Chris Lalancette, Gary Servin, Hugal31, Jacob Perron, Jochen Sprickerhof, Martin Pecka, Michael Carroll, Richard Schubert, Robert Haschke, Shane Loretz, Tom Moore, Wolfgang Merkt
+
 1.23.0 (2025-02-04)
 -------------------
 

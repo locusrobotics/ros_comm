@@ -875,6 +875,36 @@ Changelog for package roslaunch
   * declare const for source_cnt
 * Contributors: 5tan, Alessandro Tondo, Andreas Vinter-Hviid, Brutus The Tschiepel, Christophe, Christopher Wecht, Collin Scribner, Daniel Ingram, David V. Lu!!, Dirk Thomas, Gary Servin, Isaac I.Y. Saito, Jacob Perron, James Xu, Jochen Sprickerhof, Johnson Shih, Lucas Walter, Martijn Buijs, Martin Pecka, Mike Purvis, Morten Fyhn Amundsen, Sean Yen, Shane Loretz, Tom Moore, Victor Lamoine, Xaver Kroischke, betab0t, tomoya
 
+Forthcoming
+-----------
+* Fix changelogs (#63)
+* RST-13777 roscore cpp: master [26.1.0] (#59)
+* Fixes for Python 3.12
+  With fixes by Jochen Sprickerhof.
+  Taken from
+  https://salsa.debian.org/science-team/ros-ros-comm/-/blob/b74ca5c2c868a084ab36e46d68f7775518ac4c58/debian/patches/0016-Fixes-for-Python-3.12.patch
+  (cherry picked from commit 42cd22e509907d1e89765f8d1a27cbb201321d28)
+* [roslaunch] raise `ArgException` in `_arg_tag` to avoid unexpected error in `roslaunch.config.load_config_default` (#2371)
+  * add test case
+  * raise argexception in _arg_tag
+  (cherry picked from commit f90edc227877ee3d4be9d5b9a8ffe741be4037cc)
+* Disable topics aggregation by default (#42)
+* 1.17.0
+* check if ignore_unset_args is set in xmlloader (#2217)
+* [windows] Remove python2 specific hack (#2364)
+  This PR https://github.com/ros/ros_comm/pull/1872 made windows act differently than linux because of a specific python 2 delay doing unnecessary DNS checks for localhost.
+  The underlying code in python is different for python3 so the hack is no longer necessary. Given that, its better to reunify the codebase
+* 1.16.0
+* 1.15.15
+* Move @jacobperron from maintainer to author (#2302)
+* Fix $(dirname) resolution in include tags (#2173)
+  * roslaunch: Extend $(dirname) test
+  * roslaunch include: Resolve substitution args w.r.t. parent's context to ensure that $(dirname) resolves to parent's dir
+* 1.15.14
+* 1.15.13
+* 1.15.12
+* Contributors: Aaditya Ravindran, Gary Servin, Griffin Tabor, Jacob Perron, Matthias Klose, Michael Carroll, Robert Haschke, Shane Loretz, Shingo Kitagawa, Tom Moore
+
 1.23.0 (2025-02-04)
 -------------------
 
