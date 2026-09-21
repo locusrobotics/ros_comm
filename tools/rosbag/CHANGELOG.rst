@@ -632,8 +632,8 @@ Changelog for package rosbag
   * Add the option in rosbag_main to use rosbag record
 * Contributors: Alexander Reimann, AnthonyBirot, Carlos Mendes, Christopher Wecht, Dallin Briggs, Daniel Wang, Devin Bonnie, Dirk Thomas, Enrique Fernández Perdomo, Eric Tappan, Florian Friesdorf, Francisco Vina, Gary Servin, Jacob Perron, James Xu, Lucas Walter, Martijn Buijs, Martin Pecka, Maxime St-Pierre, Mikael Arguedas, Mike Purvis, Natesh Narain, Olivier Mangin, Sean Yen, Sebastian Scherer, Shane Loretz, Thomas, Timo Röhling, Tom Moore, kmiku7, pseyfert, tomoya
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fix remaining duplicate 1.16.0 changelog entries (#64)
   rosbag, rosgraph, and rosservice each had two "1.16.0" sections with
   real (non-empty) content, left over from a previous changelog merge

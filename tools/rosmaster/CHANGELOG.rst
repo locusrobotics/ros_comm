@@ -339,8 +339,8 @@ Changelog for package rosmaster
 * Setting correctly typed @apivalidate default return values (#1472)
 * Contributors: BoukeKromTNO, Carl Saldanha, Christopher Wecht, Dirk Thomas, Gary Servin, Jacob Perron, John Fettig, Kostya, Shane Loretz, tomoya
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fix changelogs (#63)
 * RST-13777 roscore cpp: master [26.1.0] (#59)
 * Add data layer: registrations and param_server (#56)

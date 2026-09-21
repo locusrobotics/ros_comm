@@ -117,8 +117,8 @@ Changelog for package test_roslib_comm
 * duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, Martijn Buijs, Sean Yen, Shane Loretz
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fixes for Python 3.12
   With fixes by Jochen Sprickerhof.
   Taken from

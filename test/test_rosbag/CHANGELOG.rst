@@ -234,8 +234,8 @@ Changelog for package test_rosbag
 * duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
 * Contributors: Christopher Wecht, Devin Bonnie, Dirk Thomas, Gary Servin, Jacob Perron, Mikael Arguedas, Shane Loretz, Tom Moore, beetleskin, tomoya
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * RST-13777 roscore cpp: master [26.1.0] (#59)
 * RST-13777 Fixing ros_comm tests (#54)
   * Fixing ros_comm tests

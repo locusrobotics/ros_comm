@@ -420,8 +420,8 @@ Changelog for package topic_tools
 * topic_tools/mux: add ~latch option (#1489)
 * Contributors: Aaron Miller, Christopher Wecht, Dirk Thomas, Enrique Fernandez Perdomo, Gary Servin, Jacob Perron, Martijn Buijs, Martin Günther, Sean Yen, Shane Loretz, Yuki Furuta, beetleskin
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fix changelogs (#63)
 * Fixes for Python 3.12
   With fixes by Jochen Sprickerhof.

@@ -236,8 +236,8 @@ Changelog for package rosnode
 * show connection info on rosnode info (#1497)
 * Contributors: Akif Hacinecipoglu, Dirk Thomas, Gary Servin, Jacob Perron, Mateusz Sadowski, Maxime St-Pierre, Shane Loretz, Victor Lamoine, mabaue, tomoya
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fix changelogs (#63)
 * Fixes for Python 3.12
   With fixes by Jochen Sprickerhof.

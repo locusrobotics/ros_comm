@@ -244,8 +244,8 @@ Changelog for package roslz4
   * declare const for source_cnt
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Jeremie Deray, Johnson Shih, Sean Yen, Shane Loretz, Tobias Fischer, tomoya
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fix changelogs (#63)
 * add missing python dependency
   this is implicitly pulled-in through the test depends on rosunit,

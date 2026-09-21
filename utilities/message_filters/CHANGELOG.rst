@@ -277,8 +277,8 @@ Changelog for package message_filters
 * Fix message_filters build issue on the template syntax (#1483)
 * Contributors: Christian Rauch, Dirk Thomas, Gary Servin, Jacob Perron, Johnson Shih, Kevin Hallenbeck, Maarten de Vries, Ross Lannen, Sean Yen, Shane Loretz, Yuki Furuta, tykurtz
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fix changelogs (#63)
 * Fixes for Python 3.12
   With fixes by Jochen Sprickerhof.

@@ -156,8 +156,8 @@ Changelog for package test_rosparam
   * Revert unrelated change to import through global variable construction
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, Levko Ivanchuk, Martijn Buijs, Sean Yen, Shane Loretz
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fixes for Python 3.12
   With fixes by Jochen Sprickerhof.
   Taken from

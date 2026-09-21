@@ -273,8 +273,8 @@ Changelog for package test_rospy
 * duplicate test nodes which aren't available to other packages, add missing dependencies (#1611)
 * Contributors: Christopher Wecht, Dirk Thomas, Gary Servin, Jacob Perron, James Xu, Martin Pecka, Miaofei Mei, Shane Loretz, tomoya
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * RST-13777 Fixing ros_comm tests (#54)
   * Fixing ros_comm tests
 * Fixes for Python 3.12

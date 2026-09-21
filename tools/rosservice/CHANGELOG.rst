@@ -236,8 +236,8 @@ Changelog for package rosservice
 * Update wiki.ros.org URLs (#1536)
 * Contributors: Christopher Wecht, Dirk Thomas, Gary Servin, Jacob Perron, Martijn Buijs, Shane Loretz, Victor Lamoine, mistoll
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fix remaining duplicate 1.16.0 changelog entries (#64)
   rosbag, rosgraph, and rosservice each had two "1.16.0" sections with
   real (non-empty) content, left over from a previous changelog merge

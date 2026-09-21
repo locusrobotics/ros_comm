@@ -75,8 +75,8 @@ Changelog for package test_rosgraph
 * Bump CMake version to avoid CMP0048 warning (#1869)
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, Shane Loretz
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fixes for Python 3.12
   With fixes by Jochen Sprickerhof.
   Taken from

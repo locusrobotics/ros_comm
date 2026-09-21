@@ -352,8 +352,8 @@ Changelog for package roswtf
   ```
 * Contributors: Christopher Wecht, Daniel Ingram, Dirk Thomas, Felix Ruess, Gary Servin, Isaac I.Y. Saito, Jacob Perron, James Xu, Nicholas Paul, Shane Loretz, tomoya
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fix changelogs (#63)
 * RST-13777 Fixing ros_comm tests (#54)
   * Fixing ros_comm tests

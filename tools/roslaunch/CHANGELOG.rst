@@ -875,8 +875,8 @@ Changelog for package roslaunch
   * declare const for source_cnt
 * Contributors: 5tan, Alessandro Tondo, Andreas Vinter-Hviid, Brutus The Tschiepel, Christophe, Christopher Wecht, Collin Scribner, Daniel Ingram, David V. Lu!!, Dirk Thomas, Gary Servin, Isaac I.Y. Saito, Jacob Perron, James Xu, Jochen Sprickerhof, Johnson Shih, Lucas Walter, Martijn Buijs, Martin Pecka, Mike Purvis, Morten Fyhn Amundsen, Sean Yen, Shane Loretz, Tom Moore, Victor Lamoine, Xaver Kroischke, betab0t, tomoya
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fix changelogs (#63)
 * RST-13777 roscore cpp: master [26.1.0] (#59)
 * Fixes for Python 3.12

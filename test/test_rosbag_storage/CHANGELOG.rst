@@ -90,8 +90,8 @@ Changelog for package test_rosbag_storage
 * Bump CMake version to avoid CMP0048 warning (#1869)
 * Contributors: Dirk Thomas, Gary Servin, Jacob Perron, Sean Yen, Shane Loretz
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * 1.17.0
 * Update: #include <boost/bind.hpp> -> <boost/bind/bind.hpp> for boost 1.73 (#2348)
   * Update: #include <boost/bind.hpp> -> <boost/bind/bind.hpp> for boost 1.73

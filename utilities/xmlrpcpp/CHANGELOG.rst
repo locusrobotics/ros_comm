@@ -451,8 +451,8 @@ Changelog for package xmlrpcpp
   * declare const for source_cnt
 * Contributors: Alex Moriarty, Christopher Wecht, Dirk Thomas, Gary Servin, Hanno Böck, Jacob Perron, James Xu, Jason Wang, Johannes Meyer, Johnson Shih, Martin Pecka, Mikael Arguedas, Sean Yen, Shane Loretz, Sid Faber, randoms, tomoya
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fix changelogs (#63)
 * RST-13777 roscore cpp: master [26.1.0] (#59)
 * RST-13777 Optimising xmlrpcpp (#52)

@@ -1217,8 +1217,8 @@ Changelog for package rospy
   ```
 * Contributors: Brutus The Tschiepel, Christopher Wecht, Dirk Thomas, Gary Servin, Hans Gaiser, Jacob Perron, Markus Grimm, Martijn Buijs, Martin Pecka, Maxime St-Pierre, Miaofei Mei, Michael Johnson, Paul Bovbel, Paweł Lorek, Sean Yen, Shane Loretz, Steve Nogar, Tom Moore, Victor Lamoine, Yong Li, Yuchen Ying, abencz, cclauss, henryzhang0506, larslue, mikolajz, salihmarangoz, tomoya, 金梦磊
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * Fix changelogs (#63)
 * wait_for_topic support topic remapping (#2159)
   Co-authored-by: SEAN.LU <SAEN.LU@deltaww.com>

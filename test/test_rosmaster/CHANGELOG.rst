@@ -138,8 +138,8 @@ Changelog for package test_rosmaster
 * Update wiki.ros.org URLs (#1536)
 * Contributors: Daniel Ingram, Dirk Thomas, Gary Servin, Jacob Perron, Martijn Buijs, Shane Loretz, Victor Lamoine
 
-Forthcoming
------------
+1.24.0 (2026-09-21)
+-------------------
 * RST-13777 Fixing ros_comm tests (#54)
   * Fixing ros_comm tests
 * Fixes for Python 3.12
