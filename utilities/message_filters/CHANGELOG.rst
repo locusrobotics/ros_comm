@@ -7,9 +7,6 @@ Changelog for package message_filters
 * Enable building with boost 1.73 (`#2348 <https://github.com/ros/ros_comm/issues/2348>`_)
 * Contributors: Robert Haschke
 
-1.16.0 (2023-02-15)
--------------------
-
 1.15.15 (2022-11-23)
 --------------------
 * Move @jacobperron from maintainer to author (`#2302 <https://github.com/ros/ros_comm/issues/2302>`_)

@@ -7,9 +7,6 @@ Changelog for package topic_tools
 * Add wait_publisher_initialization option in topic_tools mux (`#2305 <https://github.com/ros/ros_comm/issues/2305>`_)
 * Contributors: Shingo Kitagawa
 
-1.16.0 (2023-02-15)
--------------------
-
 1.15.15 (2022-11-23)
 --------------------
 * Move @jacobperron from maintainer to author (`#2302 <https://github.com/ros/ros_comm/issues/2302>`_)

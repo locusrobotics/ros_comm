@@ -5,9 +5,6 @@ Changelog for package ros_comm
 1.17.0 (2024-09-13)
 -------------------
 
-1.16.0 (2023-02-15)
--------------------
-
 1.15.15 (2022-11-23)
 --------------------
 * Move @jacobperron from maintainer to author (`#2302 <https://github.com/ros/ros_comm/issues/2302>`_)
