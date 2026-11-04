@@ -269,6 +269,51 @@ TEST_F(XmlRpcTest, Multicall)
   EXPECT_EQ(result.toXml(), expected_result.toXml());
 }
 
+// A system.multicall entry may itself be system.multicall; it must run the
+// entry's own params (this used to recurse on the outer params forever).
+TEST_F(XmlRpcTest, NestedMulticall)
+{
+  XmlRpcClient c("localhost", port);
+  XmlRpcValue result;
+
+  XmlRpcValue multicall, expected_result;
+  XmlRpcValue empty;
+  empty.setSize(0);
+
+  // Nested multicall with an empty call list.
+  multicall[0][0]["methodName"] = "system.multicall";
+  multicall[0][0]["params"][0] = empty;
+  expected_result[0][0] = empty;
+
+  // Nested multicall with one real call.
+  multicall[0][1]["methodName"] = "system.multicall";
+  multicall[0][1]["params"][0][0]["methodName"] = "Sum";
+  multicall[0][1]["params"][0][0]["params"][0] = 1.0;
+  multicall[0][1]["params"][0][0]["params"][1] = 2.0;
+  expected_result[1][0][0][0] = 3.0;
+
+  // Two levels of nesting.
+  multicall[0][2]["methodName"] = "system.multicall";
+  multicall[0][2]["params"][0][0]["methodName"] = "system.multicall";
+  multicall[0][2]["params"][0][0]["params"][0] = empty;
+  expected_result[2][0][0][0] = empty;
+
+  // Nested multicall with an invalid argument faults only that entry.
+  multicall[0][3]["methodName"] = "system.multicall";
+  multicall[0][3]["params"][0] = 5;
+  expected_result[3]["faultCode"] = -1;
+  expected_result[3]["faultString"] = "system.multicall: Invalid argument "
+                                      "(expected an array)";
+
+  ASSERT_TRUE(c.execute("system.multicall", multicall, result));
+  EXPECT_EQ(result, expected_result);
+  EXPECT_EQ(result.toXml(), expected_result.toXml());
+
+  // The server is still alive.
+  ASSERT_TRUE(c.execute("Hello", XmlRpcValue(), result));
+  EXPECT_EQ(result, XmlRpcValue("Hello"));
+}
+
 int main(int argc, char **argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
