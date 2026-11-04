@@ -314,6 +314,28 @@ TEST_F(XmlRpcTest, NestedMulticall)
   EXPECT_EQ(result, XmlRpcValue("Hello"));
 }
 
+TEST_F(XmlRpcTest, DeeplyNestedRequest) {
+  XmlRpcClient c("localhost", port);
+  XmlRpcValue result;
+
+  // Nest arrays well past the parser's nesting limit.
+  XmlRpcValue deep;
+  deep[0] = 1;
+  for (int i = 0; i < 300; i++) {
+    XmlRpcValue outer;
+    outer[0] = deep;
+    deep = outer;
+  }
+
+  // The too-deep argument is rejected instead of crashing the server.
+  ASSERT_TRUE(c.execute("system.multicall", deep, result));
+  EXPECT_TRUE(c.isFault());
+
+  // The server is still alive.
+  ASSERT_TRUE(c.execute("Hello", XmlRpcValue(), result));
+  EXPECT_EQ(result, XmlRpcValue("Hello"));
+}
+
 int main(int argc, char **argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
