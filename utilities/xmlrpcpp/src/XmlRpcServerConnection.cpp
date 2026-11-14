@@ -314,7 +314,7 @@ XmlRpcServerConnection::executeMulticall(const std::string& methodName,
     resultValue.setSize(1);
     try {
       if ( ! executeMethod(methodName, methodParams, resultValue[0]) &&
-           ! executeMulticall(methodName, params, resultValue[0]))
+           ! executeMulticall(methodName, methodParams, resultValue[0]))
       {
         result[i][FAULTCODE] = -1;
         result[i][FAULTSTRING] = methodName + ": unknown method name";
