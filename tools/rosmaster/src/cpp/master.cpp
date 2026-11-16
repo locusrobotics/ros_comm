@@ -110,7 +110,7 @@ void Master::start()
 {
   server_ = std::make_unique<XmlRpc::XmlRpcServer>();
 
-  if (!server_->bindAndListen(port_))
+  if (!server_->bindAndListen(port_, MASTER_LISTEN_BACKLOG))
   {
     throw std::runtime_error("Failed to bind ROS Master to port " + std::to_string(port_));
   }

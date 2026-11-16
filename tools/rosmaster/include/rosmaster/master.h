@@ -48,6 +48,12 @@ class ROSMasterHandler;
 /// Default TCP port for the ROS master XML-RPC server.
 constexpr int DEFAULT_MASTER_PORT = 11311;
 
+/// TCP listen backlog of the master's XML-RPC socket. This is the same value
+/// the Python rosmaster uses, min(socket.SOMAXCONN, 128) in
+/// ThreadingXMLRPCServer (rosgraph.xmlrpc). The xmlrpcpp default of 5
+/// overflows under connection bursts.
+constexpr int MASTER_LISTEN_BACKLOG = 128;
+
 /**
  * @brief High-level ROS master server wrapper.
  *

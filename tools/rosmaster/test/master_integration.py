@@ -35,16 +35,19 @@ Shared utilities and test mixin classes for rosmaster integration tests.
 
 This module provides:
   - MasterProcess: manages a rosmaster subprocess lifecycle
-  - Test mixin classes (CoreAPIMixin, ParamServerMixin, RegistrationsMixin)
+  - Test mixin classes (CoreAPIMixin, ParamServerMixin, RegistrationsMixin,
+    ListenBacklogMixin)
     containing test methods that work against any master implementation
 
 The mixin classes expect the following attributes on `self`:
   self.proxy       - xmlrpc.client.ServerProxy connected to the master
   self.master_port - port the master is listening on
   self.master_uri  - full URI of the master
+  self.master_pid  - pid of the master process
 """
 
 import os
+import select
 import shutil
 import signal
 import socket
@@ -547,3 +550,81 @@ class RegistrationsMixin:
         topic_names = [t[0] for t in topics]
         self.assertIn(t1, topic_names)
         self.assertNotIn(t2, topic_names)
+
+
+# ---------------------------------------------------------------------------
+# Test Mixin: Listen backlog / connection bursts
+# ---------------------------------------------------------------------------
+
+def _somaxconn():
+    try:
+        with open('/proc/sys/net/core/somaxconn') as f:
+            return int(f.read())
+    except (OSError, ValueError):
+        return socket.SOMAXCONN
+
+
+class ListenBacklogMixin:
+    """Guards the listen backlog of the C++ rosmaster (rosmaster_cpp).
+
+    rosmaster_cpp must queue connection bursts like the Python rosmaster,
+    which listens with a backlog of min(SOMAXCONN, 128). rosmaster_cpp used
+    the xmlrpcpp default of 5, so bursts of clients connecting at once
+    overflowed the kernel accept queue. SYNs were dropped and resent after
+    one second or more, and calls timed out or were reset.
+
+    The test also runs against the Python rosmaster as the reference behavior.
+    """
+
+    LISTEN_BACKLOG = 128
+
+    def test_listen_queue_holds_backlog(self):
+        # While the master is frozen nothing is accepted, so the kernel
+        # completes handshakes only while the accept queue has room
+        # (backlog + 1 entries on Linux). Every queued client sends a request;
+        # all of them must be answered once the master resumes.
+        expected = min(self.LISTEN_BACKLOG, _somaxconn())
+        body = xmlrpc.client.dumps(('/listen_backlog',), 'getPid').encode()
+        request = (b'POST /RPC2 HTTP/1.1\r\n'
+                   b'Host: 127.0.0.1\r\n'
+                   b'Content-Type: text/xml\r\n'
+                   b'Content-Length: %d\r\n\r\n' % len(body)) + body
+        socks = []
+        established = []
+        try:
+            os.kill(self.master_pid, signal.SIGSTOP)
+            try:
+                for _ in range(expected + 32):
+                    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    socks.append(s)
+                    s.setblocking(False)
+                    s.connect_ex(('127.0.0.1', self.master_port))
+                time.sleep(0.5)
+                poller = select.poll()
+                for s in socks:
+                    poller.register(s, select.POLLOUT)
+                writable = {fd for fd, _ in poller.poll(0)}
+                for s in socks:
+                    if s.fileno() not in writable:
+                        continue
+                    if s.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR) == 0:
+                        s.sendall(request)
+                        established.append(s)
+            finally:
+                os.kill(self.master_pid, signal.SIGCONT)
+            self.assertGreaterEqual(len(established), expected)
+            answered = 0
+            for s in established:
+                s.settimeout(5.0)
+                response = b''
+                while b'</methodResponse>' not in response:
+                    chunk = s.recv(4096)
+                    if not chunk:
+                        break
+                    response += chunk
+                if b' 200 OK' in response and b'</methodResponse>' in response:
+                    answered += 1
+            self.assertEqual(answered, len(established))
+        finally:
+            for s in socks:
+                s.close()
