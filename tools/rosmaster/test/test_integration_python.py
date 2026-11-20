@@ -44,6 +44,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from master_integration import (
     CoreAPIMixin,
+    ListenBacklogMixin,
     MasterProcess,
     ParamServerMixin,
     RegistrationsMixin,
@@ -80,6 +81,7 @@ class _Base(unittest.TestCase):
         self.proxy = _master.proxy
         self.master_port = _master.port
         self.master_uri = _master.uri
+        self.master_pid = _master.proc.pid
 
 
 class TestPythonCoreAPI(_Base, CoreAPIMixin):
@@ -91,6 +93,10 @@ class TestPythonParamServer(_Base, ParamServerMixin):
 
 
 class TestPythonRegistrations(_Base, RegistrationsMixin):
+    pass
+
+
+class TestPythonListenBacklog(_Base, ListenBacklogMixin):
     pass
 
 
