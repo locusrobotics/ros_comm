@@ -48,6 +48,20 @@ namespace XmlRpc {
   static const char MEMBER_ETAG[]   = "</member>";
   static const char STRUCT_ETAG[]   = "</struct>";
 
+  // Parsing recurses once per nested array/struct, so untrusted input could
+  // otherwise overflow the stack. The limit is far above what ROS traffic
+  // needs.
+  static const int MAX_NESTING_DEPTH = 256;
+  static thread_local int nestingDepth = 0;
+  static thread_local bool nestingExceeded = false;
+
+  namespace {
+    struct NestingGuard {
+      NestingGuard()  { ++nestingDepth; }
+      ~NestingGuard() { --nestingDepth; }
+    };
+  }
+
 
       
   // Format strings
@@ -247,6 +261,8 @@ namespace XmlRpc {
     if (offset == NULL) return false;
 
     int savedOffset = *offset;
+    if (nestingDepth == 0)
+      nestingExceeded = false;
 
     invalidate();
     if ( ! XmlRpcUtil::nextTagIs(VALUE_TAG, valueXml, offset))
@@ -267,10 +283,19 @@ namespace XmlRpc {
       result = timeFromXml(valueXml, offset);
     else if (typeTag == BASE64_TAG)
       result = binaryFromXml(valueXml, offset);
-    else if (typeTag == ARRAY_TAG)
-      result = arrayFromXml(valueXml, offset);
-    else if (typeTag == STRUCT_TAG)
-      result = structFromXml(valueXml, offset);
+    else if (typeTag == ARRAY_TAG || typeTag == STRUCT_TAG)
+    {
+      if (nestingDepth >= MAX_NESTING_DEPTH)
+        nestingExceeded = true;
+      else
+      {
+        NestingGuard guard;
+        if (typeTag == ARRAY_TAG)
+          result = arrayFromXml(valueXml, offset);
+        else
+          result = structFromXml(valueXml, offset);
+      }
+    }
     // Watch for empty/blank strings with no <string>tag
     else if (typeTag == VALUE_ETAG)
     {
@@ -552,6 +577,13 @@ namespace XmlRpc {
       _value.asArray->push_back(std::move(v));
       v._type = TypeInvalid;  // reset for next iteration (already moved)
       v._value.asBinary = 0;
+    }
+
+    // An element that failed only because it was too deep must fail the
+    // whole value, not silently truncate the array.
+    if (nestingExceeded) {
+      invalidate();
+      return false;
     }
 
     // Skip the trailing </data>

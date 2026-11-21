@@ -1291,6 +1291,74 @@ TEST(XmlRpc, fromXmlStruct) {
   EXPECT_EQ(static_cast<bool>(val["foo"]), true);
 }
 
+// Builds `depth` nested arrays around <i4>1</i4>.
+static std::string nestedArrayXml(int depth) {
+  std::string xml;
+  for (int i = 0; i < depth; ++i)
+    xml += "<value><array><data>";
+  xml += "<value><i4>1</i4></value>";
+  for (int i = 0; i < depth; ++i)
+    xml += "</data></array></value>";
+  return xml;
+}
+
+// Builds `depth` nested structs around <i4>1</i4>.
+static std::string nestedStructXml(int depth) {
+  std::string xml;
+  for (int i = 0; i < depth; ++i)
+    xml += "<value><struct><member><name>a</name>";
+  xml += "<value><i4>1</i4></value>";
+  for (int i = 0; i < depth; ++i)
+    xml += "</member></struct></value>";
+  return xml;
+}
+
+TEST(XmlRpc, fromXmlNestingLimit) {
+  int offset = 0;
+  XmlRpcValue val;
+
+  // 256 nested arrays are accepted
+  val.fromXml(nestedArrayXml(256), &offset);
+  ASSERT_EQ(val.getType(), XmlRpcValue::Type::TypeArray);
+  EXPECT_EQ(offset, static_cast<int>(nestedArrayXml(256).size()));
+  XmlRpcValue* inner = &val;
+  for (int i = 0; i < 256; ++i)
+    inner = &(*inner)[0];
+  EXPECT_EQ(static_cast<int>(*inner), 1);
+
+  // 257 nested arrays are rejected
+  offset = 0;
+  val.fromXml(nestedArrayXml(257), &offset);
+  EXPECT_EQ(val.getType(), XmlRpcValue::Type::TypeInvalid);
+  EXPECT_EQ(offset, 0);
+
+  // The same limit applies to structs
+  offset = 0;
+  val.fromXml(nestedStructXml(256), &offset);
+  EXPECT_EQ(val.getType(), XmlRpcValue::Type::TypeStruct);
+  offset = 0;
+  val.fromXml(nestedStructXml(257), &offset);
+  EXPECT_EQ(val.getType(), XmlRpcValue::Type::TypeInvalid);
+  EXPECT_EQ(offset, 0);
+
+  // A too-deep element fails the whole array instead of truncating it
+  offset = 0;
+  val.fromXml("<value><array><data><value><i4>1</i4></value>" + nestedArrayXml(256) +
+              "<value><i4>2</i4></value></data></array></value>", &offset);
+  EXPECT_EQ(val.getType(), XmlRpcValue::Type::TypeInvalid);
+  EXPECT_EQ(offset, 0);
+
+  // Far deeper input is rejected instead of overflowing the stack
+  offset = 0;
+  val.fromXml(nestedArrayXml(100000), &offset);
+  EXPECT_EQ(val.getType(), XmlRpcValue::Type::TypeInvalid);
+
+  // A failure does not affect the next parse
+  offset = 0;
+  val.fromXml(nestedArrayXml(3), &offset);
+  EXPECT_EQ(val.getType(), XmlRpcValue::Type::TypeArray);
+}
+
 int main(int argc, char **argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
